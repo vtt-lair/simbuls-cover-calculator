@@ -72,7 +72,7 @@
                 "id": "simbuls-athenaeum",
                 "type": "module",
                 "compatibility": {
-                "verified": "1.0.0"
+                "verified": "1.0.1"
                 }
             }
         ]
