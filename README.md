@@ -19,7 +19,7 @@ A Foundry VTT module that calculates cover for DnD 5e.
 
 #### A Note on Module Interactions
 
-Helpers provides built-in functionality for managing cover in a simple manner. Other modules may interact with Helper's output, or supercede it entirely. If this is the case, please consult the other module's instructions or readme and configure the Helpers cover calculator settings appropriately.
+Simbul's Cover Calculator provides built-in functionality for managing cover in a simple manner. Other modules may interact with its output, or supercede it entirely. If this is the case, please consult the other module's instructions or readme and configure the Helpers cover calculator settings appropriately.
 
 [Cover Debug](https://user-images.githubusercontent.com/33215552/197622902-3c22ba88-1412-4cfc-8364-3e7289e7d58f.mp4)
 
