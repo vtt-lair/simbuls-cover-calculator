@@ -1,0 +1,57 @@
+{
+    "SCC.ConfigApp.title": "Simbul's Cover Calculator Configuration",
+    "setting.ConfigOption.name": "設定変更",
+    "setting.ConfigOption.label": "Calculator Cover設定を開く",
+
+    "setting.debug.name": "Extended debug output",
+    "setting.debug.hint": "Logs additional debugging information to the console.",
+
+    "SCC.groupLabel.system": "System",
+    "SCC.groupLabel.combat": "Combat",
+    "SCC.groupLabel.misc": "Misc",
+
+    "setting.losOnTarget.name":"ターゲットの遮蔽判定",
+    "setting.losOnTarget.hint":"ホットキーに関わらず、コマを目標選択したとき常に遮蔽の判定が行われます。",
+    "setting.losSystem.name": "遮蔽判定モード",
+    "setting.losSystem.hint": "遮蔽判定に使用するアルゴリズムを選択します。あるいはこの機能を無効にします。",
+    "option.losOnTarget.center":"中心点からの視線（FVTTの視界準拠）",
+    "option.losOnTarget.corner":"四隅の一点からの視線（DMG p.251）",
+    "setting.debugDrawing.name": "視線のデバッグ",
+    "setting.debugDrawing.hint": "最新の遮蔽判定用いられる視線を描画します。消去するには再読込が必要です。.",
+    "SCC.LoS_nocover": "遮蔽なし",
+    "SCC.LoS_halfcover":"1/2遮蔽（+2）",
+    "SCC.LoS_34cover":"3/4遮蔽（+5）",
+    "SCC.LoS_fullcover":"完全遮蔽",
+    "SCC.LoS_outputmessage":"の射線を確認します。対象：",
+    "SCC.LoS_providescover":"遮蔽を提供",
+    "SCC.LoSMaskNPCs_creatureMask": "不明なクリーチャー",
+    "setting.losKeyBind.name" : "遮蔽のキーバインド",
+    "setting.losKeyBind.hint" : "対象の遮蔽判定にショートカットを割り当てます。",
+    "setting.removeCover.name" : "ターン終了時に遮蔽を外す",
+    "setting.removeCover.hint" : "戦闘参加者のターン終了時に、遮蔽効果を除去します。",
+    "setting.clearTargets.name" : "ターン終了時にターゲットを外す",
+    "setting.clearTargets.hint" : "戦闘参加者のターン終了時に、目標選択状態を除去します。",
+
+    "setting.coverApplication.name" : "遮蔽の効果",
+    "setting.coverApplication.hint" : "遮蔽時の攻撃にボーナスを適用します。これは目標でなく、攻撃元の近接/遠隔攻撃に適用されます。つまり【敏捷力】セーヴには影響しません。",
+    "option.coverApplication.manual" : "手動",
+    "option.coverApplication.auto" : "オート",
+    "SCC.LoSCover_cover" : "遮蔽",
+
+    "setting.coverTint.name" : "遮蔽ボタンの色合い",
+    "setting.coverTint.hint" : "遮蔽ボタンがアクティブなときの色を指定します。",
+    "option.coverTint.red" : "ダークレッド",
+    "option.coverTint.blue" : "ライトブルー",
+    "option.coverTint.grey" : "ディムグレー",
+    "option.coverTint.rainbow" : "レインボー",
+
+    "setting.losWithTokens.name":"コマによる遮蔽",
+    "setting.losWithTokens.hint": "遮蔽判定時にコマが考慮されるようになります。",
+    "setting.losMaskNPC.name": "遮蔽判定からDM向け情報を隠す",
+    "setting.losMaskNPC.hint": "遮蔽判定にDMへの秘話を使い、またNPCの名前を「不明なクリーチャー」に置き換えます。",
+    "setting.whisperToSelf.name":"遮蔽判定結果を自身にささやく",
+    "setting.whisperToSelf.hint":"遮蔽判定結果をGMにではなく、自身にのみささやくようになります。",
+
+    "setting.losWithTiles.name": "タイルによる遮蔽",
+    "setting.losWithTiles.hint": "遮蔽判定にタイルが考慮されるようになります。"
+}

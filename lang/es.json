@@ -1,0 +1,57 @@
+{
+    "SCC.ConfigApp.title": "Simbul's Cover Calculator Configuration",
+    "setting.ConfigOption.name": "Configure Settings",
+    "setting.ConfigOption.label": "Open Cover Calculator Settings",
+
+    "setting.debug.name": "Extended debug output",
+    "setting.debug.hint": "Logs additional debugging information to the console.",
+
+    "SCC.groupLabel.system": "System",
+    "SCC.groupLabel.combat": "Combat",
+    "SCC.groupLabel.misc": "Misc",
+
+    "setting.losOnTarget.name":"Calcular cobertura del objetivo",
+    "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
+    "setting.losSystem.name": "Cover computation mode",
+    "setting.losSystem.hint": "Selects algorithm to be used during cover checks, or disables this feature entirely.",
+    "option.losOnTarget.center":"Visión de punto central (visión de Foundry)",
+    "option.losOnTarget.corner":"Visión de cuatro esquinas (Four Corner Vision ,DMG pg. 251)",
+    "setting.debugDrawing.name": "Debug Line-of-Sight",
+    "setting.debugDrawing.hint": "Renders the sight rays used in the latest cover calculation. Refresh to clear drawing.",
+    "SCC.LoS_nocover": "Sin cobertura",
+    "SCC.LoS_halfcover":"Cobertura media",
+    "SCC.LoS_34cover":"Cobertura 3 cuartos",
+    "SCC.LoS_fullcover":"Cobertura completa",
+    "SCC.LoS_outputmessage":"comprobar su línea de visión hacia",
+    "SCC.LoS_providescover":"Proporciona cobertura",
+    "SCC.LoSMaskNPCs_creatureMask": "una criatura",
+    "setting.losKeyBind.name" : " Keybind for Cover",
+    "setting.losKeyBind.hint" : " Assign a keyboard shortcut to check cover when targeting.",
+    "setting.removeCover.name" : "Remove Cover on turn end",
+    "setting.removeCover.hint" : "Removes any cover effect at the end of a combatants turn",
+    "setting.clearTargets.name" : "Remove Targets on turn end",
+    "setting.clearTargets.hint" : "Removes any targets at the end of a combatants turn",
+
+    "setting.coverApplication.name" : " Cover Application",
+    "setting.coverApplication.hint" : " Allow application of cover bonuses. These are applied to the attacker, not the target. These only affect melee and ranged attacks, not dexterity saves",
+    "option.coverApplication.manual" : " Manual",
+    "option.coverApplication.auto" : " Automatic",
+    "SCC.LoSCover_cover" : " cover",
+
+    "setting.coverTint.name" : "Cover Button Tint",
+    "setting.coverTint.hint" : "What color should be applied to the cover buttons to show which is active",
+    "option.coverTint.red" : "Dark Red",
+    "option.coverTint.blue" : "Light Blue",
+    "option.coverTint.grey" : "Dim Grey",
+    "option.coverTint.rainbow" : "Rainbow",
+
+    "setting.losWithTokens.name":"Considerar tokens como media cob.",
+    "setting.losWithTokens.hint": "Resultados sin comprobar de tokens no se usan para calcular cob.",
+    "setting.losMaskNPC.name": "No mostrar información del GM del Anuncio de Cob.",
+    "setting.losMaskNPC.hint": "Reemplaza el nombre del PNJ por \"Una criatura\" al anunciar cob. y susurra control de cob. pedido por el GM..",
+    "setting.whisperToSelf.name":"Whisper cover report to self",
+    "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
+
+    "setting.losWithTiles.name": "Tile Cover",
+    "setting.losWithTiles.hint": "Allow Tiles to be factored into cover calculation"
+}

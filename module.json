@@ -1,0 +1,83 @@
+{
+    "id": "simbuls-cover-calculator",
+    "name": "simbuls-cover-calculator",
+    "title": "Simbul's Cover Calculator",
+    "description": "A module that handles Cover Calculations for DnD 5e. Originally part of DnD 5e Helpers, split out for v10.",
+    "version": "1.0.0",
+    "authors": [
+      {
+        "name": "VTT Lair",
+        "url": "https://github.com/vtt-lair"
+      }
+    ],
+    "esmodules": [
+        "/scripts/cover-calculator.js"
+    ],  
+    "styles": [
+        "/styles/athenaeum.css",
+        "/styles/cover-calculator.css"
+    ],
+    "includes": [
+        "module.json"
+    ],
+    "languages": [
+      {
+        "lang": "en",
+        "name": "English",
+        "path": "lang/en.json"
+      },
+      {
+        "lang": "es",
+        "name": "Spanish",
+        "path": "lang/es.json"
+      },
+      {
+        "lang": "fr",
+        "name": "French",
+        "path": "lang/fr.json"
+      },
+      {
+        "lang": "pt-BR",
+        "name": "Brazilian Portugues",
+        "path": "lang/pt-BR.json"
+      },
+      {
+        "lang": "ko",
+        "name": "Korean",
+        "path": "lang/ko.json"
+      },
+      {
+        "lang": "ja",
+        "name": "日本語",
+        "path": "lang/ja.json"
+      }
+    ],
+    "url": "https://github.com/vtt-lair/simbuls-cover-calculator",
+    "manifest": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/latest/download/module.json",
+    "download": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/download/v1.0.0/module.zip",
+    "relationships": {
+        "systems": [
+            {
+                "id": "dnd5e",
+                "type": "system",
+                "manifest": "https://gitlab.com/asacolips-projects/foundry-mods/archmage/-/raw/2.0.2/system.json",
+                "compatibility": {
+                    "verified": "2.0.2"
+                }
+            }
+        ],
+        "requires": [
+            {
+                "id": "simbuls-athenaeum",
+                "type": "module",
+                "compatibility": {
+                "verified": "1.0.0"
+                }
+            }
+        ]
+    },
+    "compatibility": {
+        "minimum": "10",
+        "verified": "10"
+    }
+}

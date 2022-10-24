@@ -1,0 +1,57 @@
+{
+    "SCC.ConfigApp.title": "Simbul's Cover Calculator Configuration",
+    "setting.ConfigOption.name": "Definir Configurações",
+    "setting.ConfigOption.label": "Abrir Configurações do Cover Calculator",
+
+    "setting.debug.name": "Extended debug output",
+    "setting.debug.hint": "Logs additional debugging information to the console.",
+
+    "SCC.groupLabel.system": "System",
+    "SCC.groupLabel.combat": "Combat",
+    "SCC.groupLabel.misc": "Misc",
+
+    "setting.losOnTarget.name":"Calcular cobertura ao mirar",
+    "setting.losOnTarget.hint":"Sempre calcule a cobertura ao mirar um token, independentemente da tecla de atalho.",
+    "setting.losSystem.name": "Modo de cálculo de cobertura",
+    "setting.losSystem.hint": "Seleciona o algoritmo a ser usado durante as verificações de cobertura ou desativa totalmente esse recurso.",
+    "option.losOnTarget.center":"Visão do Ponto Central (Visão do Foundry)",
+    "option.losOnTarget.corner":"Visão dos Quatro Cantos (DMG, p. 251)",
+    "setting.debugDrawing.name": "Debug Line-of-Sight",
+    "setting.debugDrawing.hint": "Renders the sight rays used in the latest cover calculation. Refresh to clear drawing.",
+    "SCC.LoS_nocover": "Sem Cobertura",
+    "SCC.LoS_halfcover":"Cobertura parcial (+2)",
+    "SCC.LoS_34cover":"Cobertura de três quartos(+5)",
+    "SCC.LoS_fullcover":"Cobertura total",
+    "SCC.LoS_outputmessage":"verifica sua linha de visão até",
+    "SCC.LoS_providescover":"Fornece Cobertura",
+    "SCC.LoSMaskNPCs_creatureMask": "uma criatura",
+    "setting.losKeyBind.name" : "Atalho para Cobertura",
+    "setting.losKeyBind.hint" : "Configura um atalho do teclado para a verificar cobertura do alvo ao mirar",
+    "setting.removeCover.name" : "Remover Cobertura no final do turno",
+    "setting.removeCover.hint" : "Remove qualquer efeito de cobertura no final do turno de um combatente",
+    "setting.clearTargets.name" : "Remover Alvos no final do turno",
+    "setting.clearTargets.hint" : "Remove quaisquer alvos no final do turno de um combatente",
+
+    "setting.coverApplication.name" : "Aplicação de Cobertura",
+    "setting.coverApplication.hint" : "Permite aplicar bônus de cobertura. Estes são aplicados no atacante, não no alvo. E afeta somente armas ataque a distância, não salvaguarda de destreza.",
+    "option.coverApplication.manual" : "Manual",
+    "option.coverApplication.auto" : "Automática",
+    "SCC.LoSCover_cover" : "cobertura",
+
+    "setting.coverTint.name" : "Cor do Botão de Cobertura",
+    "setting.coverTint.hint" : "Que cor deve ser aplicada aos botões dde cobertura para mostrar qual está ativo",
+    "option.coverTint.red" : "Vermelho Escuro",
+    "option.coverTint.blue" : "Azul Claro",
+    "option.coverTint.grey" : "Cinza Escuro",
+    "option.coverTint.rainbow" : "Arco-íris",
+
+    "setting.losWithTokens.name":"Cobertura de Token",
+    "setting.losWithTokens.hint": "Permitir que os tokens sejam considerados no cálculo da cobertura.",
+    "setting.losMaskNPC.name": "Ocultar informações do MJ do Relatório de Cobertura",
+    "setting.losMaskNPC.hint": "Substitui os usos do nome do PNJ por \"Uma criatura\" ao relatar cobertura e sussurra verificações de cobertura solicitadas pelo MJ.",
+    "setting.whisperToSelf.name":"Whisper cover report to self",
+    "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
+
+    "setting.losWithTiles.name": "Cobertura de Peça",
+    "setting.losWithTiles.hint": "Permitir que as Peças sejam consideradas no cálculo da cobertura"
+}

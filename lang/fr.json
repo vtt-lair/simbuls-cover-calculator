@@ -1,0 +1,57 @@
+{
+    "SCC.ConfigApp.title": "Simbul's Cover Calculator Configuration",
+    "setting.ConfigOption.name": "Configurer les paramètres",
+    "setting.ConfigOption.label": "Ouvrir les paramètres de Cover Calculator",
+
+    "setting.debug.name": "Extended debug output",
+    "setting.debug.hint": "Logs additional debugging information to the console.",
+
+    "SCC.groupLabel.system": "System",
+    "SCC.groupLabel.combat": "Combat",
+    "SCC.groupLabel.misc": "Misc",
+
+    "setting.losOnTarget.name":"Calculer la couverture sur la cible",
+    "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
+    "setting.losSystem.name": "Cover computation mode",
+    "setting.losSystem.hint": "Selects algorithm to be used during cover checks, or disables this feature entirely.",
+    "option.losOnTarget.center":"Vision du point centrale (Foundry Vision)",
+    "option.losOnTarget.corner":"Vision des 4 coins (DMG pg. 251)",
+    "setting.debugDrawing.name": "Debug Line-of-Sight",
+    "setting.debugDrawing.hint": "Renders the sight rays used in the latest cover calculation. Refresh to clear drawing.",
+    "SCC.LoS_nocover": "Pas de couvert",
+    "SCC.LoS_halfcover":"Demi-couvert",
+    "SCC.LoS_34cover":"3/4 couvert",
+    "SCC.LoS_fullcover":"Totalement couvert",
+    "SCC.LoS_outputmessage":"vérifie leur ligne de visée pour",
+    "SCC.LoS_providescover":"Fournit une couverture",
+    "SCC.LoSMaskNPCs_creatureMask": " une créature",
+    "setting.losKeyBind.name" : "Raccourci clavie pour la Couverture",
+    "setting.losKeyBind.hint" : "Attribuez un raccourci clavier pour vérifier la couverture lors du ciblage.",
+    "setting.removeCover.name" : "Retirer le couvercle à la fin du tour",
+    "setting.removeCover.hint" : "Supprime tout effet de couverture à la fin d'un tour des combattants",
+    "setting.clearTargets.name" : "Supprimer les cibles à la fin du tour",
+    "setting.clearTargets.hint" : "Supprime toutes les cibles à la fin d'un tour des combattants", 
+
+    "setting.coverApplication.name" : "Appliquer la Couverture",
+    "setting.coverApplication.hint" : "Autoriser l'application des bonus de couverture. Ceux-ci sont appliqués à l'attaquant, pas à la cible. Ils n'affectent que les attaques de mêlée et à distance, pas les sauvegardes de dextérité",
+    "option.coverApplication.manual" : "Manuelle",
+    "option.coverApplication.auto" : "Automatique",
+    "SCC.LoSCover_cover" : " couverture",
+
+    "setting.coverTint.name" : "Teinte des boutons de couverture",
+    "setting.coverTint.hint" : "Quelle couleur doit être appliquée aux boutons de couverture pour montrer qui est actif",
+    "option.coverTint.red" : "Rouge foncé",
+    "option.coverTint.blue" : "Bleu léger",
+    "option.coverTint.grey" : "Gris pâle",
+    "option.coverTint.rainbow" : "Arc-en-ciel",
+
+    "setting.losWithTokens.name":"Considérez les jetons comme une demi-couverture",
+    "setting.losWithTokens.hint": "Si la case n'est pas cochée, les jetons ne sont pas pris en compte pour le calcul de la couverture.",
+    "setting.losMaskNPC.name": "Masquer les informations MJ du rapport de couverture",
+    "setting.losMaskNPC.hint": "Remplace les utilisations du nom du PNJ par \"Une créature\" lors du rapport de couverture et chuchote les vérifications de couverture demandées par le MJ.",
+    "setting.whisperToSelf.name":"Whisper cover report to self",
+    "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
+
+    "setting.losWithTiles.name": "Couverture de tuile",
+    "setting.losWithTiles.hint": "Permettre aux tuiles d'être prises en compte dans le calcul de la couverture"
+}
