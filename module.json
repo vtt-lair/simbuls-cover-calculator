@@ -55,6 +55,7 @@
     "url": "https://github.com/vtt-lair/simbuls-cover-calculator",
     "manifest": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/latest/download/module.json",
     "download": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/download/v1.0.0/module.zip",
+    "changelog": "https://github.com/vtt-lair/simbuls-cover-calculator/blob/main/CHANGELOG.md",
     "relationships": {
         "systems": [
             {
