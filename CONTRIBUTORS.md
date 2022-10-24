@@ -7,7 +7,6 @@
  Contributors who wish to be recognized in this file should add themselves 
  (or their employer, as appropriate).
 
-- szefo09 <37833135+szefo09@users.noreply.github.com> - Refactors and improvements to Automatic Proficiency detection
 - BrotherSharper <41280723+BrotherSharper@users.noreply.github.com> (on behalf of `Touge`) - Japanese localization
 - drdwing <66671688+drdwing@users.noreply.github.com> - Korean localization
 - brnmuller <70756628+brnmuller@users.noreply.github.com> - Brazilian-Portugese localization
