@@ -379,11 +379,6 @@ export class CoverCalculator {
                   });
             }
         }
-
-        /* clear targets for all users on a turn change */
-        if (HELPER.setting('clearTargets') && HELPER.isTurnChange(combat,changed)) {
-            game.user.updateTokenTargets();
-        }
     } 
 
     /**
