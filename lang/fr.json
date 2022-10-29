@@ -8,7 +8,10 @@
 
     "SCC.groupLabel.system": "System",
     "SCC.groupLabel.combat": "Combat",
+    "SCC.groupLabel.token-sizes": "Token Cover Sizes",
     "SCC.groupLabel.misc": "Misc",
+
+    "SCC.groupHint.token-sizes": "When the 'Token Cover' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
 
     "setting.losOnTarget.name":"Calculer la couverture sur la cible",
     "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
@@ -53,5 +56,20 @@
     "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
 
     "setting.losWithTiles.name": "Couverture de tuile",
-    "setting.losWithTiles.hint": "Permettre aux tuiles d'être prises en compte dans le calcul de la couverture"
+    "setting.losWithTiles.hint": "Permettre aux tuiles d'être prises en compte dans le calcul de la couverture",
+
+    "setting.coverPerTokenSize.name" : "Token Sizes effects cover",
+    "setting.coverPerTokenSize.hint" : "Enable this and specify sizes below to determine cover for token sizes.",
+    "setting.noCoverTokenSizes.name" : "No cover",
+    "setting.noCoverTokenSizes.hint" : "The token sizes that does not provide any cover while it has HP.",
+    "setting.threeQuartersCoverTokenSizes.name" : "3/4 cover",
+    "setting.threeQuartersCoverTokenSizes.hint" : "The token sizes that provide 3/4 cover while it has HP.",
+    "setting.noDeadTokenSizes.name" : "No cover when at 0hp",
+    "setting.noDeadTokenSizes.hint" : "The token sizes that does not provide any cover while it has 0 HP.",
+    "setting.halfDeadTokenSizes.name" : "1/2 cover when at 0h",
+    "setting.halfDeadTokenSizes.hint" : "The token sizes that provides 1/2 cover while it has 0 HP.",
+    "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
+    "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
+    "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
+    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP."
 }
