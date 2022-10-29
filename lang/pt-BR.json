@@ -71,5 +71,12 @@
     "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
     "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
     "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
-    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP."
+    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
+
+    "SCC.flagsNoCover" : "Ignorar cobertura parcial e de três quartos",
+    "SCC.flagsNoCoverHint" : "Fornecido por talentos",
+    "SCC.flagsNoCoverOptionNone" : "Don't ignore any cover.",
+    "SCC.flagsNoCoverOptionHalf" : "Ignore half cover.",
+    "SCC.flagsNoCoverOptionThreeQ" : "Ignore half and three-quarters cover.",
+    "SCC.flagsNoCoverOptionFull" : "Ignore all cover."
 }

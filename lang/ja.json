@@ -71,5 +71,12 @@
     "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
     "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
     "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
-    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP."
+    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
+
+    "SCC.flagsNoCover" : "遮蔽を無視する程度の能力",
+    "SCC.flagsNoCoverHint" : "特技やマジックアイテムによって提供されることがあります。",
+    "SCC.flagsNoCoverOptionNone" : "遮蔽は無視できない",
+    "SCC.flagsNoCoverOptionHalf" : "1/2遮蔽を無視する",
+    "SCC.flagsNoCoverOptionThreeQ" : "1/2遮蔽と3/4の遮蔽を無視する",
+    "SCC.flagsNoCoverOptionFull" : "すべての遮蔽を無視する"
 }
