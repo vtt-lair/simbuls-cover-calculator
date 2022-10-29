@@ -71,5 +71,12 @@
     "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
     "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
     "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
-    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP."
+    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
+
+    "SCC.flagsNoCover" : "절반 및 3/4 엄폐 무시",
+    "SCC.flagsNoCoverHint" : "피트에 따라 적용된다",
+    "SCC.flagsNoCoverOptionNone" : "Don't ignore any cover.",
+    "SCC.flagsNoCoverOptionHalf" : "Ignore half cover.",
+    "SCC.flagsNoCoverOptionThreeQ" : "Ignore half and three-quarters cover.",
+    "SCC.flagsNoCoverOptionFull" : "Ignore all cover."
 }
