@@ -48,7 +48,7 @@
 
     "setting.losWithTokens.name": "Token Cover",
     "setting.losWithTokens.hint": "Allow tokens to be factored into cover calculation.",
-    "setting.losMaskNPC.name": "Hide 'GM info from Cover Report'",
+    "setting.losMaskNPC.name": "Hide GM info from Cover Report",
     "setting.losMaskNPC.hint": "Replaces uses of the NPC's name with \"A creature\" when reporting cover and whispers GM prompted cover checks.",
     "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
     "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
