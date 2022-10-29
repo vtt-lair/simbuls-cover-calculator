@@ -57,8 +57,20 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return app.render(true);
     }
 
-    _onTabClick(event) {
-        debugger;
+    onTokenCoverChange(event) {
+        this.toggleTokenSizesTabVisible(event.currentTarget.checked);
+    }
+
+    prepareVisibleForms() {
+        const isLosTokenChecked = document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked;
+        this.toggleTokenSizesTabVisible(isLosTokenChecked);
+    }
+
+    toggleTokenSizesTabVisible(isVisible) {
+        const tab = document.querySelector(".sheet-tabs :nth-child(3)");
+        if (tab) {
+            tab.style.display = isVisible ? 'block' : 'none';
+        }
     }
 
     async _onSubmit(...args) {
@@ -76,12 +88,17 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
+        html.find(`[name="${MODULE.data.name}.losWithTokens"]`).change(this.onTokenCoverChange.bind(this));
+
+        // unsure if this is the right place 
+        this.prepareVisibleForms();
     }
 
     static get defaultGroupLabels() {
         return {
             'system': { faIcon: 'fas fa-cog', tabLabel: 'SCC.groupLabel.system'},
             'combat': { faIcon: 'fas fa-dice-d20', tabLabel: 'SCC.groupLabel.combat'},
+            'token-sizes': { faIcon: 'fas fa-expand-arrows-alt', tabLabel: 'SCC.groupLabel.token-sizes', hint: 'SCC.groupHint.token-sizes'},
             'misc': { faIcon: 'fas fa-list-alt', tabLabel: 'SCC.groupLabel.misc'},
         }
     }
@@ -156,9 +173,9 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             if(!!val.settings || !!val.menus) acc[name] = val;
             return acc;
         }, {})
-
+       
         logger.debug(MODULE.data.name, "GET DATA | DATA | ", data);
-
+       
         return {
             user : game.user, canConfigure, systemTitle : game.system.title, data
         }

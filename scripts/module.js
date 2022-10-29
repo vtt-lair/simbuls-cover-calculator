@@ -29,7 +29,7 @@ export class MODULE {
     }
 
     static globals() {
-        game.dnd5e.npcactions = {};
+        game.dnd5e.covercalc = {};
     }
 
     static settings() {

@@ -81,7 +81,7 @@ export class CoverCalculator {
         }
     }
 
-  static settings() {
+    static settings() {
         const config = false;
         const menuData = {
             debugDrawing : {
@@ -129,7 +129,7 @@ export class CoverCalculator {
             },
             removeCover : {
                 scope : "world", config, group : "combat", default : false, type : Boolean,
-            },      
+            },
         };
 
         MODULE.applySettings(menuData);
@@ -147,7 +147,7 @@ export class CoverCalculator {
             type: Number
         };
 
-    /* insert keybindings */
+        /* insert keybindings */
         game.keybindings.register(MODULE.data.name, "coverReport", {
             name: "Check Cover",
             hint: "Check the cover between the selected and hovered token",
@@ -283,7 +283,7 @@ export class CoverCalculator {
         const status = app.object.object.coverValue() ?? 0;
         const selectHTML = `<div class="form-group">
                             <label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name="flags.dnd5e-helpers.coverLevel" data-dtype="Number">
+                            <select name=flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
                                 ${
                                     Object.entries(MODULE[NAME].coverData).reduce((acc, [key,{label}]) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${label}</option>`, ``)
                                 }
@@ -306,7 +306,7 @@ export class CoverCalculator {
         if (!app.object?.object) return;
         const status = app.object.object.coverValue() ?? 0;
         const selectHTML = `<label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name="flags.dnd5e-helpers.coverLevel" data-dtype="Number">
+                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
                                 ${
                                     Object.entries(MODULE[NAME].coverData).reduce((acc, [key,{label}]) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${label}</option>`, ``)
                                 }
@@ -485,7 +485,7 @@ class Cover {
         this.calculate();
     }
 
-    calculate(){
+    calculate() {
         if (HELPER.setting(MODULE.data.name, "debugDrawing")) {
             Cover._removeRays();
         }        
