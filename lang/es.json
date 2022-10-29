@@ -52,6 +52,8 @@
     "setting.losWithTokens.hint": "Resultados sin comprobar de tokens no se usan para calcular cob.",
     "setting.losMaskNPC.name": "No mostrar información del GM del Anuncio de Cob.",
     "setting.losMaskNPC.hint": "Reemplaza el nombre del PNJ por \"Una criatura\" al anunciar cob. y susurra control de cob. pedido por el GM..",
+    "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
+    "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
     "setting.whisperToSelf.name":"Whisper cover report to self",
     "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
 

@@ -52,6 +52,8 @@
     "setting.losWithTokens.hint": "遮蔽判定時にコマが考慮されるようになります。",
     "setting.losMaskNPC.name": "遮蔽判定からDM向け情報を隠す",
     "setting.losMaskNPC.hint": "遮蔽判定にDMへの秘話を使い、またNPCの名前を「不明なクリーチャー」に置き換えます。",
+    "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
+    "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
     "setting.whisperToSelf.name":"遮蔽判定結果を自身にささやく",
     "setting.whisperToSelf.hint":"遮蔽判定結果をGMにではなく、自身にのみささやくようになります。",
 

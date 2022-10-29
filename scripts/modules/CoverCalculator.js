@@ -127,6 +127,9 @@ export class CoverCalculator {
             losMaskNPC : {
                 scope : "world", config, group : "system", default : false, type : Boolean,
             },
+            hideNoCoverChat : {
+                scope : "world", config, group : "system", default : false, type : Boolean,
+            },
             removeCover : {
                 scope : "world", config, group : "combat", default : false, type : Boolean,
             },
@@ -684,6 +687,9 @@ class Cover {
         this.data.origin.name = HELPER.sanitizeTokenName(MODULE.data.name, this.data.origin.object, "losMaskNPC", "SCC.LoSMaskNPCs_creatureMask");
         this.data.target.name = HELPER.sanitizeTokenName(MODULE.data.name, this.data.target.object, "losMaskNPC", "SCC.LoSMaskNPCs_creatureMask", false);
         this.data.target.name += '.'; //punctuation
+        const hideNoCover = HELPER.setting(MODULE.data.name, "hideNoCoverChat");
+
+        if (hideNoCover && this.data.results.cover === 0) return;
 
         const appliedCover = this.data.origin.object.getCoverEffect()?.getFlag(MODULE.data.name, "level") ?? 0;
         let content = `
@@ -700,7 +706,7 @@ class Cover {
         `;
 
         
-        if(HELPER.setting(MODULE.data.name, "coverApplication") > 0) {
+        if (HELPER.setting(MODULE.data.name, "coverApplication") > 0) {
             content += `
                 <div class="cover-calc">
                     <button class="cover-button half ${appliedCover == 1 ? "active" : ""} " id="half">
