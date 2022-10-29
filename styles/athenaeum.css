@@ -95,6 +95,10 @@
   .athenaeum-tab-pad {
       padding-top: 5px;
   }
+
+  .athenaeum-tab-pad .tab-hint {
+    margin-bottom: 1rem;
+  }
   
   .settings-footer {
       max-height: 34px;

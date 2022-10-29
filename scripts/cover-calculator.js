@@ -7,10 +7,12 @@ import { MODULE } from './module.js';
  * Sub Modules
  */
 import { CoverCalculator } from './modules/CoverCalculator.js';
+import { CoverCalculatorTokenSizes } from './modules/CoverCalculatorTokenSizes.js';
 
 const SUB_MODULES = {
     MODULE,
-    CoverCalculator
+    CoverCalculator,
+    CoverCalculatorTokenSizes,
 };
 
 /*
@@ -23,5 +25,5 @@ MODULE.build();
 */
 Hooks.on(`setup`, () => {
     Object.values(SUB_MODULES).forEach(cl => cl.register());
-    Hooks.callAll('npcactionsReady', {MODULE, logger});
+    Hooks.callAll('covercalcReady', {MODULE, logger});
 });
