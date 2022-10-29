@@ -52,6 +52,8 @@
     "setting.losWithTokens.hint": "Permitir que os tokens sejam considerados no cálculo da cobertura.",
     "setting.losMaskNPC.name": "Ocultar informações do MJ do Relatório de Cobertura",
     "setting.losMaskNPC.hint": "Substitui os usos do nome do PNJ por \"Uma criatura\" ao relatar cobertura e sussurra verificações de cobertura solicitadas pelo MJ.",
+    "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
+    "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
     "setting.whisperToSelf.name":"Whisper cover report to self",
     "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
 

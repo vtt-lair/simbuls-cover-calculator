@@ -52,6 +52,8 @@
     "setting.losWithTokens.hint": "토큰에 엄폐 계산을 적용한다.",
     "setting.losMaskNPC.name": "엄폐 보고에서 GM 정보 숨기기",
     "setting.losMaskNPC.hint": "엄폐 보고 시 NPC 이름을 \"한 생물\"로 대체하여 GM에게 엄폐 결과를 귓속말로 출력한다.",
+    "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
+    "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
     "setting.whisperToSelf.name":"Whisper cover report to self",
     "setting.whisperToSelf.hint":"Whisper the cover report only to yourself instead of also whispering it to the GM",
 
