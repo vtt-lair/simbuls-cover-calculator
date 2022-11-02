@@ -80,5 +80,8 @@
     "SCC.flagsNoCoverOptionNone" : "遮蔽は無視できない",
     "SCC.flagsNoCoverOptionHalf" : "1/2遮蔽を無視する",
     "SCC.flagsNoCoverOptionThreeQ" : "1/2遮蔽と3/4の遮蔽を無視する",
-    "SCC.flagsNoCoverOptionFull" : "すべての遮蔽を無視する"
+    "SCC.flagsNoCoverOptionFull" : "すべての遮蔽を無視する",
+
+    "setting.proneActsLikeDead.name": "Prone acts like 0 HP",
+    "setting.proneActsLikeDead.hint": "When the token has the prone or unconcious status effect, handle cover as if it has 0 HP."
 }

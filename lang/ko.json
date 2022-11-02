@@ -80,5 +80,8 @@
     "SCC.flagsNoCoverOptionNone" : "Don't ignore any cover.",
     "SCC.flagsNoCoverOptionHalf" : "Ignore half cover.",
     "SCC.flagsNoCoverOptionThreeQ" : "Ignore half and three-quarters cover.",
-    "SCC.flagsNoCoverOptionFull" : "Ignore all cover."
+    "SCC.flagsNoCoverOptionFull" : "Ignore all cover.",
+
+    "setting.proneActsLikeDead.name": "Prone acts like 0 HP",
+    "setting.proneActsLikeDead.hint": "When the token has the prone or unconcious status effect, handle cover as if it has 0 HP."
 }
