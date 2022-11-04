@@ -26,8 +26,4 @@ MODULE.build();
 Hooks.on(`setup`, () => {
     Object.values(SUB_MODULES).forEach(cl => cl.register());
     Hooks.callAll('covercalcReady', {MODULE, logger});
-
-    window.CoverCalculator = {
-        checkCoverViaCoordinates: CoverCalculator._runCoverCheckForCoordinates,
-    }
 });

@@ -355,22 +355,6 @@ export class CoverCalculator {
         }         
     }
 
-    /*
-    // 
-    */
-    static async _runCoverCheckForCoordinates(x, y, ignoresCover, originName, showChatMessage, target) {
-        const cover = new Cover(null, target, 5, {x: x, y: y, ignoresCover: ignoresCover, name: originName});
-
-        //apply cover bonus automatically if requested
-        queueUpdate( async () => {
-            if (showChatMessage) {
-                await cover.toMessage();
-            }
-        });
-
-        return cover;
-    }
-
     static async _targetToken(user, target, onOff) {
         if (game.user !== user || HELPER.setting(MODULE.data.name, 'losOnTarget') == false) return;
 
@@ -494,29 +478,9 @@ class Cover {
         results : {},
         calculations : 0,
     };
-    isViaCoords = false;
 
     constructor(origin, target, padding = 5, coordinates = {}) {
-        if (coordinates.x && coordinates.y) {
-            this.isViaCoords = true;
-            origin = {
-                center: {
-                    x: coordinates.x,
-                    y: coordinates.y
-                },
-                w: 1,
-                h: 1,
-                name: coordinates.name ?? "Template",
-                document: {
-                    uuid: -1,
-                }
-            };
-            
-            origin.ignoresCover = () => { return coordinates.ignoresCover; }
-            origin.getCoverEffect = () => { return null; };
-        } else {
-            if (origin.id === target.id) return new Error("Token Error");
-        }        
+        if (origin.id === target.id) return new Error("Token Error");       
 
         this.data.origin.object = origin;
         this.data.target.object = target;
@@ -578,7 +542,7 @@ class Cover {
         this.data.origin.shapes = [];
         this.data.origin.points = [];
 
-        if (HELPER.setting(MODULE.data.name, 'losSystem') === 1 || this.isViaCoords) {
+        if (HELPER.setting(MODULE.data.name, 'losSystem') === 1) {
             this.data.origin.points.push(new Point(this.data.origin.object.center));
         } else {
             let c = Math.round(this.data.origin.object.w / canvas.grid.size), d = Math.round(this.data.origin.object.h / canvas.grid.size);
@@ -741,7 +705,7 @@ class Cover {
             </div>
         `;
         
-        if (HELPER.setting(MODULE.data.name, "coverApplication") > 0 && !this.isViaCoords) {
+        if (HELPER.setting(MODULE.data.name, "coverApplication") > 0) {
             content += `
                 <div class="cover-calc">
                     <button class="cover-button half ${appliedCover == 1 ? "active" : ""} " id="half">
