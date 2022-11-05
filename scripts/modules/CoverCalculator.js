@@ -185,6 +185,7 @@ export class CoverCalculator {
             Shape : CoverCalculator._Shape,
             Segment : CoverCalculator._Segment,
             Point : CoverCalculator._Point,
+            checkCoverViaCoordinates: CoverCalculator._runCoverCheckForCoordinates,
         };
     }
 
