@@ -327,7 +327,7 @@ export class CoverCalculator {
         
         if (!(layer instanceof TokenLayer)) return false;
 
-        const hovered = layer.placeables.find(t => t._hover);
+        const hovered = layer.placeables.find(t => t._isHoverIn);
         if ( !hovered ) {
 
             /* remove cover bonuses for any selected */
