@@ -148,7 +148,7 @@ export class CoverCalculatorTokenSizes {
         await token.setFlag(MODULE.data.name, "coverLevel", cover)
     }
 
-    static isDowned(status, token) {
+    static isDowned(status) {
         return (
             status === CoverCalculatorTokenSizes.Downed.Prone &&
             !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
@@ -163,9 +163,13 @@ export class CoverCalculatorTokenSizes {
 
     static _canvasReady(){
         CoverCalculatorTokenSizes.userDefined()
-    }    
+    }
 
-    static async _createToken(document, data, id){
+    static async _createToken(document, data, id) {
+        if (!game.user.isGM && !document.canUserModify(game.user, "update")) {
+            return;
+        }
+        
         let cover = CoverCalculatorTokenSizes.coverValue(document.actor, "cover");
         await document.update({ 'flags.simbuls-cover-calculator.coverLevel': cover });
     }    
@@ -207,7 +211,7 @@ export class CoverCalculatorTokenSizes {
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
         let actor = token.actor;
 
-        if (CoverCalculatorTokenSizes.isDowned(status, token)) {
+        if (CoverCalculatorTokenSizes.isDowned(status)) {
             await CoverCalculatorTokenSizes.setCover('cover', actor, token);
         }
     }
