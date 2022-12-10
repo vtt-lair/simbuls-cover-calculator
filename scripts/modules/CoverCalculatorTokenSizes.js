@@ -148,7 +148,7 @@ export class CoverCalculatorTokenSizes {
         await token.setFlag(MODULE.data.name, "coverLevel", cover)
     }
 
-    static isDowned(status) {
+    static isDowned(status, token) {
         return (
             status === CoverCalculatorTokenSizes.Downed.Prone &&
             !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
@@ -207,7 +207,7 @@ export class CoverCalculatorTokenSizes {
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
         let actor = token.actor;
 
-        if (CoverCalculatorTokenSizes.isDowned(status)) {
+        if (CoverCalculatorTokenSizes.isDowned(status, token)) {
             await CoverCalculatorTokenSizes.setCover('cover', actor, token);
         }
     }
