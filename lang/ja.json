@@ -1,17 +1,17 @@
 {
-    "SCC.ConfigApp.title": "Simbul's Cover Calculator Configuration",
+    "SCC.ConfigApp.title": "Simbul's Cover Calculator 設定",
     "setting.ConfigOption.name": "設定変更",
     "setting.ConfigOption.label": "Calculator Cover設定を開く",
 
-    "setting.debug.name": "Extended debug output",
-    "setting.debug.hint": "Logs additional debugging information to the console.",
+    "setting.debug.name": "拡張デバッグ出力",
+    "setting.debug.hint": "デバッグ情報をコンソールへより多く出力します。",
+    
+    "SCC.groupLabel.system": "システム",
+    "SCC.groupLabel.combat": "戦闘",
+    "SCC.groupLabel.token-sizes": "コマのサイズと遮蔽",
+    "SCC.groupLabel.misc": "その他",
 
-    "SCC.groupLabel.system": "System",
-    "SCC.groupLabel.combat": "Combat",
-    "SCC.groupLabel.token-sizes": "Token Cover Sizes",
-    "SCC.groupLabel.misc": "Misc",
-
-    "SCC.groupHint.token-sizes": "When the 'Token Cover' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
+    "SCC.groupHint.token-sizes": "「サイズによる遮蔽変化」を有効にした場合に設定します。有効な値は tiny / sm / med / lg / huge / grg となります。空白を入れずカンマ(',')区切りで指定してください。空欄にすると、コマによる遮蔽は一律“1/2遮蔽”として扱われます。",
 
     "setting.losOnTarget.name":"ターゲットの遮蔽判定",
     "setting.losOnTarget.hint":"ホットキーに関わらず、コマを目標選択したとき常に遮蔽の判定が行われます。",
@@ -52,28 +52,28 @@
     "setting.losWithTokens.hint": "遮蔽判定時にコマが考慮されるようになります。",
     "setting.losMaskNPC.name": "遮蔽判定からDM向け情報を隠す",
     "setting.losMaskNPC.hint": "遮蔽判定にDMへの秘話を使い、またNPCの名前を「不明なクリーチャー」に置き換えます。",
-    "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",
-    "setting.hideNoCoverChat.hint": "Doesn't display the cover report if 'No Cover' is the result.",
+    "setting.hideNoCoverChat.name": "「遮蔽なし」の報告を隠す",
+    "setting.hideNoCoverChat.hint": "遮蔽判定結果が「遮蔽なし」の場合、チャットログに出力されなくなります。",
     "setting.whisperToSelf.name":"遮蔽判定結果を自身にささやく",
     "setting.whisperToSelf.hint":"遮蔽判定結果をGMにではなく、自身にのみささやくようになります。",
 
     "setting.losWithTiles.name": "タイルによる遮蔽",
     "setting.losWithTiles.hint": "遮蔽判定にタイルが考慮されるようになります。",
 
-    "setting.coverPerTokenSize.name" : "Token Sizes effects cover",
-    "setting.coverPerTokenSize.hint" : "Enable this and specify sizes below to determine cover for token sizes.",
-    "setting.noCoverTokenSizes.name" : "No cover",
-    "setting.noCoverTokenSizes.hint" : "The token sizes that does not provide any cover while it has HP.",
-    "setting.threeQuartersCoverTokenSizes.name" : "3/4 cover",
-    "setting.threeQuartersCoverTokenSizes.hint" : "The token sizes that provide 3/4 cover while it has HP.",
-    "setting.noDeadTokenSizes.name" : "No cover when at 0hp",
-    "setting.noDeadTokenSizes.hint" : "The token sizes that does not provide any cover while it has 0 HP.",
-    "setting.halfDeadTokenSizes.name" : "1/2 cover when at 0h",
-    "setting.halfDeadTokenSizes.hint" : "The token sizes that provides 1/2 cover while it has 0 HP.",
-    "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
-    "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
-    "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
-    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
+    "setting.coverPerTokenSize.name" : "サイズによる遮蔽変化",
+    "setting.coverPerTokenSize.hint" : "有効すると、遮蔽が提供されるコマのサイズを状況別に設定できるようになります。",
+    "setting.noCoverTokenSizes.name" : "遮蔽なし",
+    "setting.noCoverTokenSizes.hint" : "hpがあるとき、遮蔽を提供しないコマのサイズを指定します。",
+    "setting.threeQuartersCoverTokenSizes.name" : "3/4遮蔽",
+    "setting.threeQuartersCoverTokenSizes.hint" : "hpがあるとき、3/4遮蔽を発生させるコマのサイズを指定します。",
+    "setting.noDeadTokenSizes.name" : "hp0なら遮蔽なし",
+    "setting.noDeadTokenSizes.hint" : "hpが0のとき、遮蔽を提供しないコマのサイズを指定します。",
+    "setting.halfDeadTokenSizes.name" : "hp0なら1/2遮蔽",
+    "setting.halfDeadTokenSizes.hint" : "hpが0のとき、1/2遮蔽を提供するコマのサイズを指定します。",
+    "setting.threeQuartersDeadTokenSizes.name" : "hp0なら3/4遮蔽",
+    "setting.threeQuartersDeadTokenSizes.hint" : "hpが0のとき、3/4遮蔽を提供するコマのサイズを指定します。",
+    "setting.fullDeadTokenSizes.name" : "hp0なら完全遮蔽",
+    "setting.fullDeadTokenSizes.hint" : "hpが0のとき、完全遮蔽を提供するコマのサイズを指定します。",
 
     "SCC.flagsNoCover" : "遮蔽を無視する程度の能力",
     "SCC.flagsNoCoverHint" : "特技やマジックアイテムによって提供されることがあります。",
@@ -82,6 +82,6 @@
     "SCC.flagsNoCoverOptionThreeQ" : "1/2遮蔽と3/4の遮蔽を無視する",
     "SCC.flagsNoCoverOptionFull" : "すべての遮蔽を無視する",
 
-    "setting.proneActsLikeDead.name": "Prone acts like 0 HP",
-    "setting.proneActsLikeDead.hint": "When the token has the prone or unconcious status effect, handle cover as if it has 0 HP."
+    "setting.proneActsLikeDead.name": "“伏せ”をhp0として扱う",
+    "setting.proneActsLikeDead.hint": "コマが“伏せ”や“気絶”の状態であるとき、遮蔽判定においてhpを0として扱うようにします。"
 }
