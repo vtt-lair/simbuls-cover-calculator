@@ -166,7 +166,7 @@ export class CoverCalculatorTokenSizes {
     }
 
     static async _createToken(document, data, id) {
-        if (!game.user.isGM && !document.canUserModify(game.user, "update")) {
+        if (!document.canUserModify(game.user, "update")) {
             return;
         }
         
