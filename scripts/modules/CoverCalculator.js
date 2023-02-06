@@ -137,7 +137,7 @@ export class CoverCalculator {
 
         MODULE.applySettings(menuData);
 
-        CONFIG.DND5E.characterFlags.helpersIgnoreCover = {
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
             hint: HELPER.localize("SCC.flagsNoCoverHint"),
             name: HELPER.localize("SCC.flagsNoCover"),
             section: "Feats",
