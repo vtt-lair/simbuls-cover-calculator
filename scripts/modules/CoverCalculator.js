@@ -150,6 +150,13 @@ export class CoverCalculator {
             type: Number
         };
 
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersReduceCover = {
+            hint: HELPER.localize("SCC.flagsReduceCoverHint"),
+            name: HELPER.localize("SCC.flagsReduceCover"),
+            section: "Feats",
+            type: Number
+        };
+
         /* insert keybindings */
         game.keybindings.register(MODULE.data.name, "coverReport", {
             name: "Check Cover",
@@ -397,6 +404,10 @@ export class CoverCalculator {
                 flagValue=MODULE[NAME].ignoreCover.threeQuarter
             }
             return flagValue;
+        }
+
+        Token.prototype.reducesCover = function() {
+            return this.actor?.getFlag(game.system.id, "helpersReduceCover") ?? 0;
         }
 
         Token.prototype.coverValue = function() {
@@ -673,7 +684,10 @@ class Cover {
         this.data.results.ignore = this.data.origin.object.ignoresCover();
         this.data.results.corners = 0;
         this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), 3)),3);
-        // If the current cover value is under the ignore threshold set cover to 0. ignore theshold goes from 1 to 3, cover from 0 to 3
+        // Reduce cover by reduce value
+        this.data.cover = Math.max(0, this.data.results.cover - this.data.results.reduce);
+
+        // If the current cover value is under the ignore threshold set cover to 0. ignore threshold goes from 1 to 3, cover from 0 to 3
         // none, half, threequarter, full
         this.data.results.cover = this.data.results.cover <= this.data.results.ignore ? 0 : this.data.results.cover;
         this.data.results.label = MODULE[NAME].coverData[this.data.results.cover ?? 0].label;
