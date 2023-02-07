@@ -80,8 +80,8 @@
     "SCC.flagsNoCoverOptionThreeQ" : "Ignore half and three-quarters cover.",
     "SCC.flagsNoCoverOptionFull" : "Ignore all cover.",
 
-    "SCC.flagsReduceCover" : "Reduces partial cover of targets by the given number of steps",
-    "SCC.flagsReduceCoverHint" : "Provided by feats and magic items.",
+    "SCC.flagsReduceCover" : "Reduce target partial cover",
+    "SCC.flagsReduceCoverHint" : "When attacking a target, their partial cover is reduced by the specified number of steps.",
 
     "setting.proneActsLikeDead.name": "Prone acts like 0 HP",
     "setting.proneActsLikeDead.hint": "When the token has the prone or unconcious status effect, handle cover as if it has 0 HP."
