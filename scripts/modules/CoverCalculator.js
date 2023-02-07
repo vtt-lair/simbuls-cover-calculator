@@ -137,7 +137,7 @@ export class CoverCalculator {
 
         MODULE.applySettings(menuData);
 
-        CONFIG.DND5E.characterFlags.helpersIgnoreCover = {
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
             hint: HELPER.localize("SCC.flagsNoCoverHint"),
             name: HELPER.localize("SCC.flagsNoCover"),
             section: "Feats",
@@ -390,7 +390,7 @@ export class CoverCalculator {
     */
     static _patchToken() {
         Token.prototype.ignoresCover = function() {
-            let flagValue = this.actor?.getFlag("dnd5e", "helpersIgnoreCover") ?? 0;
+            let flagValue = this.actor?.getFlag(game.system.id, "helpersIgnoreCover") ?? 0;
             if (flagValue === true||flagValue === "true"){
                 // used to be a boolean flag, if the flag is true either 
                 // ,the value or a string due to AE shenanigans, treat is as it would have been before

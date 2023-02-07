@@ -82,7 +82,7 @@ export class CoverCalculatorTokenSizes {
     }
 
     static userDefined() {
-        let keys = Object.keys(CONFIG.DND5E.tokenSizes)
+        let keys = Object.keys(CONFIG[game.system.id.toUpperCase()].tokenSizes)
 
         let noCover = HELPER.setting(MODULE.data.name, "noCoverTokenSizes").split(",")
         for (let size of noCover) {

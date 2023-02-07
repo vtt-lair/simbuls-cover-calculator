@@ -65,6 +65,14 @@
                 "compatibility": {
                     "verified": "2.0.2"
                 }
+            },
+            {
+              "id": "sw5e",
+              "type": "system",
+              "manifest": "https://github.com/unrealkakeman89/sw5e/releases/download/2.0.3.2.3.7/system.json",
+              "compatibility": {
+                "verified": "2.0.3.2.3.7"
+              }
             }
         ],
         "requires": [
