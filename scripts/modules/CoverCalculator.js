@@ -686,7 +686,7 @@ class Cover {
         this.data.results.corners = 0;
         this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), 3)),3);
         // Reduce cover by reduce value
-        this.data.cover = Math.max(0, this.data.results.cover - this.data.results.coverReduction);
+        this.data.results.cover = Math.max(0, this.data.results.cover - this.data.results.coverReduction);
 
         // If the current cover value is under the ignore threshold set cover to 0. ignore threshold goes from 1 to 3, cover from 0 to 3
         // none, half, threequarter, full
