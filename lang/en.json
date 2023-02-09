@@ -12,7 +12,7 @@
     "SCC.groupLabel.misc": "Misc",
 
     "SCC.groupHint.token-sizes": "When the 'Token Cover' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
-    
+
     "setting.losOnTarget.name":"Compute cover on target",
     "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
     "setting.losSystem.name": "Cover computation mode",
@@ -22,16 +22,17 @@
     "setting.debugDrawing.name": "Debug Line-of-Sight",
     "setting.debugDrawing.hint": "Renders the sight rays used in the latest cover calculation. Refresh to clear drawing.",
     "SCC.LoS_nocover": "No cover",
-    "SCC.LoS_halfcover":"Half cover (+2)",
-    "SCC.LoS_34cover":"Three-quarters cover (+5)",
+    "SCC.LoS_halfcover":"Half cover",
+    "SCC.LoS_34cover":"Three-quarters cover",
     "SCC.LoS_fullcover":"Full cover",
+    "SCC.LoS_coverstring": "{coverType} ({acBonus})",
     "SCC.LoS_outputmessage":"checks their sightline to",
     "SCC.LoS_providescover":"Provides Cover",
     "SCC.LoSMaskNPCs_creatureMask": "a creature",
     "setting.losKeyBind.name" : "Keybind for Cover",
     "setting.losKeyBind.hint" : "Assign a keyboard shortcut to check cover when targeting.",
     "setting.removeCover.name" : "Remove Cover on Turn End",
-    "setting.removeCover.hint" : "Removes any cover effect at the end of a combatants turn",    
+    "setting.removeCover.hint" : "Removes any cover effect at the end of a combatants turn",
 
     "setting.coverApplication.name" : "Cover Application",
     "setting.coverApplication.hint" : "Allow application of cover bonuses. These are applied to the attacker, not the target. These only affect melee and ranged attacks, not dexterity saves.",
