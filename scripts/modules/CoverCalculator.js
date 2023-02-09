@@ -259,7 +259,7 @@ export class CoverCalculator {
     }
 
     static _renderTileConfig(app, html){
-        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.data.overhead ) return;
+        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.overhead ) return;
         const adjacentElement = html.find('[data-tab="basic"] .form-group').last();
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
