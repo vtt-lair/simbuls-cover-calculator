@@ -284,6 +284,38 @@ export class CoverCalculator {
         return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: sign + coverData[coverLevel].value})
     }
 
+    // TODO: Move to where the settings is
+    /**
+     * Approximate the cover level look up table
+     * @param coverLevel The level to create the LUT for
+     * @returns {Number[]} A look up table for the cover level at each level of cover for the given cover level
+     * @private
+     */
+    static _calculateCoverLevelLut(coverLevel) {
+        const lut = [];
+        for (let i = 0; i < 5; i++) {
+            let value;
+            // Anything bigger than 4 looks best on a linear curve
+            if (coverLevel > 4) {
+                value = Math.ceil(coverLevel*i/4);
+            } else {
+                const x = i/4;
+                value = (1.4 * Math.pow(x, 3) - 2.1 * Math.pow(x, 2) + 1.7 * x) * coverLevel;
+
+                // Ceil below 3
+                if (coverLevel < 3) {
+                    value = Math.ceil(value);
+                } else {
+                    // This bad rounding matches better than the regular kind of rounding
+                    if (value % 1 > 0.5) value = Math.ceil(value);
+                    else value = Math.floor(value);
+                }
+            }
+            lut.push(value);
+        }
+        return lut;
+    }
+
     static _injectCoverAdjacent(app, html, element) {
         /* if this app doesnt have the expected
         * data (ex. prototype token config),
@@ -691,6 +723,8 @@ class Cover {
         this.data.results.value = -coverData.value;
 
         function getResult(data, arr) {
+
+
             return Math.max(...Object.entries(data).map(([key, coverArr]) => coverArr[arr.count(key)]));
         }
     }
