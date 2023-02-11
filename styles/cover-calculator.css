@@ -28,3 +28,67 @@
     opacity: 0.3;
     margin-right: -100%;
 }
+
+/* Cover Settings */
+.athenaeum-tab-pad .cover-levels-container {
+    margin: 10px;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-title {
+    flex: 0 0 50%;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-ac-bonus {
+    flex: 1;
+    padding: 0 35px;
+    text-align: center;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-controls {
+    flex: 1;
+    padding-left: 40px;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-controls .cover-control.cover-control-disabled {
+    color: #858585;
+    cursor: unset;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-controls a {
+    flex-grow: 0;
+    white-space: nowrap;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-header {
+    border: 2px #eeede0 groove;
+    padding: 5px 10px;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-header > * + * {
+    border-left: 1px black solid;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-header .cover-controls {
+    justify-content: flex-end;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body {
+    list-style: none;
+    padding: 0;
+    margin-top: 0;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-level {
+    padding: 5px 10px;
+    margin: 1px;
+    border: 1px #eeede066 solid;
+    background: #00000007;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-level:nth-child(2n) {
+    background: #00000014;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-level .cover-controls {
+    justify-content: space-between;
+}

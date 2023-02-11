@@ -9,6 +9,7 @@
     "SCC.groupLabel.system": "System",
     "SCC.groupLabel.combat": "Combat",
     "SCC.groupLabel.token-sizes": "Token Cover Sizes",
+    "SCC.groupLabel.cover-levels": "Cover Levels",
     "SCC.groupLabel.misc": "Misc",
 
     "SCC.groupHint.token-sizes": "When the 'Token Cover' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",

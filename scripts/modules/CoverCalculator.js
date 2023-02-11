@@ -11,6 +11,7 @@ const NAME = "CoverCalculator";
 export class CoverCalculator {
     static register(){
         CoverCalculator.defaults();
+        CoverCalculator.handlebars();
         CoverCalculator.settings();
         CoverCalculator.hooks();
         CoverCalculator.patch();
@@ -53,6 +54,10 @@ export class CoverCalculator {
                 "full":3
             },
         }
+    }
+
+    static handlebars() {
+        loadTemplates({"scc.coverDataPartial": MODULE.data.path + "/templates/partials/ModularSettingsCoverData.hbs"})
     }
 
     static settings() {
@@ -108,7 +113,7 @@ export class CoverCalculator {
                 scope : "world", config, group : "combat", default : false, type : Boolean,
             },
             coverData : {
-                scope : "world", config: true, type : Object,
+                scope : "world", config, group : "cover", type : Object, customPartial: "scc.coverDataPartial",
                 default : {
                     0 : {
                         label : HELPER.localize("SCC.LoS_nocover"),
@@ -207,6 +212,7 @@ export class CoverCalculator {
             }
         }
     }
+    // Nick and Lukas Were Here
 
     static async _deleteCombatant(combatant, /*render*/){
         if (HELPER.setting(MODULE.data.name, "losSystem") > 0 && HELPER.isFirstGM()) {
@@ -282,38 +288,6 @@ export class CoverCalculator {
 
         const sign = coverData[coverLevel].value < 0 ? "-" : "+";
         return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: sign + coverData[coverLevel].value})
-    }
-
-    // TODO: Move to where the settings is
-    /**
-     * Approximate the cover level look up table
-     * @param coverLevel The level to create the LUT for
-     * @returns {Number[]} A look up table for the cover level at each level of cover for the given cover level
-     * @private
-     */
-    static _calculateCoverLevelLut(coverLevel) {
-        const lut = [];
-        for (let i = 0; i < 5; i++) {
-            let value;
-            // Anything bigger than 4 looks best on a linear curve
-            if (coverLevel > 4) {
-                value = Math.ceil(coverLevel*i/4);
-            } else {
-                const x = i/4;
-                value = (1.4 * Math.pow(x, 3) - 2.1 * Math.pow(x, 2) + 1.7 * x) * coverLevel;
-
-                // Ceil below 3
-                if (coverLevel < 3) {
-                    value = Math.ceil(value);
-                } else {
-                    // This bad rounding matches better than the regular kind of rounding
-                    if (value % 1 > 0.5) value = Math.ceil(value);
-                    else value = Math.floor(value);
-                }
-            }
-            lut.push(value);
-        }
-        return lut;
     }
 
     static _injectCoverAdjacent(app, html, element) {
