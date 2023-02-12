@@ -75,7 +75,7 @@
     "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
     "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
 
-    "SCC.flagsNoCover" : "Ignore half and three-quaters cover",
+    "SCC.flagsNoCover" : "Ignore half and three-quarters cover",
     "SCC.flagsNoCoverHint" : "Provided by feats.",
     "SCC.flagsNoCoverOptionNone" : "Don't ignore any cover.",
     "SCC.flagsNoCoverOptionHalf" : "Ignore half cover.",

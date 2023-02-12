@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+        viewBox="0 0 512 512"
+        width="512"
+        height="512"
+        version="1.1"
+        id="svg147"
+        sodipodi:docname="Half_Cover.svg"
+        inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <metadata
+          id="metadata153">
+    <rdf:RDF>
+      <cc:Work
+              rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+                rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+          id="defs151">
+    <inkscape:path-effect
+            effect="powerclip"
+            id="path-effect203"
+            is_visible="true"
+            lpeversion="1"
+            inverse="true"
+            flatten="false"
+            hide_clip="false"
+            message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+    <inkscape:path-effect
+            effect="powerclip"
+            id="path-effect187"
+            is_visible="true"
+            lpeversion="1"
+            inverse="true"
+            flatten="false"
+            hide_clip="false"
+            message="Use fill-rule evenodd on &lt;b&gt;fill and stroke&lt;/b&gt; dialog if no flatten result after convert clip to paths." />
+    <clipPath
+            clipPathUnits="userSpaceOnUse"
+            id="clipPath199">
+      <rect
+              style="display:none;fill:#ffffff;stroke-width:1.40061"
+              id="rect201"
+              width="336.35626"
+              height="600.68262"
+              x="187.55252"
+              y="-44"
+              d="M 187.55252,-44 H 523.90878 V 556.68262 H 187.55252 Z" />
+      <path
+              id="lpe_path-effect203"
+              style="display:block;fill:#ffffff;stroke-width:1.40061"
+              class="powerclip"
+              d="M 101,11 H 411 V 501 H 101 Z m 86.55252,-55 V 556.68262 H 523.90878 V -44 Z" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+          pagecolor="#ffffff"
+          bordercolor="#666666"
+          borderopacity="1"
+          objecttolerance="10"
+          gridtolerance="10"
+          guidetolerance="10"
+          inkscape:pageopacity="0"
+          inkscape:pageshadow="2"
+          inkscape:window-width="1920"
+          inkscape:window-height="1051"
+          id="namedview149"
+          showgrid="false"
+          inkscape:zoom="1.3921165"
+          inkscape:cx="169.52604"
+          inkscape:cy="272.96566"
+          inkscape:window-x="1920"
+          inkscape:window-y="0"
+          inkscape:window-maximized="1"
+          inkscape:current-layer="svg147"
+          inkscape:showpageshadow="2"
+          inkscape:pagecheckerboard="0"
+          inkscape:deskcolor="#d1d1d1" />
+  <g
+          class=""
+          transform="translate(0,0)"
+          style="touch-action:none;fill:#000000"
+          id="g145">
+    <path
+            d="M256 16c25 24 100 72 150 72v96c0 96-75 240-150 312-75-72-150-216-150-312V88c50 0 125-48 150-72z"
+            fill="#ffffff"
+            fill-opacity="1"
+            id="path143"
+            style="fill:#000000" />
+  </g>
+  <g
+          class=""
+          style="fill:#ffffff"
+          id="g145-2"
+          transform="matrix(0.8,0,0,0.8,51.2,51.2)">
+    <path
+            d="m 256,16 c 25,24 100,72 150,72 v 96 C 406,280 331,424 256,496 181,424 106,280 106,184 V 88 c 50,0 125,-48 150,-72 z"
+            fill="#ffffff"
+            fill-opacity="1"
+            id="path143-3"
+            style="fill:#ffffff"
+            clip-path="url(#clipPath199)"
+            inkscape:path-effect="#path-effect203"
+            inkscape:original-d="m 256,16 c 25,24 100,72 150,72 v 96 C 406,280 331,424 256,496 181,424 106,280 106,184 V 88 c 50,0 125,-48 150,-72 z" />
+  </g>
+</svg>

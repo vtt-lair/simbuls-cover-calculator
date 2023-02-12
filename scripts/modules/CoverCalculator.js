@@ -1,10 +1,10 @@
-import { MODULE } from "../module.js";
-import { Shape } from "./Shape.js";
-import { Segment } from "./Segment.js";
-import { Point } from "./Point.js";
-import { logger } from '../../../simbuls-athenaeum/scripts/logger.js';
-import { HELPER } from '../../../simbuls-athenaeum/scripts/helper.js'
-import { queueUpdate } from "../../../simbuls-athenaeum/scripts/update-queue.js"
+import {MODULE} from "../module.js";
+import {Shape} from "./Shape.js";
+import {Segment} from "./Segment.js";
+import {Point} from "./Point.js";
+import {logger} from '../../../simbuls-athenaeum/scripts/logger.js';
+import {HELPER} from '../../../simbuls-athenaeum/scripts/helper.js'
+import {queueUpdate} from "../../../simbuls-athenaeum/scripts/update-queue.js"
 
 const NAME = "CoverCalculator";
 
@@ -22,30 +22,15 @@ export class CoverCalculator {
         MODULE[NAME] = {
             wall : {
                 default : 3,
-                flag : "coverLevel",
-                cover : {
-                    3 : [0,1,1,2,3],
-                    2 : [0,1,1,2,2],
-                    1 : [0,0,0,1,1],
-                },
+                flag : "coverLevel"
             },
             tile : {
                 default : 0,
-                flag : "coverLevel",
-                cover : {
-                    3 : [0,1,1,2,3],
-                    2 : [0,1,1,2,2],
-                    1 : [0,0,0,1,1],
-                },
+                flag : "coverLevel"
             },
             token : {
                 default : 1,
-                flag : "coverLevel",
-                cover : {
-                    3 : [0,1,1,2,3],
-                    2 : [0,1,1,2,2],
-                    1 : [0,1,1,1,1],
-                }
+                flag : "coverLevel"
             },
             ignoreCover:{ // Defining what number relates to what cover ignore level
                 "none":0,
@@ -57,7 +42,9 @@ export class CoverCalculator {
     }
 
     static handlebars() {
-        loadTemplates({"scc.coverDataPartial": MODULE.data.path + "/templates/partials/ModularSettingsCoverData.hbs"})
+        loadTemplates({
+            "scc.coverDataPartial": MODULE.data.path + "/templates/partials/ModularSettingsCoverData.hbs"
+        })
     }
 
     static settings() {
@@ -119,25 +106,29 @@ export class CoverCalculator {
                         label : HELPER.localize("SCC.LoS_nocover"),
                         value : 0,
                         color : "0xff0000",
-                        icon : ""
+                        icon : "",
+                        partial: [0, 0, 0, 0, 0]
                     },
                     1 : {
                         label : HELPER.localize("SCC.LoS_halfcover"),
                         value : 2,
                         color : "0xffa500",
-                        icon : `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`
+                        icon : `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
+                        partial: [0,1,1,1,1]
                     },
                     2 : {
                         label : HELPER.localize("SCC.LoS_34cover"),
                         value : 5,
                         color : "0xffff00",
-                        icon : `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`
+                        icon : `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
+                        partial: [0,1,1,2,2]
                     },
                     3 : {
                         label : HELPER.localize("SCC.LoS_fullcover"),
                         value : 40,
                         color : "0x008000",
-                        icon : `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`
+                        icon : `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
+                        partial: [0,1,1,2,3]
                     },
                 },
             }
@@ -659,20 +650,28 @@ class Cover {
                         return r;
                     });
 
-                let results = {
-                    tiles : getResult(
-                        MODULE[NAME].tile.cover,
-                        collisions.map(c => c.tiles),
-                    ),
-                    tokens : getResult(
-                        MODULE[NAME].token.cover,
-                        collisions.map(c => c.tokens),
-                    ),
-                    walls : getResult(
-                        MODULE[NAME].wall.cover,
-                        collisions.map(c => c.walls),
-                    ),
-                }
+                const cover = Object.entries(HELPER.setting(MODULE.data.name, "coverData"))
+                    .filter(([key]) => key !== 0)
+                    .reduce(
+                        (acc, [key, coverLevel]) => {
+                            acc[key] = coverLevel.partial;
+                            return acc;
+                        }, {}
+                    );
+
+                const results = ["tiles", "tokens", "walls"]
+                    // Extract tiles, tokens, and walls from collisions
+                    .map((type) => {
+                        return {
+                            key: type,
+                            value: collisions.map(c => c[type])
+                        };
+                    })
+                    // Get cover level for each type
+                    .reduce((acc, {key, value}) => {
+                        acc[key] = Math.max(...Object.entries(cover).map(([key, coverArr]) => coverArr[value.count(key)]))
+                        return acc;
+                    }, {})
 
                 results.total = Math.max(results.tiles, results.tokens, results.walls);
 
@@ -696,11 +695,6 @@ class Cover {
         this.data.results.label = CoverCalculator._buildLabel(this.data.results.cover)
         this.data.results.value = -coverData.value;
 
-        function getResult(data, arr) {
-
-
-            return Math.max(...Object.entries(data).map(([key, coverArr]) => coverArr[arr.count(key)]));
-        }
     }
 
     async toMessage() {

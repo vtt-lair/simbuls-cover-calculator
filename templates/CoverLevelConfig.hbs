@@ -1,0 +1,39 @@
+<div class="form-group">
+    <label>Label</label>
+    <input type="text" name="label" value="{{label}}" placeholder="Label">
+</div>
+<div class="form-group">
+    <label>AC Bonus</label>
+    <input type="number" name="value" value="{{value}}" placeholder="AC Bonus">
+</div>
+
+<div class="cover-partials">
+    <h3>Partial Cover Levels</h3>
+    <p>When the token is only partially behind cover of this level, these cover levels are substituted.</p>
+    <p>Changing the value for fully behind cover is possible, but not recommended</p>
+    <div class="form-group flexrow">
+        <label>Quarter behind cover</label>
+        <select name="quarter-cover">
+            {{selectOptions coverLevels selected=partial.[1]}}
+        </select>
+    </div>
+    <div class="form-group flexrow">
+        <label>Half behind cover</label>
+        <select name="half-cover">
+            {{selectOptions coverLevels selected=partial.[2]}}
+        </select>
+    </div>
+    <div class="form-group flexrow">
+        <label>Three quarters behind cover</label>
+        <select name="three-q-cover">
+            {{selectOptions coverLevels selected=partial.[3]}}
+        </select>
+    </div>
+    <div class="form-group flexrow">
+        <label>Fully behind cover</label>
+        <select name="full-cover">
+            {{selectOptions coverLevels selected=partial.[4]}}
+        </select>
+    </div>
+    <button name="reset-partials">Reset Partial Cover</button>
+</div>

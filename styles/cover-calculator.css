@@ -78,6 +78,48 @@
     margin-top: 0;
 }
 
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-title {
+
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-warn-parent {
+    position: relative;
+    margin-left: 5px;
+    color: gold;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-warn-parent .cover-warn-container {
+    display: none;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    min-width: 280px;
+    z-index: 1;
+    padding: 0;
+
+    border-radius: 1px;
+
+    color: white;
+    background-color: #00000079;
+    font-size: 8pt;
+    font-weight: normal;
+    font-family: 'Open Sans', sans-serif serif;
+
+    list-style: none;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-warn-parent:hover .cover-warn-container {
+    display: block;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-warn-parent .cover-warn-container .cover-warn {
+    padding: 4px 7px;
+}
+
+.athenaeum-tab-pad .cover-levels-container .cover-body .cover-warn-parent .cover-warn-container .cover-warn + .cover-warn {
+    border-top: 1px white solid;
+}
+
 .athenaeum-tab-pad .cover-levels-container .cover-body .cover-level {
     padding: 5px 10px;
     margin: 1px;
@@ -91,4 +133,13 @@
 
 .athenaeum-tab-pad .cover-levels-container .cover-body .cover-level .cover-controls {
     justify-content: space-between;
+}
+
+/** Cover Level Config */
+.cover-level-config .cover-partials .form-group {
+    justify-content: space-between;
+}
+
+.cover-level-config .cover-partials button {
+    margin-top: 10px;
 }

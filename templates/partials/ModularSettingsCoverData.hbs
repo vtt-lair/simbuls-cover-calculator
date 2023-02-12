@@ -1,31 +1,21 @@
-<div class="cover-levels-container">
-    <div class="cover-header flexrow">
-        <div class="cover-title">Name</div>
-        <div class="cover-ac-bonus">AC Bonus</div>
-        <div class="cover-controls flexrow">
-            <a class="cover-control" title="Add Cover Level" data-action="add">
-                <i class="fas fa-plus"></i> Add
-            </a>
-        </div>
-    </div>
-    <ul class="cover-body" id="scc-cover-levels-settings-body">
-        <li class="cover-level flexrow" data-index="0">
-            <div class="cover-title">No Cover</div>
-            <div class="cover-ac-bonus">+1</div>
+<div class="form-group">
+    <label>Presets</label>
+    <select class="cover-preset">
+        {{selectOptions @root.data.coverOptions labelAttr="label"}}
+    </select>
+</div>
+<div class="form-group">
+    <div class="cover-levels-container">
+        <div class="cover-header flexrow">
+            <div class="cover-title">Name</div>
+            <div class="cover-ac-bonus">AC Bonus</div>
             <div class="cover-controls flexrow">
-                <a class="cover-control" title="Edit Cover Level" data-action="edit">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <a class="cover-control" title="Move Up" data-action="up">
-                    <i class="fas fa-arrow-up"></i>
-                </a>
-                <a class="cover-control" title="Move Down" data-action="down">
-                    <i class="fas fa-arrow-down"></i>
-                </a>
-                <a class="cover-control" title="Delete Cover Level" data-action="delete">
-                    <i class="fas fa-trash"></i>
+                <a class="cover-control" title="Add Cover Level" data-action="add">
+                    <i class="fas fa-plus"></i> Add
                 </a>
             </div>
-        </li>
-    </ul>
+        </div>
+        <ul class="cover-body" id="scc-cover-levels-settings-body">
+        </ul>
+    </div>
 </div>
