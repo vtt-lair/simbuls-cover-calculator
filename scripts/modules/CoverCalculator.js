@@ -273,7 +273,7 @@ export class CoverCalculator {
     static _renderWallConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0) return;
         const ele = html.find('[name="ds"]')[0].parentElement;
-        CoverCalculator._addToConfig(app, html, ele);
+        CoverCalculator._injectCoverAdjacent(app, html, ele);
     }
 
     /* used for new style multi-tab config apps */
@@ -295,29 +295,8 @@ export class CoverCalculator {
                             </div>`;
 
         html.css("height", "auto");
+
         element.after(selectHTML);
-
-    }
-
-    /* used for "legacy" single page config apps */
-    // TODO functionalize HTML generation between these two functions
-    static _addToConfig(app, html, ele) {
-
-      /* if this app doesnt have the expected
-       * data (ex. prototype token config),
-       * bail out.
-       */
-        if (!app.object?.object) return;
-        const status = app.object.object.coverValue() ?? 0;
-        const selectHTML = `<label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
-                                ${
-                                    Object.entries(MODULE[NAME].coverData).reduce((acc, [key,{label}]) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${label}</option>`, ``)
-                                }
-                            </select>`;
-
-        html.css("height", "auto");
-        ele.insertAdjacentElement('afterend', HELPER.stringToDom(selectHTML, "form-group"));
     }
 
     static _handleCover() {
