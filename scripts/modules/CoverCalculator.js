@@ -662,8 +662,8 @@ class Cover {
 
                 results.total = Math.max(results.tiles, results.tokens, results.walls);
 
-                logger.debug("Collisions | ", collisions);
-                logger.debug("Results | ", results);
+                logger.debug(game.settings.get(MODULE.data.name, "debug"), "Collisions | ", collisions);
+                logger.debug(game.settings.get(MODULE.data.name, "debug"), "Results | ", results);
 
                 return results;
             });

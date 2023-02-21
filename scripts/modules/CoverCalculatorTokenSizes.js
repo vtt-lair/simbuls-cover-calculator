@@ -75,7 +75,8 @@ export class CoverCalculatorTokenSizes {
 
     static hooks(){
         Hooks.on(`canvasReady`, CoverCalculatorTokenSizes._canvasReady);
-        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createToken);        
+        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
+        Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
         Hooks.on(`preUpdateActor`, CoverCalculatorTokenSizes._preUpdateActor);
         Hooks.on("preCreateActiveEffect", CoverCalculatorTokenSizes._preCreateActiveEffect);
         Hooks.on("preDeleteActiveEffect", CoverCalculatorTokenSizes._preDeleteActiveEffect);
@@ -165,14 +166,14 @@ export class CoverCalculatorTokenSizes {
         CoverCalculatorTokenSizes.userDefined()
     }
 
-    static async _createToken(document, data, id) {
+    static async _createOrUpdateToken(document, data, id) {
         if (!document.canUserModify(game.user, "update")) {
             return;
         }
         
         let cover = CoverCalculatorTokenSizes.coverValue(document.actor, "cover");
         await document.update({ 'flags.simbuls-cover-calculator.coverLevel': cover });
-    }    
+    }
 
     static async _preUpdateActor(actor, update) {
         if (!actor.token || !actor.getActiveTokens()[0]?.document) return;

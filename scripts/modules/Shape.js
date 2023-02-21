@@ -74,7 +74,7 @@ export class Shape {
         try {
             return new Shape({ segments : [new Segment({ numbers : wall.document.c }, o)] }, o);
         } catch(e) {
-            logger.debug('Ignoring invalid wall:', wall);
+            logger.debug(game.settings.get(MODULE.data.name, "debug"), 'Ignoring invalid wall:', wall);
             return null;
         }
     }
