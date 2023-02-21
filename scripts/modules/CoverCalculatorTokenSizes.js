@@ -83,7 +83,7 @@ export class CoverCalculatorTokenSizes {
     }
 
     static userDefined() {
-        let keys = Object.keys(CONFIG.DND5E.tokenSizes)
+        let keys = Object.keys(CONFIG[game.system.id.toUpperCase()].tokenSizes)
 
         let noCover = HELPER.setting(MODULE.data.name, "noCoverTokenSizes").split(",")
         for (let size of noCover) {
@@ -152,13 +152,13 @@ export class CoverCalculatorTokenSizes {
     static isDowned(status) {
         return (
             status === CoverCalculatorTokenSizes.Downed.Prone &&
-            !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
-            !token.actor.getRollData().attributes.hp.value === 0
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
+            !token.actor.system.attributes.hp.value === 0
         ) ||
         (
             status === CoverCalculatorTokenSizes.Downed.Unconscious &&
-            !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Prone) && 
-            !token.actor.getRollData().attributes.hp.value === 0
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Prone) && 
+            !token.actor.system.attributes.hp.value === 0
         );
 }
 
@@ -176,7 +176,7 @@ export class CoverCalculatorTokenSizes {
     }
 
     static async _preUpdateActor(actor, update) {
-        if (!actor.token || !actor.getActiveTokens()[0]?.document) return;
+        if (!actor.token && !actor.getActiveTokens()[0]?.document) return;
 
         let hp = getProperty(update, "system.attributes.hp.value");
         let token = actor.token ?? actor.getActiveTokens()[0].document;
@@ -192,7 +192,7 @@ export class CoverCalculatorTokenSizes {
     static async _preCreateActiveEffect(effect) {
         if (HELPER.setting(MODULE.data.name, 'proneActsLikeDead') === false) return;
 
-        if (!effect.parent.parent || !effect.parent.getActiveTokens()[0]?.document) return;
+        if (!effect.parent.parent && !effect.parent.getActiveTokens()[0]?.document) return;
 
         let status = effect.label;
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
@@ -206,7 +206,7 @@ export class CoverCalculatorTokenSizes {
     static async _preDeleteActiveEffect(effect) {
         if (HELPER.setting(MODULE.data.name, 'proneActsLikeDead') === false) return;
 
-        if (!effect.parent.parent || !effect.parent.getActiveTokens()[0]?.document) return;
+        if (!effect.parent.parent && !effect.parent.getActiveTokens()[0]?.document) return;
 
         let status = effect.label;
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;

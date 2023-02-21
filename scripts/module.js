@@ -29,7 +29,7 @@ export class MODULE {
     }
 
     static globals() {
-        game.dnd5e.covercalc = {};
+        game[game.system.id].covercalc = {};
     }
 
     static settings() {

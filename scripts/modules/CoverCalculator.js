@@ -137,7 +137,7 @@ export class CoverCalculator {
 
         MODULE.applySettings(menuData);
 
-        CONFIG.DND5E.characterFlags.helpersIgnoreCover = {
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
             hint: HELPER.localize("SCC.flagsNoCoverHint"),
             name: HELPER.localize("SCC.flagsNoCover"),
             section: "Feats",
@@ -147,6 +147,13 @@ export class CoverCalculator {
                 2: HELPER.localize("SCC.flagsNoCoverOptionThreeQ"),
                 3: HELPER.localize("SCC.flagsNoCoverOptionFull")
             },
+            type: Number
+        };
+
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersReduceCover = {
+            hint: HELPER.localize("SCC.flagsReduceCoverHint"),
+            name: HELPER.localize("SCC.flagsReduceCover"),
+            section: "Feats",
             type: Number
         };
 
@@ -259,7 +266,7 @@ export class CoverCalculator {
     }
 
     static _renderTileConfig(app, html){
-        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.data.overhead ) return;
+        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.overhead ) return;
         const adjacentElement = html.find('[data-tab="basic"] .form-group').last();
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
@@ -273,7 +280,7 @@ export class CoverCalculator {
     static _renderWallConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0) return;
         const ele = html.find('[name="ds"]')[0].parentElement;
-        CoverCalculator._addToConfig(app, html, ele);
+        CoverCalculator._injectCoverAdjacent(app, html, ele);
     }
 
     /* used for new style multi-tab config apps */
@@ -295,29 +302,8 @@ export class CoverCalculator {
                             </div>`;
 
         html.css("height", "auto");
+
         element.after(selectHTML);
-
-    }
-
-    /* used for "legacy" single page config apps */
-    // TODO functionalize HTML generation between these two functions
-    static _addToConfig(app, html, ele) {
-
-      /* if this app doesnt have the expected
-       * data (ex. prototype token config),
-       * bail out.
-       */
-        if (!app.object?.object) return;
-        const status = app.object.object.coverValue() ?? 0;
-        const selectHTML = `<label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
-                                ${
-                                    Object.entries(MODULE[NAME].coverData).reduce((acc, [key,{label}]) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${label}</option>`, ``)
-                                }
-                            </select>`;
-
-        html.css("height", "auto");
-        ele.insertAdjacentElement('afterend', HELPER.stringToDom(selectHTML, "form-group"));
     }
 
     static _handleCover() {
@@ -390,13 +376,17 @@ export class CoverCalculator {
     */
     static _patchToken() {
         Token.prototype.ignoresCover = function() {
-            let flagValue = this.actor?.getFlag("dnd5e", "helpersIgnoreCover") ?? 0;
+            let flagValue = this.actor?.getFlag(game.system.id, "helpersIgnoreCover") ?? 0;
             if (flagValue === true||flagValue === "true"){
                 // used to be a boolean flag, if the flag is true either 
                 // ,the value or a string due to AE shenanigans, treat is as it would have been before
                 flagValue=MODULE[NAME].ignoreCover.threeQuarter
             }
             return flagValue;
+        }
+
+        Token.prototype.reducesCover = function() {
+            return this.actor?.getFlag(game.system.id, "helpersReduceCover") ?? 0;
         }
 
         Token.prototype.coverValue = function() {
@@ -671,9 +661,13 @@ class Cover {
 
         this.data.results.raw = results;
         this.data.results.ignore = this.data.origin.object.ignoresCover();
+        this.data.results.coverReduction = this.data.origin.object.reducesCover();
         this.data.results.corners = 0;
         this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), 3)),3);
-        // If the current cover value is under the ignore threshold set cover to 0. ignore theshold goes from 1 to 3, cover from 0 to 3
+        // Reduce cover by reduce value
+        this.data.results.cover = Math.max(0, this.data.results.cover - this.data.results.coverReduction);
+
+        // If the current cover value is under the ignore threshold set cover to 0. ignore threshold goes from 1 to 3, cover from 0 to 3
         // none, half, threequarter, full
         this.data.results.cover = this.data.results.cover <= this.data.results.ignore ? 0 : this.data.results.cover;
         this.data.results.label = MODULE[NAME].coverData[this.data.results.cover ?? 0].label;
