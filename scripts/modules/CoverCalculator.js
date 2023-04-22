@@ -104,6 +104,9 @@ export class CoverCalculator {
             losWithTokens : {
                 scope : "world", config, group : "system", default : false, type : Boolean,
             },
+            specifyCoverForTokenSizes : {
+                scope : "world", config, group : "system", default : false, type : Boolean,
+            },
             coverTint : {
                 scope : "world", config, group : "system", default : 0, type : String, 
                 choices : {
@@ -279,8 +282,8 @@ export class CoverCalculator {
 
     static _renderWallConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0) return;
-        const ele = html.find('[name="ds"]')[0].parentElement;
-        CoverCalculator._injectCoverAdjacent(app, html, ele);
+        const adjacentElement = html.find('.form-group').last();
+        CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
 
     /* used for new style multi-tab config apps */
