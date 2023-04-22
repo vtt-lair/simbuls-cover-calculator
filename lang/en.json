@@ -11,7 +11,7 @@
     "SCC.groupLabel.token-sizes": "Token Cover Sizes",
     "SCC.groupLabel.misc": "Misc",
 
-    "SCC.groupHint.token-sizes": "When the 'Token Cover' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
+    "SCC.groupHint.token-sizes": "When the 'Specify Cover for Token Sizes' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
     
     "setting.losOnTarget.name":"Compute cover on target",
     "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
@@ -48,6 +48,8 @@
 
     "setting.losWithTokens.name": "Token Cover",
     "setting.losWithTokens.hint": "Allow tokens to be factored into cover calculation.",
+    "setting.specifyCoverForTokenSizes.name": "Specify Cover for Token Sizes",
+    "setting.specifyCoverForTokenSizes.hint": "Specify what cover should be applied to sizes.",
     "setting.losMaskNPC.name": "Hide GM info from Cover Report",
     "setting.losMaskNPC.hint": "Replaces uses of the NPC's name with \"A creature\" when reporting cover and whispers GM prompted cover checks.",
     "setting.hideNoCoverChat.name": "Hide 'No Cover' report.",

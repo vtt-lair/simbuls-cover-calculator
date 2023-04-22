@@ -57,7 +57,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return app.render(true);
     }
 
-    onTokenCoverChange(event) {
+    onSpecifyCoverForTokenSizesChange(event) {
         this.toggleTokenSizesTabVisible(event.currentTarget.checked);
     }
 
@@ -88,7 +88,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
-        html.find(`[name="${MODULE.data.name}.losWithTokens"]`).change(this.onTokenCoverChange.bind(this));
+        html.find(`[name="${MODULE.data.name}.specifyCoverForTokenSizes"]`).change(this.onSpecifyCoverForTokenSizesChange.bind(this));
 
         // unsure if this is the right place 
         this.prepareVisibleForms();
