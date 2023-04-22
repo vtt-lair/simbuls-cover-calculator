@@ -294,7 +294,7 @@ export class CoverCalculator {
         const status = app.object.object.coverValue() ?? 0;
         const selectHTML = `<div class="form-group">
                             <label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name=flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
+                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
                                 ${
                                     Object.entries(MODULE[NAME].coverData).reduce((acc, [key,{label}]) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${label}</option>`, ``)
                                 }
