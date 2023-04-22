@@ -221,7 +221,7 @@ export class CoverCalculator {
             * and we need to do nothing
             */
             const tokenId = combatant.token?.id;
-            const sceneId = combatant.parent.scene
+            const sceneId = combatant.parent.scene.id;
 
             const tokenDoc = game.scenes.get(sceneId).tokens.get(tokenId);
             const token = tokenDoc?.object;
