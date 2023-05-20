@@ -20,17 +20,15 @@ export class CoverCalculator {
 
     static defaults(){
         MODULE[NAME] = {
+            flag: "coverLevel",
             wall : {
-                default : 3,
-                flag : "coverLevel"
+                default : 3
             },
             tile : {
-                default : 0,
-                flag : "coverLevel"
+                default : 0
             },
             token : {
-                default : 1,
-                flag : "coverLevel"
+                default : 1
             },
             ignoreCover:{ // Defining what number relates to what cover ignore level
                 "none":0,
@@ -399,7 +397,7 @@ export class CoverCalculator {
 
         Token.prototype.coverValue = function() {
             const data = MODULE[NAME].token;
-            return this.document.getFlag(MODULE.data.name, data.flag) ?? data.default;
+            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? data.default;
         }
 
         Token.prototype.getCoverEffect = function() {
@@ -411,8 +409,7 @@ export class CoverCalculator {
         }
 
         Token.prototype.setCoverValue = function(value) {
-            const data = MODULE[NAME].token;
-            return this.document.setFlag(MODULE.data.name, data.flag, value);
+            return this.document.setFlag(MODULE.data.name, MODULE[NAME].flag, value);
         }
     }
 
@@ -425,7 +422,7 @@ export class CoverCalculator {
     static _patchTile() {
         Tile.prototype.coverValue = function() {
             const data = MODULE[NAME].tile;
-            return this.document.getFlag(MODULE.data.name, data.flag) ?? data.default;
+            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? data.default;
         }
     }
 
@@ -433,7 +430,7 @@ export class CoverCalculator {
         Wall.prototype.coverValue = function() {
             const data = MODULE[NAME].wall;
             /* sight vs sense is a 0.9 vs 0.8 issue -- prefer 0.9, but fall back to 0.8 */
-            const definedCover = this.document.getFlag(MODULE.data.name, data.flag);
+            const definedCover = this.document.getFlag(MODULE.data.name, MODULE[NAME].flag);
 
             if (definedCover != undefined) return definedCover;
 
