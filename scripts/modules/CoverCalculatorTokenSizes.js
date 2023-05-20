@@ -73,9 +73,10 @@ export class CoverCalculatorTokenSizes {
         MODULE.applySettings(menuData);
     }
 
-    static hooks(){
+    static hooks() {
         Hooks.on(`canvasReady`, CoverCalculatorTokenSizes._canvasReady);
-        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createToken);        
+        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
+        Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
         Hooks.on(`preUpdateActor`, CoverCalculatorTokenSizes._preUpdateActor);
         Hooks.on("preCreateActiveEffect", CoverCalculatorTokenSizes._preCreateActiveEffect);
         Hooks.on("preDeleteActiveEffect", CoverCalculatorTokenSizes._preDeleteActiveEffect);
@@ -140,7 +141,8 @@ export class CoverCalculatorTokenSizes {
     }
 
     static coverValue(actor, key) {
-        return MODULE[NAME][actor.system.traits.size][key]
+        CoverCalculatorTokenSizes.userDefined();
+        return MODULE[NAME][actor.system.traits.size][key];
     }
 
     static async setCover(coverStatus, actor, token) {
@@ -148,34 +150,45 @@ export class CoverCalculatorTokenSizes {
         await token.setFlag(MODULE.data.name, "coverLevel", cover)
     }
 
-    static isDowned(status) {
+    static isDowned(status, token) {
         return (
             status === CoverCalculatorTokenSizes.Downed.Prone &&
-            !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
-            !token.actor.getRollData().attributes.hp.value === 0
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
+            !token.actor.system.attributes.hp.value === 0
         ) ||
         (
             status === CoverCalculatorTokenSizes.Downed.Unconscious &&
-            !token.actor.effects.find(eff => eff.data.label === CoverCalculatorTokenSizes.Downed.Prone) && 
-            !token.actor.getRollData().attributes.hp.value === 0
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Prone) && 
+            !token.actor.system.attributes.hp.value === 0
         );
-}
+    }
 
-    static _canvasReady(){
+    static isIncomingDataDifferentThanSpecifiedCover(data, cover) {
+        if (!data?.flags) return false;
+        if (cover !== data?.flags['simbuls-cover-calculator'].coverLevel) return true;
+
+        return false;
+    }
+
+    static _canvasReady() {
+        if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
+
         CoverCalculatorTokenSizes.userDefined()
     }
 
-    static async _createToken(document, data, id) {
-        if (!document.canUserModify(game.user, "update")) {
-            return;
-        }
+    static async _createOrUpdateToken(document, data, id) {
+        if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
+        if (!document.canUserModify(game.user, "update")) return;
         
         let cover = CoverCalculatorTokenSizes.coverValue(document.actor, "cover");
+        if (CoverCalculatorTokenSizes.isIncomingDataDifferentThanSpecifiedCover(data, cover)) return;
+        
         await document.update({ 'flags.simbuls-cover-calculator.coverLevel': cover });
-    }    
+    }
 
     static async _preUpdateActor(actor, update) {
-        if (!actor.token || !actor.getActiveTokens()[0]?.document) return;
+        if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
+        if (!actor.token && !actor.getActiveTokens()[0]?.document) return;
 
         let hp = getProperty(update, "system.attributes.hp.value");
         let token = actor.token ?? actor.getActiveTokens()[0].document;
@@ -184,14 +197,16 @@ export class CoverCalculatorTokenSizes {
             await CoverCalculatorTokenSizes.setCover('dead', actor, token);            
         }
         if (actor.system.attributes.hp.value === 0 && hp > 0) {
+            if (CoverCalculatorTokenSizes.isIncomingDataDifferentThanSpecifiedCover(data, cover)) return;            
             await CoverCalculatorTokenSizes.setCover('cover', actor, token);
         }
     }    
 
     static async _preCreateActiveEffect(effect) {
+        if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
         if (HELPER.setting(MODULE.data.name, 'proneActsLikeDead') === false) return;
 
-        if (!effect.parent.parent || !effect.parent.getActiveTokens()[0]?.document) return;
+        if (!effect.parent.parent && !effect.parent.getActiveTokens()[0]?.document) return;
 
         let status = effect.label;
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
@@ -203,15 +218,16 @@ export class CoverCalculatorTokenSizes {
     }
     
     static async _preDeleteActiveEffect(effect) {
+        if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
         if (HELPER.setting(MODULE.data.name, 'proneActsLikeDead') === false) return;
 
-        if (!effect.parent.parent || !effect.parent.getActiveTokens()[0]?.document) return;
+        if (!effect.parent.parent && !effect.parent.getActiveTokens()[0]?.document) return;
 
         let status = effect.label;
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
         let actor = token.actor;
 
-        if (CoverCalculatorTokenSizes.isDowned(status)) {
+        if (CoverCalculatorTokenSizes.isDowned(status, token)) {
             await CoverCalculatorTokenSizes.setCover('cover', actor, token);
         }
     }

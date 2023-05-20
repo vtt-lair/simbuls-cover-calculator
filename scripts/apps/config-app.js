@@ -135,7 +135,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return app.render(true);
     }
 
-    onTokenCoverChange(event) {
+    onSpecifyCoverForTokenSizesChange(event) {
         this.toggleTokenSizesTabVisible(event.currentTarget.checked);
     }
 
@@ -521,7 +521,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     activateListeners(html) {
         super.activateListeners(html);
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
-        html.find(`[name="${MODULE.data.name}.losWithTokens"]`).change(this.onTokenCoverChange.bind(this));
+        html.find(`[name="${MODULE.data.name}.specifyCoverForTokenSizes"]`).change(this.onSpecifyCoverForTokenSizesChange.bind(this));
 
         html.find(".cover-preset").change(this._handleCoverPresentSelected.bind(this));
 
@@ -618,8 +618,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         // Store coverData for manipulation
         this.coverData = Object.values(HELPER.setting(MODULE.data.name, "coverData"));
 
-        logger.debug(MODULE.data.name, "GET DATA | DATA | ", data);
-
+        logger.debug(game.settings.get(MODULE.data.name, "debug"), "GET DATA | DATA | ", data);
+       
         return {
             user : game.user, canConfigure, systemTitle : game.system.title, data
         }

@@ -70,6 +70,9 @@ export class CoverCalculator {
             losWithTokens : {
                 scope : "world", config, group : "system", default : false, type : Boolean,
             },
+            specifyCoverForTokenSizes : {
+                scope : "world", config, group : "system", default : false, type : Boolean,
+            },
             coverTint : {
                 scope : "world", config, group : "system", default : 0, type : String,
                 choices : {
@@ -149,6 +152,13 @@ export class CoverCalculator {
             type: Number
         };
 
+        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersReduceCover = {
+            hint: HELPER.localize("SCC.flagsReduceCoverHint"),
+            name: HELPER.localize("SCC.flagsReduceCover"),
+            section: "Feats",
+            type: Number
+        };
+
         /* insert keybindings */
         game.keybindings.register(MODULE.data.name, "coverReport", {
             name: "Check Cover",
@@ -214,7 +224,7 @@ export class CoverCalculator {
             * and we need to do nothing
             */
             const tokenId = combatant.token?.id;
-            const sceneId = combatant.parent.scene
+            const sceneId = combatant.parent.scene.id;
 
             const tokenDoc = game.scenes.get(sceneId).tokens.get(tokenId);
             const token = tokenDoc?.object;
@@ -255,7 +265,7 @@ export class CoverCalculator {
     }
 
     static _renderTileConfig(app, html){
-        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.data.overhead ) return;
+        if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.overhead ) return;
         const adjacentElement = html.find('[data-tab="basic"] .form-group').last();
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
@@ -268,8 +278,8 @@ export class CoverCalculator {
 
     static _renderWallConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0) return;
-        const ele = html.find('[name="ds"]')[0].parentElement;
-        CoverCalculator._addToConfig(app, html, ele);
+        const adjacentElement = html.find('.form-group').last();
+        CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
 
     static _buildLabel(coverLevel) {
@@ -292,7 +302,7 @@ export class CoverCalculator {
 
         const selectHTML = `<div class="form-group">
                             <label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name=flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
+                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
                                 ${
                                     Object.keys(coverData).reduce((acc, key) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${this._buildLabel(key)}</option>`, ``)
                                 }
@@ -300,29 +310,8 @@ export class CoverCalculator {
                             </div>`;
 
         html.css("height", "auto");
+
         element.after(selectHTML);
-
-    }
-
-    /* used for "legacy" single page config apps */
-    // TODO functionalize HTML generation between these two functions
-    static _addToConfig(app, html, ele) {
-
-      /* if this app doesnt have the expected
-       * data (ex. prototype token config),
-       * bail out.
-       */
-        if (!app.object?.object) return;
-        const status = app.object.object.coverValue() ?? 0;
-        const selectHTML = `<label>${HELPER.localize("SCC.LoS_providescover")}</label>
-                            <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
-                                ${
-                                    Object.keys(HELPER.setting(MODULE.data.name, "coverData")).reduce((acc, key) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${this._buildLabel(key)}</option>`, ``)
-                                }
-                            </select>`;
-
-        html.css("height", "auto");
-        ele.insertAdjacentElement('afterend', HELPER.stringToDom(selectHTML, "form-group"));
     }
 
     static _handleCover() {
@@ -402,6 +391,10 @@ export class CoverCalculator {
                 flagValue=MODULE[NAME].ignoreCover.threeQuarter
             }
             return flagValue;
+        }
+
+        Token.prototype.reducesCover = function() {
+            return this.actor?.getFlag(game.system.id, "helpersReduceCover") ?? 0;
         }
 
         Token.prototype.coverValue = function() {
@@ -675,8 +668,8 @@ class Cover {
 
                 results.total = Math.max(results.tiles, results.tokens, results.walls);
 
-                logger.debug("Collisions | ", collisions);
-                logger.debug("Results | ", results);
+                logger.debug(game.settings.get(MODULE.data.name, "debug"), "Collisions | ", collisions);
+                logger.debug(game.settings.get(MODULE.data.name, "debug"), "Results | ", results);
 
                 return results;
             });
@@ -684,9 +677,13 @@ class Cover {
 
         this.data.results.raw = results;
         this.data.results.ignore = this.data.origin.object.ignoresCover();
+        this.data.results.coverReduction = this.data.origin.object.reducesCover();
         this.data.results.corners = 0;
         this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), 3)),3);
-        // If the current cover value is under the ignore threshold set cover to 0. ignore theshold goes from 1 to 3, cover from 0 to 3
+        // Reduce cover by reduce value
+        this.data.results.cover = Math.max(0, this.data.results.cover - this.data.results.coverReduction);
+
+        // If the current cover value is under the ignore threshold set cover to 0. ignore threshold goes from 1 to 3, cover from 0 to 3
         // none, half, threequarter, full
         this.data.results.cover = this.data.results.cover <= this.data.results.ignore ? 0 : this.data.results.cover;
 
