@@ -14,7 +14,7 @@
 
     "setting.losOnTarget.name":"Compute cover on target",
     "SCC.groupHint.token-sizes": "When the 'Specify Cover for Token Sizes' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
-    
+
     "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
     "setting.losSystem.name": "Cover computation mode",
     "setting.losSystem.hint": "Selects algorithm to be used during cover checks, or disables this feature entirely.",
@@ -23,6 +23,7 @@
     "setting.debugDrawing.name": "Debug Line-of-Sight",
     "setting.debugDrawing.hint": "Renders the sight rays used in the latest cover calculation. Refresh to clear drawing.",
     "SCC.LoS_nocover": "No cover",
+    "SCC.LoS_quartercover": "Quarter cover",
     "SCC.LoS_halfcover":"Half cover",
     "SCC.LoS_34cover":"Three-quarters cover",
     "SCC.LoS_fullcover":"Full cover",
