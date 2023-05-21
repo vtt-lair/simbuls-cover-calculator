@@ -21,15 +21,6 @@ export class CoverCalculator {
     static defaults(){
         MODULE[NAME] = {
             flag: "coverLevel",
-            wall : {
-                default : 3
-            },
-            tile : {
-                default : 0
-            },
-            token : {
-                default : 1
-            },
             ignoreCover:{ // Defining what number relates to what cover ignore level
                 "none":0,
                 "half":1,
@@ -289,6 +280,11 @@ export class CoverCalculator {
         return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: sign + coverData[coverLevel].value})
     }
 
+    static _getMaxCoverLevel() {
+        const coverData = HELPER.setting(MODULE.data.name, "coverData")
+        return Object.keys(coverData).length - 1;
+    }
+
     static _injectCoverAdjacent(app, html, element) {
         /* if this app doesnt have the expected
         * data (ex. prototype token config),
@@ -384,9 +380,10 @@ export class CoverCalculator {
         Token.prototype.ignoresCover = function() {
             let flagValue = this.actor?.getFlag(game.system.id, "helpersIgnoreCover") ?? 0;
             if (flagValue === true||flagValue === "true"){
-                // used to be a boolean flag, if the flag is true either
-                // ,the value or a string due to AE shenanigans, treat is as it would have been before
-                flagValue=MODULE[NAME].ignoreCover.threeQuarter
+                // used to be a boolean flag, if the flag is true either value or a string due to AE shenanigans,
+                // This previously would have been treated the same as before, I.E three quarters, however this no longer
+                // Works due to the custom levels changes, so it's safest to set this to max cover
+                flagValue=CoverCalculator._getMaxCoverLevel();
             }
             return flagValue;
         }
@@ -397,7 +394,7 @@ export class CoverCalculator {
 
         Token.prototype.coverValue = function() {
             const data = MODULE[NAME].token;
-            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? data.default;
+            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? 1;
         }
 
         Token.prototype.getCoverEffect = function() {
@@ -422,7 +419,7 @@ export class CoverCalculator {
     static _patchTile() {
         Tile.prototype.coverValue = function() {
             const data = MODULE[NAME].tile;
-            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? data.default;
+            return this.document.getFlag(MODULE.data.name, MODULE[NAME].flag) ?? 0;
         }
     }
 
@@ -440,7 +437,7 @@ export class CoverCalculator {
                 : this.document.ds == CONST.WALL_DOOR_STATES.OPEN ? CONST.WALL_SENSE_TYPES.NONE
                 : this.document.sight;
 
-            return sense >= CONST.WALL_SENSE_TYPES.LIMITED ? data.default : 0;
+            return sense >= CONST.WALL_SENSE_TYPES.LIMITED ? CoverCalculator._getMaxCoverLevel() : 0;
         }
     }
 
@@ -676,7 +673,7 @@ class Cover {
         this.data.results.ignore = this.data.origin.object.ignoresCover();
         this.data.results.coverReduction = this.data.origin.object.reducesCover();
         this.data.results.corners = 0;
-        this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), 3)),3);
+        this.data.results.cover = results.reduce((a,b) => Math.min(a, b.reduce((c,d) => Math.min(c, d.total), CoverCalculator._getMaxCoverLevel())), CoverCalculator._getMaxCoverLevel());
         // Reduce cover by reduce value
         this.data.results.cover = Math.max(0, this.data.results.cover - this.data.results.coverReduction);
 
