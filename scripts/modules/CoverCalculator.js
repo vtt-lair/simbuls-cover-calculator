@@ -20,13 +20,7 @@ export class CoverCalculator {
 
     static defaults(){
         MODULE[NAME] = {
-            flag: "coverLevel",
-            ignoreCover:{ // Defining what number relates to what cover ignore level
-                "none":0,
-                "half":1,
-                "threeQuarter":2,
-                "full":3
-            },
+            flag: "coverLevel"
         }
     }
 
@@ -132,12 +126,7 @@ export class CoverCalculator {
             hint: HELPER.localize("SCC.flagsNoCoverHint"),
             name: HELPER.localize("SCC.flagsNoCover"),
             section: "Feats",
-            choices: {
-                0: HELPER.localize("SCC.flagsNoCoverOptionNone"),
-                1: HELPER.localize("SCC.flagsNoCoverOptionHalf"),
-                2: HELPER.localize("SCC.flagsNoCoverOptionThreeQ"),
-                3: HELPER.localize("SCC.flagsNoCoverOptionFull")
-            },
+            placeholder: 0,
             type: Number
         };
 
@@ -145,6 +134,7 @@ export class CoverCalculator {
             hint: HELPER.localize("SCC.flagsReduceCoverHint"),
             name: HELPER.localize("SCC.flagsReduceCover"),
             section: "Feats",
+            placeholder: 0,
             type: Number
         };
 
