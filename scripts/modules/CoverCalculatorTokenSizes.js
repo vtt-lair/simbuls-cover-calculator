@@ -8,7 +8,7 @@ export class CoverCalculatorTokenSizes {
         Prone: "Prone",
         Unconscious: "Unconscious",
     }
-    
+
     static register() {
         CoverCalculatorTokenSizes.defaults();
         CoverCalculatorTokenSizes.settings();
@@ -42,32 +42,25 @@ export class CoverCalculatorTokenSizes {
                 dead: 1
             }
         }
-    }    
+    }
 
     static settings() {
         const config = false;
         const menuData = {
-            noCoverTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            threeQuartersCoverTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            noDeadTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            halfDeadTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            threeQuartersDeadTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            fullDeadTokenSizes : {
-                scope : "world", config, group : "token-sizes", default : "", type : String,
-            },
-            proneActsLikeDead : {
-                scope : "world", config, group : "token-sizes", default : "", type : Boolean,
-            },
+            tokenSizesDefault : {
+                scope : "world", config, group : "token-sizes", type : Object, customPartial: "scc.tokenSizesDefaultsPartial",
+                default : Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
+                    .reduce((acc, [key, name]) => {
+                        acc[key] = {
+                            label: name,
+                            normal : 1,
+                            dead : 0,
+                            prone : 0
+                        }
+
+                        return acc;
+                    }, {})
+            }
         };
 
         MODULE.applySettings(menuData);
@@ -75,8 +68,8 @@ export class CoverCalculatorTokenSizes {
 
     static hooks() {
         Hooks.on(`canvasReady`, CoverCalculatorTokenSizes._canvasReady);
-        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
-        Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);        
+        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
+        Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
         Hooks.on(`preUpdateActor`, CoverCalculatorTokenSizes._preUpdateActor);
         Hooks.on("preCreateActiveEffect", CoverCalculatorTokenSizes._preCreateActiveEffect);
         Hooks.on("preDeleteActiveEffect", CoverCalculatorTokenSizes._preDeleteActiveEffect);
@@ -91,7 +84,7 @@ export class CoverCalculatorTokenSizes {
                 if(!!size) console.error(`Cover TokenSizes: ${size} is not a valid size`);
                 continue;
             }
-            MODULE[NAME][size].cover = 0;            
+            MODULE[NAME][size].cover = 0;
         }
 
         let quarterCover = HELPER.setting(MODULE.data.name, "threeQuartersCoverTokenSizes").split(",")
@@ -153,12 +146,12 @@ export class CoverCalculatorTokenSizes {
     static isDowned(status, token) {
         return (
             status === CoverCalculatorTokenSizes.Downed.Prone &&
-            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Unconscious) && 
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Unconscious) &&
             !token.actor.system.attributes.hp.value === 0
         ) ||
         (
             status === CoverCalculatorTokenSizes.Downed.Unconscious &&
-            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Prone) && 
+            !token.actor.effects.find(eff => eff.label === CoverCalculatorTokenSizes.Downed.Prone) &&
             !token.actor.system.attributes.hp.value === 0
         );
     }
@@ -179,10 +172,10 @@ export class CoverCalculatorTokenSizes {
     static async _createOrUpdateToken(document, data, id) {
         if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
         if (!document.canUserModify(game.user, "update")) return;
-        
+
         let cover = CoverCalculatorTokenSizes.coverValue(document.actor, "cover");
         if (CoverCalculatorTokenSizes.isIncomingDataDifferentThanSpecifiedCover(data, cover)) return;
-        
+
         await document.update({ 'flags.simbuls-cover-calculator.coverLevel': cover });
     }
 
@@ -192,15 +185,15 @@ export class CoverCalculatorTokenSizes {
 
         let hp = getProperty(update, "system.attributes.hp.value");
         let token = actor.token ?? actor.getActiveTokens()[0].document;
-    
+
         if (hp === 0) {
-            await CoverCalculatorTokenSizes.setCover('dead', actor, token);            
+            await CoverCalculatorTokenSizes.setCover('dead', actor, token);
         }
         if (actor.system.attributes.hp.value === 0 && hp > 0) {
-            if (CoverCalculatorTokenSizes.isIncomingDataDifferentThanSpecifiedCover(data, cover)) return;            
+            if (CoverCalculatorTokenSizes.isIncomingDataDifferentThanSpecifiedCover(data, cover)) return;
             await CoverCalculatorTokenSizes.setCover('cover', actor, token);
         }
-    }    
+    }
 
     static async _preCreateActiveEffect(effect) {
         if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
@@ -211,12 +204,12 @@ export class CoverCalculatorTokenSizes {
         let status = effect.label;
         let token = effect.parent.parent ?? effect.parent.getActiveTokens()[0].document;
         let actor = token.actor;
-        
+
         if (status === CoverCalculatorTokenSizes.Downed.Unconscious || status === CoverCalculatorTokenSizes.Downed.Prone) {
             await CoverCalculatorTokenSizes.setCover('dead', actor, token);
-        }        
+        }
     }
-    
+
     static async _preDeleteActiveEffect(effect) {
         if (HELPER.setting(MODULE.data.name, 'specifyCoverForTokenSizes') === false) return;
         if (HELPER.setting(MODULE.data.name, 'proneActsLikeDead') === false) return;
