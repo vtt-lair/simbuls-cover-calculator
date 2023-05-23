@@ -1,12 +1,12 @@
 <div class="form-group">
     <label>Presets</label>
     <select class="cover-preset">
-        {{selectOptions @root.data.coverOptions labelAttr="label"}}
+        {{selectOptions @root.data.coverPresets labelAttr="label"}}
     </select>
 </div>
 <div class="form-group">
-    <div class="cover-levels-container">
-        <div class="cover-header flexrow">
+    <div class="athenaeum-table cover-levels-table">
+        <div class="athenaeum-table-header flexrow">
             <div class="cover-title">Name</div>
             <div class="cover-ac-bonus">AC Bonus</div>
             <div class="cover-controls flexrow">
@@ -15,7 +15,7 @@
                 </a>
             </div>
         </div>
-        <ul class="cover-body" id="scc-cover-levels-settings-body">
+        <ul class="athenaeum-table-body" id="scc-cover-levels-settings-body">
         </ul>
     </div>
 </div>

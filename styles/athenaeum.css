@@ -3,25 +3,25 @@
     width: 100%;
     height: auto;
   }
-  
+
   .simbuls-athenaeum .row {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     text-align: center;
   }
-  
+
   .simbuls-athenaeum .row > div {
     flex: 1;
   }
-  
+
   .simbuls-athenaeum .col {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     text-align: center;
   }
-  
+
   .simbuls-athenaeum .img-button {
     padding: 0;
     margin: 0;
@@ -29,16 +29,16 @@
     display: block;
     max-width: 200px;
   }
-  
+
   .simbuls-athenaeum .row img {
     border: none;
     display: block;
   }
-  
+
   .simbuls-athenaeum .row .action {
     flex: 1;
   }
-  
+
   .simbuls-athenaeum .desc {
     background-color: rgb(189 188 181);
     color: #000;
@@ -52,7 +52,7 @@
     border: 1px solid black;
     text-align: left;
   }
-  
+
   .simbuls-athenaeum .dice-result .desc {
     background-color: rgb(208 208 215);
     color: #000;
@@ -70,15 +70,15 @@
     font-size: 1.2em;
     font-style: italic;
   }
-  
+
   .simbuls-athenaeum .dice-formula:hover .desc {
     display: block;
   }
-  
+
   .control-icon.actions img {
     width: 90%;
   }
-  
+
   .simbuls-athenaeum .cover-button img {
     width: 2em;
     margin-bottom: -10px;
@@ -87,11 +87,11 @@
     opacity: 0.3;
     margin-right: -100%;
   }
-  
+
   .athenaeum-setting-pad {
       padding: 5px;
   }
-  
+
   .athenaeum-tab-pad {
       padding-top: 5px;
   }
@@ -99,16 +99,16 @@
   .athenaeum-tab-pad .tab-hint {
     margin-bottom: 1rem;
   }
-  
+
   .settings-footer {
       max-height: 34px;
   }
-  
+
   .action-dialog {
     min-height: 280px !important;
     min-width: 530px !important;
   }
-  
+
   .action-dialog .combatant-img {
     display: flex;
     width: 75px;
@@ -117,7 +117,7 @@
     justify-content: flex-start;
     text-align: center;
   }
-  
+
   .action-dialog .col {
     display: flex;
     flex-direction: column;
@@ -126,25 +126,25 @@
     width: 25px;
     height: auto;
   }
-  
+
   .action-dialog .row {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
   }
-  
+
   .action-dialog .button {
     display: flex;
     text-align: center;
     padding: 1px;
   }
-  
+
   .action-dialog .dialog-buttons {
     display: flex;
     text-align: center;
     justify-content: flex-end;
   }
-  
+
   .action-dialog .desc {
     background-color: rgb(189 188 181);
     color: #000;
@@ -158,8 +158,94 @@
     border: 1px solid black;
     text-align: left;
   }
-  
+
   .action-dialog .hover-group:hover .desc {
     display: block;
   }
-  
+
+/* Table */
+.athenaeum-table {
+  margin: 10px;
+}
+
+.athenaeum-table .athenaeum-table-header {
+  border: 2px #eeede0 groove;
+  padding: 5px 10px;
+}
+
+.athenaeum-table .athenaeum-table-header > * + * {
+  border-left: 1px black solid;
+}
+
+.athenaeum-table .athenaeum-table-body {
+  list-style: none;
+  padding: 0;
+  margin-top: 0;
+}
+
+.athenaeum-table .athenaeum-table-body .athenaeum-table-row {
+  padding: 5px 10px;
+  margin: 1px;
+  border: 1px #eeede066 solid;
+  background: #00000007;
+}
+
+.athenaeum-table.athenaeum-table-header > *,
+.athenaeum-table .athenaeum-table-body .athenaeum-table-row > * {
+  flex: 1;
+}
+
+.athenaeum-table .athenaeum-table-header > *:not(:first-child):not(:last-child),
+.athenaeum-table .athenaeum-table-body .athenaeum-table-row > *:not(:first-child):not(:last-child) {
+  text-align: center;
+  padding: 0 10px;
+}
+
+.athenaeum-table .athenaeum-table-header > *:last-child,
+.athenaeum-table .athenaeum-table-body .athenaeum-table-row > *:last-child {
+  text-align: right;
+  padding-left: 10px;
+}
+
+.athenaeum-table .athenaeum-table-body > *:nth-child(2n) {
+  background: #00000014;
+}
+
+/* Warning */
+.athenaeum-warn-parent {
+  position: relative;
+  margin-left: 5px;
+  color: gold;
+}
+
+.athenaeum-warn-parent .athenaeum-warn-container {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  min-width: 280px;
+  z-index: 1;
+  padding: 0;
+
+  border-radius: 1px;
+
+  color: white;
+  background-color: #00000079;
+  font-size: 8pt;
+  font-weight: normal;
+  font-family: 'Open Sans', sans-serif, serif;
+
+  list-style: none;
+}
+
+.athenaeum-warn-parent:hover .athenaeum-warn-container {
+  display: block;
+}
+
+.athenaeum-warn-container .athenaeum-warn {
+  padding: 4px 7px;
+}
+
+.athenaeum-warn-container .athenaeum-warn + .athenaeum-warn {
+  border-top: 1px white solid;
+}

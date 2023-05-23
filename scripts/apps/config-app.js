@@ -24,6 +24,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         this.options.parentMenu = parentMenu;
     }
 
+    // Presets available for cover levels
     coverPresets = {
         none: {
             label: ""
@@ -180,7 +181,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 coverLevels: this.coverData.reduce((acc, value, currentIndex) => {
                     acc[currentIndex] = value.label
                     return acc;
-                }, {})
+                }, {}),
             };
         }
 
@@ -255,7 +256,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }).render(true);
     }
 
-    _handleCoverPresentSelected(event) {
+    /**
+     * An event to handle when the user selects a preset for cover levels
+     * @param event The event that triggered the preset change
+     * @private
+     */
+    _handleCoverPresetSelected(event) {
         try {
             const presetKey = event.currentTarget.value;
             if (presetKey.length === 0) return;
@@ -264,13 +270,13 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 return;
             }
 
-            if (!this.checkedMove) {
+            if (!this.checkedCoverChange) {
                 Dialog.confirm({
                     title: "Are you sure?",
                     content: "Are you sure you want to completely change the cover levels? Existing walls, tiles, and " +
                         "tokens in the world will not be updated and may behave unexpectedly unless corrected",
                     yes: () => {
-                        this.checkedMove = true;
+                        this.checkedCoverChange = true;
                         this.coverData = Object.values(foundry.utils.deepClone(preset.config));
                         this._redrawCoverLevels();
                     },
@@ -298,13 +304,13 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             await this._createCoverLevelDialog(newIndex, true);
             return;
         }
-        if (["up", "down", "delete"].includes(action) && !this.checkedMove) {
+        if (["up", "down", "delete"].includes(action) && !this.checkedCoverChange) {
             Dialog.confirm({
                 title: "Are you sure?",
                 content: "Are you sure you want to modify the order of the cover levels? Existing walls, tiles, and " +
                     "tokens in the world will not be updated and may behave unexpectedly unless corrected",
                 yes: () => {
-                    this.checkedMove = true;
+                    this.checkedCoverChange = true;
                 },
                 defaultYes: false
             });
@@ -398,7 +404,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         ]
 
         const containerEl = document.createElement("li");
-        containerEl.className = "cover-level flexrow";
+        containerEl.className = "athenaeum-table-row flexrow";
         containerEl.dataset.index = index;
 
         // Title
@@ -409,12 +415,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
             if (coverLevel.warnings.length > 0) {
                 const warnEl = document.createElement("i");
-                warnEl.className = "cover-warn-parent fas fa-triangle-exclamation";
+                warnEl.className = "athenaeum-warn-parent fas fa-triangle-exclamation";
                 const warningsEl = document.createElement("ul");
-                warningsEl.className = "cover-warn-container";
+                warningsEl.className = "athenaeum-warn-container";
                 for (const warning of coverLevel.warnings) {
                     const warningEl = document.createElement("li");
-                    warningEl.className = "cover-warn";
+                    warningEl.className = "athenaeum-warn";
                     warningEl.innerText = warning;
                     warningsEl.appendChild(warningEl);
                 }
