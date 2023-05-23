@@ -1,0 +1,32 @@
+<div class="form-group">
+    <label>Presets</label>
+    <select class="token-cover-preset">
+        {{selectOptions @root.data.tokenPresets labelAttr="label"}}
+    </select>
+</div>
+<div class="form-group">
+    <div class="athenaeum-table token-cover-table">
+        <div class="athenaeum-table-header flexrow">
+            <div class="token-title">Size</div>
+            <div class="token-cover-value" title="The normal cover value for a token of this size">Cover</div>
+            <div class="token-cover-value" title="The cover value for a token of this size when it is dead">Dead</div>
+            <div class="token-cover-value" title="The cover value for a token of this size when it is prone or unconcious">Prone</div>
+        </div>
+        <ul class="athenaeum-table-body" id="scc-token-cover-settings-body">
+            {{#each this.value}}
+                <li class="athenaeum-table-row flexrow" data-size="{{@key}}">
+                    <div class="token-title">{{this.label}}</div>
+                    <div class="token-cover-value">
+                        {{numberInput this.normal class="token-cover-normal" step=1 min=0}}
+                    </div>
+                    <div class="token-cover-value">
+                        {{numberInput this.dead class="token-cover-dead" step=1 min=0}}
+                    </div>
+                    <div class="token-cover-value">
+                        {{numberInput this.prone class="token-cover-prone" step=1 min=0}}
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

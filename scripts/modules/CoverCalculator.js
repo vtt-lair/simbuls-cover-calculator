@@ -53,9 +53,6 @@ export class CoverCalculator {
             losWithTokens : {
                 scope : "world", config, group : "system", default : false, type : Boolean,
             },
-            specifyCoverForTokenSizes : {
-                scope : "world", config, group : "system", default : false, type : Boolean,
-            },
             coverTint : {
                 scope : "world", config, group : "system", default : 0, type : String,
                 choices : {

@@ -11,53 +11,38 @@ export class CoverCalculatorTokenSizes {
 
     static register() {
         CoverCalculatorTokenSizes.defaults();
+        CoverCalculatorTokenSizes.handlebars();
         CoverCalculatorTokenSizes.settings();
         CoverCalculatorTokenSizes.hooks();
     }
 
     static defaults() {
-        MODULE[NAME] = {
-            tiny: {
-                cover: 1,
-                dead: 1
-            },
-            sm: {
-                cover: 1,
-                dead: 1
-            },
-            med: {
-                cover: 1,
-                dead: 1
-            },
-            lg: {
-                cover: 1,
-                dead: 1
-            },
-            huge: {
-                cover: 1,
-                dead: 1
-            },
-            grg: {
-                cover: 1,
-                dead: 1
-            }
-        }
+    }
+
+    static handlebars() {
+        loadTemplates({
+            "scc.tokenSizesDefaultsPartial": MODULE.data.path + "/templates/partials/TokenSizeDefaults.hbs"
+        })
     }
 
     static settings() {
         const config = false;
         const menuData = {
+            actorSizePath: {
+                scope : "world", config, group : "token-sizes", type : String,
+                default : "system.traits.size"
+            },
             tokenSizesDefault : {
                 scope : "world", config, group : "token-sizes", type : Object, customPartial: "scc.tokenSizesDefaultsPartial",
+                // As systems can have differing actor sizes, fetch the systems actor sizes and
                 default : Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
                     .reduce((acc, [key, name]) => {
                         acc[key] = {
                             label: name,
                             normal : 1,
-                            dead : 0,
-                            prone : 0
+                            dead : 1,
+                            prone : 1
                         }
-
                         return acc;
                     }, {})
             }
@@ -67,12 +52,12 @@ export class CoverCalculatorTokenSizes {
     }
 
     static hooks() {
-        Hooks.on(`canvasReady`, CoverCalculatorTokenSizes._canvasReady);
-        Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
-        Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
-        Hooks.on(`preUpdateActor`, CoverCalculatorTokenSizes._preUpdateActor);
-        Hooks.on("preCreateActiveEffect", CoverCalculatorTokenSizes._preCreateActiveEffect);
-        Hooks.on("preDeleteActiveEffect", CoverCalculatorTokenSizes._preDeleteActiveEffect);
+        // Hooks.on(`canvasReady`, CoverCalculatorTokenSizes._canvasReady);
+        // Hooks.on(`createToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
+        // Hooks.on(`updateToken`, CoverCalculatorTokenSizes._createOrUpdateToken);
+        // Hooks.on(`preUpdateActor`, CoverCalculatorTokenSizes._preUpdateActor);
+        // Hooks.on("preCreateActiveEffect", CoverCalculatorTokenSizes._preCreateActiveEffect);
+        // Hooks.on("preDeleteActiveEffect", CoverCalculatorTokenSizes._preDeleteActiveEffect);
     }
 
     static userDefined() {

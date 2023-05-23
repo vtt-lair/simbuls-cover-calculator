@@ -13,8 +13,6 @@
     "SCC.groupLabel.misc": "Misc",
 
     "setting.losOnTarget.name":"Compute cover on target",
-    "SCC.groupHint.token-sizes": "When the 'Specify Cover for Token Sizes' setting is enabled. Each input can take one of the following options: tiny, sm, med, lg, huge, grg. They must be comma (',') separated and have no spaces. If you leave them empty a token will supply 1/2 cover by default.",
-
     "setting.losOnTarget.hint":"Always compute cover when targeting a token, regardless of hotkey.",
     "setting.losSystem.name": "Cover computation mode",
     "setting.losSystem.hint": "Selects algorithm to be used during cover checks, or disables this feature entirely.",
@@ -63,20 +61,10 @@
     "setting.losWithTiles.name": "Tile Cover",
     "setting.losWithTiles.hint": "Allow Tiles to be factored into cover calculation.",
 
-    "setting.coverPerTokenSize.name" : "Token Sizes effects cover",
-    "setting.coverPerTokenSize.hint" : "Enable this and specify sizes below to determine cover for token sizes.",
-    "setting.noCoverTokenSizes.name" : "No cover",
-    "setting.noCoverTokenSizes.hint" : "The token sizes that does not provide any cover while it has HP.",
-    "setting.threeQuartersCoverTokenSizes.name" : "3/4 cover",
-    "setting.threeQuartersCoverTokenSizes.hint" : "The token sizes that provide 3/4 cover while it has HP.",
-    "setting.noDeadTokenSizes.name" : "No cover when at 0hp",
-    "setting.noDeadTokenSizes.hint" : "The token sizes that does not provide any cover while it has 0 HP.",
-    "setting.halfDeadTokenSizes.name" : "1/2 cover when at 0h",
-    "setting.halfDeadTokenSizes.hint" : "The token sizes that provides 1/2 cover while it has 0 HP.",
-    "setting.threeQuartersDeadTokenSizes.name" : "3/4 cover when at 0hp",
-    "setting.threeQuartersDeadTokenSizes.hint" : "The token sizes that provides 3/4 cover while it has 0 HP.",
-    "setting.fullDeadTokenSizes.name" : "Full cover when at 0hp",
-    "setting.fullDeadTokenSizes.hint" : "The token sizes that provides full cover while it has 0 HP.",
+    "setting.actorSizePath.name" : "Actor Size Path",
+    "setting.actorSizePath.hint" : "The path to the variable in the actor that defines it's size.",
+    "setting.tokenSizesDefault.name" : "Cover by Token Size",
+    "setting.tokenSizesDefault.hint" : "Set the cover level of tokens for each size.",
 
     "SCC.flagsNoCover" : "Ignore certain levels of cover",
     "SCC.flagsNoCoverHint" : "When attacking a target, if their cover level is below or equal to this value, you will treat it as if the have no cover",
