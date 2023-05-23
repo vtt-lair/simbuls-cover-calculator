@@ -205,10 +205,20 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return CoverCalculatorSettingsConfig._menus;
     }
 
+    static get defaultGroupLabels() {
+        return {
+            'system': { faIcon: 'fas fa-cog', tabLabel: 'SCC.groupLabel.system'},
+            'combat': { faIcon: 'fas fa-dice-d20', tabLabel: 'SCC.groupLabel.combat'},
+            'token-sizes': { faIcon: 'fas fa-expand-arrows-alt', tabLabel: 'SCC.groupLabel.token-sizes'},
+            'cover': { faIcon: 'fas fa-chart-simple', tabLabel: 'SCC.groupLabel.cover-levels'},
+            'misc': { faIcon: 'fas fa-list-alt', tabLabel: 'SCC.groupLabel.misc'},
+        }
+    }
+
+
     get menus() {
         return CoverCalculatorSettingsConfig.menus;
     }
-
     /**@override */
     static get defaultOptions(){
         return mergeObject(super.defaultOptions, {
@@ -230,6 +240,143 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         const app = new menu.type();
         return app.render(true);
     }
+
+    /**@override */
+    getData(options){
+        const canConfigure = game.user.can("SETTING_MODIFY");
+        const settings = Array.from(game.settings.settings);
+
+        options.title = HELPER.format('SCC.ConfigApp.title');
+        let data = {
+            tabs: duplicate(options.groupLabels),
+            hasParent: !!options.subMenuId,
+            parentMenu: options.parentMenu
+        }
+
+        const registerTabSetting = (tabName) => {
+            /* this entry exists already or the setting does NOT have a group,
+            * dont need to create another tab. Core settings do not have this field.
+            */
+            if (data.tabs[tabName].settings) return false;
+
+            /* it doesnt exist, so add a new entry */
+            data.tabs[tabName].settings = [];
+        }
+
+        const registerTabMenu = (tabName) => {
+            /* this entry exists already or the setting does NOT have a group,
+            * dont need to create another tab. Core settings do not have this field.
+            */
+            if (data.tabs[tabName].menus) return false;
+
+            /* it doesnt exist, so add a new entry */
+            data.tabs[tabName].menus = [];
+        }
+
+        for (let [_, setting] of settings.filter(([_, setting]) => setting.namespace == MODULE.data.name)) {
+
+            /* only add an actual setting if the menu ids match */
+            if (!setting.config) {
+
+                if (!canConfigure && setting.scope !== "client") continue;
+                setting.group = data.tabs[setting.group] ? setting.group : 'misc'
+
+                /* ensure there is a tab to hold this setting */
+                registerTabSetting(setting.group);
+
+                let groupTab = data.tabs[setting.group] ?? false;
+                if(groupTab) groupTab.settings.push({
+                    ...setting,
+                    type : setting.type instanceof Function ? setting.type.name : "String",
+                    isCheckbox : setting.type === Boolean,
+                    isSelect : setting.choices !== undefined,
+                    isRange : setting.type === Number && setting.range,
+                    isCustom : !!setting.customPartial,
+                    value : HELPER.setting(MODULE.data.name, setting.key),
+                    path: `${setting.namespace}.${setting.key}`
+                });
+            }
+        }
+
+        /* check if we are the parent of any registered submenus and add those */
+        const childMenus = this.menus.filter( menu => menu.parentMenu == this.options.subMenuId )
+        childMenus.forEach( menu => {
+            registerTabMenu(menu.tab);
+            let groupTab = data.tabs[menu.tab] ?? false;
+            if(groupTab) groupTab.menus.push(menu);
+        });
+
+        /* clean out tabs that have no entries */
+        data.tabs = Object.entries(data.tabs).reduce( (acc, [name, val]) => {
+            /* if we have any settings or any menus, keep the tab */
+            if(!!val.settings || !!val.menus) acc[name] = val;
+            return acc;
+        }, {})
+
+        // Store coverData and token cover data for manipulation
+        this.coverData = Object.values(HELPER.setting(MODULE.data.name, "coverData"));
+
+        // Presets
+        data.coverPresets = this.coverPresets;
+        data.tokenPresets = this.tokenPresets;  // This needs to occur after cover data is set
+
+        logger.debug(game.settings.get(MODULE.data.name, "debug"), "GET DATA | DATA | ", data);
+
+        return {
+            user : game.user, canConfigure, systemTitle : game.system.title, data
+        }
+    }
+
+    async _onSubmit(...args) {
+        const formData = await super._onSubmit(...args);
+
+        // We need to save the cover data separately as the FormApplication#_updateObject function will flatten the object and break
+        game.settings.set(MODULE.data.name, "coverData",
+            this.coverData.reduce((acc, coverLevel, index) => {
+                acc[index] = coverLevel;
+                return acc;
+            }, {})
+        )
+
+        // Save the changes to token sizes
+        {
+            const defaultTokenSizes = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
+            const tokenCoverSettings = this.form.querySelector("#scc-token-cover-settings-body");
+            for (const tokenCover of tokenCoverSettings.children) {
+                const tokenSize = defaultTokenSizes[tokenCover.dataset.size];
+                tokenSize.normal = parseInt(tokenCover.querySelector(".token-cover-normal").value) || 0;
+                tokenSize.dead = parseInt(tokenCover.querySelector(".token-cover-dead").value) || 0;
+                tokenSize.prone = parseInt(tokenCover.querySelector(".token-cover-prone").value) || 0;
+            }
+
+            game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
+        }
+
+        if( this.options.subMenuId ){
+            /* submitting from a subMenu, re-render parent */
+            await this._onClickReturn(...args);
+        }
+
+        return formData;
+    }
+
+    /** @override */
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find('button[name="return"]').click(this._onClickReturn.bind(this));
+
+        html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
+        html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
+
+        // unsure if this is the right place
+        this._redrawCoverLevels();
+    }
+
+
+
+    /* --------------------------------------------- */
+    /* Cover Level Helpers                           */
+    /* --------------------------------------------- */
 
     /**
      * Create a dialog for modifying a cover level
@@ -368,57 +515,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             this._redrawCoverLevels();
         } finally {
             event.currentTarget.value = "none";
-        }
-    }
-
-    /**
-     * An event to handle when the user selects a preset for token cover levels
-     * @param event The event that triggered the preset change
-     * @private
-     */
-    _handleTokenCoverPresetSelected(event) {
-        try {
-            const presetKey = event.currentTarget.value;
-            if (presetKey.length === 0) return;
-            const preset = this.tokenPresets[presetKey];
-            if (preset === undefined) {
-                return;
-            }
-
-            if (!this.checkedTokenCoverChange) {
-                Dialog.confirm({
-                    title: "Are you sure?",
-                    content: "Are you sure you want to apply a token cover level preset? Existing tokens already " +
-                        "placed in the world will not be updated",
-                    yes: () => {
-                        this.checkedTokenCoverChange = true;
-                        this._applyTokenPreset(preset);
-                    },
-                    defaultYes: false
-                });
-                return;
-            }
-
-            this._applyTokenPreset(preset);
-        } finally {
-            event.currentTarget.value = "none";
-        }
-    }
-
-    /**
-     * Apply the given preset config to the settings menu
-     * @param preset {Object} the preset config to use
-     * @private
-     */
-    _applyTokenPreset(preset) {
-        const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
-
-        const presetConfig = preset.generateConfig(Object.keys(CONFIG[game.system.id.toUpperCase()].actorSizes));
-        for (const [key, value] of Object.entries(presetConfig)) {
-            const settingsEle = tokenCoverSettingsEle.querySelector(`[data-size="${key}"]`);
-            settingsEle.querySelector(".token-cover-normal").value = value.normal;
-            settingsEle.querySelector(".token-cover-dead").value = value.dead;
-            settingsEle.querySelector(".token-cover-prone").value = value.prone;
         }
     }
 
@@ -634,149 +730,58 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return lut;
     }
 
-    async _onSubmit(...args) {
-        const formData = await super._onSubmit(...args);
+    /* --------------------------------------------- */
+    /* Token Size Cover Helpers                      */
+    /* --------------------------------------------- */
 
-        // We need to save the cover data separately as the FormApplication#_updateObject function will flatten the object and break
-        game.settings.set(MODULE.data.name, "coverData",
-            this.coverData.reduce((acc, coverLevel, index) => {
-                acc[index] = coverLevel;
-                return acc;
-            }, {})
-        )
-
-        // Save the changes to token sizes
-        {
-            const defaultTokenSizes = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
-            const tokenCoverSettings = this.form.querySelector("#scc-token-cover-settings-body");
-            for (const tokenCover of tokenCoverSettings.children) {
-                const tokenSize = defaultTokenSizes[tokenCover.dataset.size];
-                tokenSize.normal = parseInt(tokenCover.querySelector(".token-cover-normal").value) || 0;
-                tokenSize.dead = parseInt(tokenCover.querySelector(".token-cover-dead").value) || 0;
-                tokenSize.prone = parseInt(tokenCover.querySelector(".token-cover-prone").value) || 0;
+    /**
+     * An event to handle when the user selects a preset for token cover levels
+     * @param event The event that triggered the preset change
+     * @private
+     */
+    _handleTokenCoverPresetSelected(event) {
+        try {
+            const presetKey = event.currentTarget.value;
+            if (presetKey.length === 0) return;
+            const preset = this.tokenPresets[presetKey];
+            if (preset === undefined) {
+                return;
             }
 
-            game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
-        }
-
-        if( this.options.subMenuId ){
-            /* submitting from a subMenu, re-render parent */
-            await this._onClickReturn(...args);
-        }
-
-        return formData;
-    }
-
-    /** @override */
-    activateListeners(html) {
-        super.activateListeners(html);
-        html.find('button[name="return"]').click(this._onClickReturn.bind(this));
-
-        html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
-        html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
-
-        // unsure if this is the right place
-        this._redrawCoverLevels();
-    }
-
-    static get defaultGroupLabels() {
-        return {
-            'system': { faIcon: 'fas fa-cog', tabLabel: 'SCC.groupLabel.system'},
-            'combat': { faIcon: 'fas fa-dice-d20', tabLabel: 'SCC.groupLabel.combat'},
-            'token-sizes': { faIcon: 'fas fa-expand-arrows-alt', tabLabel: 'SCC.groupLabel.token-sizes'},
-            'cover': { faIcon: 'fas fa-chart-simple', tabLabel: 'SCC.groupLabel.cover-levels'},
-            'misc': { faIcon: 'fas fa-list-alt', tabLabel: 'SCC.groupLabel.misc'},
-        }
-    }
-
-
-    /**@override */
-    getData(options){
-        const canConfigure = game.user.can("SETTING_MODIFY");
-        const settings = Array.from(game.settings.settings);
-
-        options.title = HELPER.format('SCC.ConfigApp.title');
-        let data = {
-            tabs: duplicate(options.groupLabels),
-            hasParent: !!options.subMenuId,
-            parentMenu: options.parentMenu
-        }
-
-        const registerTabSetting = (tabName) => {
-            /* this entry exists already or the setting does NOT have a group,
-            * dont need to create another tab. Core settings do not have this field.
-            */
-            if (data.tabs[tabName].settings) return false;
-
-            /* it doesnt exist, so add a new entry */
-            data.tabs[tabName].settings = [];
-        }
-
-        const registerTabMenu = (tabName) => {
-            /* this entry exists already or the setting does NOT have a group,
-            * dont need to create another tab. Core settings do not have this field.
-            */
-            if (data.tabs[tabName].menus) return false;
-
-            /* it doesnt exist, so add a new entry */
-            data.tabs[tabName].menus = [];
-        }
-
-        for (let [_, setting] of settings.filter(([_, setting]) => setting.namespace == MODULE.data.name)) {
-
-            /* only add an actual setting if the menu ids match */
-            if (!setting.config) {
-
-                if (!canConfigure && setting.scope !== "client") continue;
-                setting.group = data.tabs[setting.group] ? setting.group : 'misc'
-
-                /* ensure there is a tab to hold this setting */
-                registerTabSetting(setting.group);
-
-                let groupTab = data.tabs[setting.group] ?? false;
-                if(groupTab) groupTab.settings.push({
-                    ...setting,
-                    type : setting.type instanceof Function ? setting.type.name : "String",
-                    isCheckbox : setting.type === Boolean,
-                    isSelect : setting.choices !== undefined,
-                    isRange : setting.type === Number && setting.range,
-                    isCustom : !!setting.customPartial,
-                    value : HELPER.setting(MODULE.data.name, setting.key),
-                    path: `${setting.namespace}.${setting.key}`
+            if (!this.checkedTokenCoverChange) {
+                Dialog.confirm({
+                    title: "Are you sure?",
+                    content: "Are you sure you want to apply a token cover level preset? Existing tokens already " +
+                        "placed in the world will not be updated",
+                    yes: () => {
+                        this.checkedTokenCoverChange = true;
+                        this._applyTokenPreset(preset);
+                    },
+                    defaultYes: false
                 });
+                return;
             }
-        }
 
-        /* check if we are the parent of any registered submenus and add those */
-        const childMenus = this.menus.filter( menu => menu.parentMenu == this.options.subMenuId )
-        childMenus.forEach( menu => {
-            registerTabMenu(menu.tab);
-            let groupTab = data.tabs[menu.tab] ?? false;
-            if(groupTab) groupTab.menus.push(menu);
-        });
-
-        /* clean out tabs that have no entries */
-        data.tabs = Object.entries(data.tabs).reduce( (acc, [name, val]) => {
-            /* if we have any settings or any menus, keep the tab */
-            if(!!val.settings || !!val.menus) acc[name] = val;
-            return acc;
-        }, {})
-
-        // Store coverData and token cover data for manipulation
-        this.coverData = Object.values(HELPER.setting(MODULE.data.name, "coverData"));
-
-        // Presets
-        data.coverPresets = this.coverPresets;
-        data.tokenPresets = this.tokenPresets;  // This needs to occur after cover data is set
-
-        logger.debug(game.settings.get(MODULE.data.name, "debug"), "GET DATA | DATA | ", data);
-
-        return {
-            user : game.user, canConfigure, systemTitle : game.system.title, data
+            this._applyTokenPreset(preset);
+        } finally {
+            event.currentTarget.value = "none";
         }
     }
 
-    /*
-        Need to add a "reRender" state based onChange of specific elements
-    */
+    /**
+     * Apply the given preset config to the settings menu
+     * @param preset {Object} the preset config to use
+     * @private
+     */
+    _applyTokenPreset(preset) {
+        const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
+
+        const presetConfig = preset.generateConfig(Object.keys(CONFIG[game.system.id.toUpperCase()].actorSizes));
+        for (const [key, value] of Object.entries(presetConfig)) {
+            const settingsEle = tokenCoverSettingsEle.querySelector(`[data-size="${key}"]`);
+            settingsEle.querySelector(".token-cover-normal").value = value.normal;
+            settingsEle.querySelector(".token-cover-dead").value = value.dead;
+            settingsEle.querySelector(".token-cover-prone").value = value.prone;
+        }
+    }
 }
