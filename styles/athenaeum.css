@@ -218,6 +218,10 @@
   color: gold;
 }
 
+.athenaeum-warn-parent.hidden {
+  display: none;
+}
+
 .athenaeum-warn-parent .athenaeum-warn-container {
   display: none;
   position: absolute;

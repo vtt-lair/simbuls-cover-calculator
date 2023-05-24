@@ -385,9 +385,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             const tokenCoverSettings = this.form.querySelector("#scc-token-cover-settings-body");
             for (const tokenCover of tokenCoverSettings.children) {
                 const tokenSize = defaultTokenSizes[tokenCover.dataset.size];
-                tokenSize.normal = parseInt(tokenCover.querySelector(".token-cover-normal").value) || 0;
-                tokenSize.dead = parseInt(tokenCover.querySelector(".token-cover-dead").value) || 0;
-                tokenSize.prone = parseInt(tokenCover.querySelector(".token-cover-prone").value) || 0;
+                foundry.utils.mergeObject(tokenSize, this._getTokenSizeValues(tokenCover));
             }
 
             game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
@@ -409,11 +407,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
         html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
 
+        html.find("#scc-token-cover-settings-body input").change(this._updateTokenSizeCoverRowWarnings.bind(this));
+
         // unsure if this is the right place
         this._redrawCoverLevels();
+        this._updateTokenSizeCoverRowWarnings()
     }
-
-
 
     /* --------------------------------------------- */
     /* Cover Level Helpers                           */
@@ -635,6 +634,9 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
             coverElement.appendChild(this._buildCoverLevelElement(indexNum, coverLevel));
         }
+
+        // When we redraw we may have done something that has messed up the token cover levels, so check for warnings
+        this._updateTokenSizeCoverRowWarnings()
     }
 
     _getCoverLevelWarnings(coverLevel, index) {
@@ -823,6 +825,80 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             settingsEle.querySelector(".token-cover-normal").value = value.normal;
             settingsEle.querySelector(".token-cover-dead").value = value.dead;
             settingsEle.querySelector(".token-cover-prone").value = value.prone;
+        }
+
+        // Check for warnings incase they've been removed or something has gone very wrong
+        this._updateTokenSizeCoverRowWarnings();
+    }
+
+    /**
+     * Update the warnings on each size
+     * @private
+     */
+    _updateTokenSizeCoverRowWarnings() {
+        const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
+
+        for (const sizeRow of tokenCoverSettingsEle.children) {
+            const warnings = this._getTokenSizeCoverRowWarning(sizeRow.dataset.size);
+            const warningsEl = sizeRow.querySelector(".athenaeum-warn-parent");
+            if (warnings.length) {
+                warningsEl.classList.remove("hidden");
+                warningsEl.firstElementChild.replaceChildren(...warnings.map(warning => {
+                    const el = document.createElement("li");
+                    el.className = "athenaeum-warn";
+                    el.innerText = warning;
+                    return el;
+                }));
+            } else {
+                warningsEl.classList.add("hidden");
+                warningsEl.firstElementChild.replaceChildren();
+            }
+        }
+    }
+
+    /**
+     * Get the warnings for a size
+     * @param sizeKey {String} The key of the size to check for warnings
+     * @return {String[]}
+     * @private
+     */
+    _getTokenSizeCoverRowWarning(sizeKey) {
+        const warnings = [];
+
+        const sizeRow = this.form.querySelector(`#scc-token-cover-settings-body [data-size="${sizeKey}"]`)
+        const coverLevels = this._getTokenSizeValues(sizeRow);
+        const prevSizeRow = sizeRow.previousElementSibling;
+
+        // Check below max
+        {
+            const maxCoverLevel = this.coverData.length - 1
+            if (Object.values(coverLevels).some(coverLevel => coverLevel > maxCoverLevel)) {
+                warnings.push(`A cover level has been set to greater than the maximum available cover level, this will be clamped to the max cover level: ${maxCoverLevel}.`);
+            }
+        }
+
+        // Check Above or equal to previous
+        if (prevSizeRow) {
+            const prevCoverLevels = this._getTokenSizeValues(prevSizeRow);
+            if (Object.entries(coverLevels).some(([actorState, coverLevel]) => coverLevel < prevCoverLevels[actorState])) {
+                warnings.push("The cover level of this size is less than the cover level of the previous size, this may be a mistake, or the sizes are out of order.");
+            }
+        }
+
+        return warnings
+    }
+
+    /**
+     * Get the normal, dead, and prone values of a specific actor size from the form
+     * @param sizeRowEl {Element} The size row element that contains the fields
+     * @return {{normal: (number), dead: (number), prone: (number)}}
+     * @private
+     */
+    _getTokenSizeValues(sizeRowEl) {
+        return {
+            normal: parseInt(sizeRowEl.querySelector(".token-cover-normal").value) || 0,
+            dead: parseInt(sizeRowEl.querySelector(".token-cover-dead").value) || 0,
+            prone: parseInt(sizeRowEl.querySelector(".token-cover-prone").value) || 0,
         }
     }
 }
