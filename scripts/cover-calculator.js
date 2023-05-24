@@ -7,12 +7,10 @@ import { MODULE } from './module.js';
  * Sub Modules
  */
 import { CoverCalculator } from './modules/CoverCalculator.js';
-import { CoverCalculatorTokenSizes } from './modules/CoverCalculatorTokenSizes.js';
 
 const SUB_MODULES = {
     MODULE,
-    CoverCalculator,
-    CoverCalculatorTokenSizes,
+    CoverCalculator
 };
 
 /*

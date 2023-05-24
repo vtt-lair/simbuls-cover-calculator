@@ -28,6 +28,9 @@
     "SCC.LoS_coverstring": "{coverType} ({acBonus})",
     "SCC.LoS_outputmessage":"checks their sightline to",
     "SCC.LoS_providescover":"Provides Cover",
+    "SCC.LoS_providescoveralive":"Provides Cover (Alive)",
+    "SCC.LoS_providescoverdead":"Provides Cover (Dead)",
+    "SCC.LoS_providescoverprone":"Provides Cover (Prone)",
     "SCC.LoSMaskNPCs_creatureMask": "a creature",
     "setting.losKeyBind.name" : "Keybind for Cover",
     "setting.losKeyBind.hint" : "Assign a keyboard shortcut to check cover when targeting.",
@@ -63,6 +66,10 @@
 
     "setting.actorSizePath.name" : "Actor Size Path",
     "setting.actorSizePath.hint" : "The path to the variable in the actor that defines it's size.",
+    "setting.unconsciousStatusName.name" : "Unconscious Status Name",
+    "setting.unconsciousStatusName.hint" : "The name of the status effect actors have when they are Unconscious.",
+    "setting.proneStatusName.name" : "Prone Status Name",
+    "setting.proneStatusName.hint" : "The name of the status effect actors have when they are Prone.",
     "setting.tokenSizesDefault.name" : "Cover by Token Size",
     "setting.tokenSizesDefault.hint" : "Set the cover level of tokens for each size.",
 
@@ -70,8 +77,5 @@
     "SCC.flagsNoCoverHint" : "When attacking a target, if their cover level is below or equal to this value, you will treat it as if the have no cover",
 
     "SCC.flagsReduceCover" : "Reduce target partial cover",
-    "SCC.flagsReduceCoverHint" : "When attacking a target, their partial cover is reduced by the specified number of steps.",
-
-    "setting.proneActsLikeDead.name": "Prone acts like 0 HP",
-    "setting.proneActsLikeDead.hint": "When the token has the prone or unconscious status effect, handle cover as if it has 0 HP."
+    "SCC.flagsReduceCoverHint" : "When attacking a target, their partial cover is reduced by the specified number of steps."
 }
