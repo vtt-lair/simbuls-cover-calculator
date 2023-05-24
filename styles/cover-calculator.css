@@ -61,6 +61,26 @@
 }
 
 /* Cover Level Config */
+.cover-level-config .cover-settings {
+
+}
+
+.cover-level-config .cover-settings .cover-settings-image {
+    height: 150px;
+    width: 150px;
+    flex: 0 0 150px;
+
+    margin: 10px;
+}
+
+.cover-level-config .cover-settings .cover-settings-main .cover-settings-subwrap {
+    display: flex;
+}
+
+.cover-level-config .cover-settings .cover-settings-main label {
+    flex: 1;
+}
+
 .cover-level-config .cover-partials .form-group {
     justify-content: space-between;
 }

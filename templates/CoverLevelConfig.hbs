@@ -1,39 +1,65 @@
-<div class="form-group">
-    <label>Label</label>
-    <input type="text" name="label" value="{{label}}" placeholder="Label">
-</div>
-<div class="form-group">
-    <label>AC Bonus</label>
-    <input type="number" name="value" value="{{value}}" placeholder="AC Bonus">
-</div>
+<form>
+    <div class="cover-settings flexrow">
+        <img class="cover-settings-image" src="{{icon}}">
+        <div class="cover-settings-main flexcol">
+            <div class="form-group">
+                <label>Label</label>
+                <input type="text" name="label" value="{{label}}" placeholder="Name" title="The name of this cover level.">
+            </div>
+            <div class="form-group">
+                <label>AC Bonus</label>
+                <input type="number" name="value" value="{{value}}" placeholder="AC Bonus" title="The AC bonus granted by being behind cover of this level.">
+            </div>
+            <div class="form-group">
+                <label>Icon</label>
+                <div class="cover-settings-subwrap">
+                    <input type="text" name="icon" value="{{icon}}" placeholder="Icon" title="The icon that represents this cover level.">
+                    {{filePicker type="image" target="icon"}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Colour</label>
+                <div class="cover-settings-subwrap">
+                    {{colorPicker name="color" value=color default="#000000" title="The debug color that represents this cover level."}}
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="cover-partials">
-    <h3>Partial Cover Levels</h3>
-    <p>When the token is only partially behind cover of this level, these cover levels are substituted.</p>
-    <p>Changing the value for fully behind cover is possible, but not recommended</p>
-    <div class="form-group flexrow">
-        <label>Quarter behind cover</label>
-        <select name="quarter-cover">
-            {{selectOptions coverLevels selected=partial.[1]}}
-        </select>
+    <div class="cover-partials">
+        <h3>Partial Cover Levels</h3>
+        <p>When the token is only partially behind cover of this level, these cover levels are substituted.</p>
+        <p>Changing the value for fully behind cover is possible, but not recommended</p>
+        <div class="form-group flexrow">
+            <label>Quarter behind cover</label>
+            <select name="quarter-cover" title="The cover level provided when a token is only a quarter covered by cover of this level.">
+                {{selectOptions coverLevels selected=partial.[1]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>Half behind cover</label>
+            <select name="half-cover" title="The cover level provided when a token is only half covered by cover of this level.">
+                {{selectOptions coverLevels selected=partial.[2]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>Three quarters behind cover</label>
+            <select name="three-q-cover" title="The cover level provided when a token is only a three-quarters covered by cover of this level.">
+                {{selectOptions coverLevels selected=partial.[3]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>Fully behind cover</label>
+            <select name="full-cover" title="The cover level provided when a token is completely covered by cover of this level.">
+                {{selectOptions coverLevels selected=partial.[4]}}
+            </select>
+        </div>
+        <button type="button" name="reset-partials">Reset Partial Cover</button>
     </div>
-    <div class="form-group flexrow">
-        <label>Half behind cover</label>
-        <select name="half-cover">
-            {{selectOptions coverLevels selected=partial.[2]}}
-        </select>
-    </div>
-    <div class="form-group flexrow">
-        <label>Three quarters behind cover</label>
-        <select name="three-q-cover">
-            {{selectOptions coverLevels selected=partial.[3]}}
-        </select>
-    </div>
-    <div class="form-group flexrow">
-        <label>Fully behind cover</label>
-        <select name="full-cover">
-            {{selectOptions coverLevels selected=partial.[4]}}
-        </select>
-    </div>
-    <button name="reset-partials">Reset Partial Cover</button>
-</div>
+    <!-- Settings Footer -->
+    <footer class="sheet-footer flexrow settings-footer">
+        <button type="submit" name="submit">
+            <i class="far fa-save"></i> {{localize 'SETTINGS.Save'}}
+        </button>
+    </footer>
+</form>

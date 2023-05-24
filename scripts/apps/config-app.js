@@ -1,7 +1,8 @@
 import {MODULE} from "../module.js";
+import {calculateCoverLevelLut} from "../cover-utils.js";
 import {HELPER} from "../../../simbuls-athenaeum/scripts/helper.js";
 import {logger} from "../../../simbuls-athenaeum/scripts/logger.js";
-import {CoverCalculator} from "../modules/CoverCalculator.js";
+import CoverLevelConfig from "./cover-level-app.js";
 
 /**
  * HelpersSettingConfig extends {SettingsConfig}
@@ -453,7 +454,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             data = {
                 label: "New Cover Level", value: null, color : "0x008000",
                 icon : `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
-                partial: CoverCalculatorSettingsConfig._calculateCoverLevelLut(index),
+                partial: calculateCoverLevelLut(index),
                 coverLevels: {
                     [index]: "New Cover Level",
                     ...this.coverData.reduce((acc, value, currentIndex) => {
@@ -473,75 +474,18 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             };
         }
 
-        new Dialog({
-                title: add ? "Add a new cover level" : "Edit Cover Level",
-                content: await renderTemplate(`${MODULE.data.path}/templates/CoverLevelConfig.hbs`, data),
-                buttons: {
-                    submit: {
-                        label: add ? "Add" : "Apply",
-                        callback: (html) => {
-                            const coverLevel = {};
-                            // Label
-                            {
-                                const labelEl = html.find("[name=\"label\"]")[0];
-                                if (labelEl.value.length === 0) throw new Error("You must provide a label");
-                                coverLevel.label = labelEl.value;
-                            }
+        new CoverLevelConfig(add, data, index, (coverLevel) => {
+            if (add) {
+                const coverIndex = this.coverData.length - 1;
+                const temp = this.coverData[coverIndex];
+                this.coverData[coverIndex] = coverLevel;
+                this.coverData.push(temp)
+            } else {
+                this.coverData[index] = coverLevel;
+            }
 
-                            // AC Bonus
-                            {
-                                const labelEl = html.find("[name=\"value\"]")[0];
-                                coverLevel.value = parseInt(labelEl.value) || 0;
-                            }
-
-                            // Cover Partials
-                            {
-                                const partial = [0];
-                                const quarterEl = html.find("[name=\"quarter-cover\"]")[0];
-                                partial.push(parseInt(quarterEl.value));
-                                const halfEl = html.find("[name=\"half-cover\"]")[0];
-                                partial.push(parseInt(halfEl.value));
-                                const threeQuaterEl = html.find("[name=\"three-q-cover\"]")[0];
-                                partial.push(parseInt(threeQuaterEl.value));
-                                const fullEl = html.find("[name=\"full-cover\"]")[0];
-                                partial.push(parseInt(fullEl.value));
-
-                                coverLevel.partial = partial;
-                            }
-
-                            if (add) {
-                                const coverIndex = this.coverData.length - 1;
-                                const temp = this.coverData[coverIndex];
-                                this.coverData[coverIndex] = coverLevel;
-                                this.coverData.push(temp)
-                            } else {
-                                this.coverData[index] = coverLevel;
-                            }
-                            this._redrawCoverLevels();
-                        },
-                        icon: (add ? `<i class="fas fa-plus"></i>` : undefined)
-                    },
-                },
-                default: "submit",
-                render: (html) => {
-                    // Add reset functionality to reset partials button
-                    html.find("[name=\"reset-partials\"]")[0].onclick = (event) => {
-                        const partial = CoverCalculatorSettingsConfig._calculateCoverLevelLut(index);
-
-                        const quarterEl = html.find("[name=\"quarter-cover\"]")[0];
-                        quarterEl.value = partial[1];
-                        const halfEl = html.find("[name=\"half-cover\"]")[0];
-                        halfEl.value = partial[2];
-                        const threeQuaterEl = html.find("[name=\"three-q-cover\"]")[0];
-                        threeQuaterEl.value = partial[3];
-                        const fullEl = html.find("[name=\"full-cover\"]")[0];
-                        fullEl.value = partial[4];
-                    }
-                }
-            },
-            {
-                classes: ["cover-level-config"]
-            }).render(true);
+            this._redrawCoverLevels();
+        }).render(true);
     }
 
     /**
@@ -663,6 +607,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
     _getCoverLevelWarnings(coverLevel, index) {
         const warnings = [];
+
         if (!coverLevel.partial.includes(index)) {
             warnings.push("The partial cover values never return this cover level, an actor will never be regarded as fully in cover of this type.")
         }
@@ -756,43 +701,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
 
         return containerEl;
-    }
-
-    /**
-     * Approximate the cover level look up table
-     * <br>
-     * This matches exactly the original look up tables for tokens for all values (0-3), then approximates future ones
-     * using linear interpolation
-     * <br>
-     * Working out, where t is the cover level: {@link https://www.desmos.com/calculator/3lykzkmfb5}
-     * @param coverLevel The level to create the LUT for
-     * @returns {Number[]} A look up table for the cover level at each level of cover for the given cover level
-     * @private
-     */
-    static _calculateCoverLevelLut(coverLevel) {
-        const lut = [];
-        for (let i = 0; i < 5; i++) {
-            let value;
-            if (coverLevel > 3) {
-                // Anything bigger than 3 looks best on a linear curve
-                value = Math.ceil(coverLevel*i/4);
-            } else {
-                // Everything else can be approximated with this equation and some creative rounding
-                const x = i/4;
-                value = (1.4 * Math.pow(x, 3) - 2.1 * Math.pow(x, 2) + 1.7 * x) * coverLevel;
-
-                if (coverLevel < 3) {
-                    // Ceil 1 & 2
-                    value = Math.ceil(value);
-                } else {
-                    // This bad rounding matches better than the regular kind of rounding
-                    if (value % 1 > 0.5) value = Math.ceil(value);
-                    else value = Math.floor(value);
-                }
-            }
-            lut.push(value);
-        }
-        return lut;
     }
 
     /* --------------------------------------------- */
