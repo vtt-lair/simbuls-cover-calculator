@@ -405,6 +405,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
 
         html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
+        html.find(".cover-levels-table .cover-control[data-action=\"add\"]").click(this._handleCoverControl.bind(this));
+
         html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
 
         html.find("#scc-token-cover-settings-body input").change(this._updateTokenSizeCoverRowWarnings.bind(this));
@@ -565,13 +567,15 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
      */
     async _handleCoverControl(event) {
         const action = event.currentTarget.dataset.action;
+        const index = parseInt(event.currentTarget.parentElement.parentElement.dataset.index);
+
         if (action === "add") {
             const newIndex = this.coverData.length - 1;
             await this._createCoverLevelDialog(newIndex, true);
             return;
         }
         if (["up", "down", "delete"].includes(action) && !this.checkedCoverChange) {
-            Dialog.confirm({
+            await Dialog.confirm({
                 title: "Are you sure?",
                 content: "Are you sure you want to modify the order of the cover levels? Existing walls, tiles, and " +
                     "tokens in the world will not be updated and may behave unexpectedly unless corrected",
@@ -580,10 +584,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 },
                 defaultYes: false
             });
-            return;
+            if (!this.checkedCoverChange) return;
         }
-
-        const index = parseInt(event.currentTarget.parentElement.parentElement.dataset.index);
         switch (action) {
             case "edit":
                 await this._createCoverLevelDialog(index, false)
