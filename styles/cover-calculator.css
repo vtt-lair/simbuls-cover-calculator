@@ -39,7 +39,7 @@
 }
 
 .athenaeum-table.cover-levels-table .cover-controls {
-    padding-left: 40px;
+    padding-left: 40px !important;
 }
 
 .athenaeum-table.cover-levels-table .cover-controls .cover-control.cover-control-disabled {
@@ -67,4 +67,10 @@
 
 .cover-level-config .cover-partials button {
     margin-top: 10px;
+}
+
+/* Token Size Cover Level Config */
+.athenaeum-table.token-cover-table .athenaeum-table-header > *:last-child,
+.athenaeum-table.token-cover-table .athenaeum-table-body .athenaeum-table-row > *:last-child {
+    text-align: center !important;
 }

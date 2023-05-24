@@ -285,7 +285,7 @@ export class CoverCalculator {
                             <label>${HELPER.localize("SCC.LoS_providescover")}</label>
                             <select name="flags.${MODULE.data.name}.coverLevel" data-dtype="Number">
                                 ${
-                                    Object.keys(coverData).reduce((acc, key) => acc+=`<option value="${key}" ${key == status ? 'selected' : ''}>${this._buildLabel(key)}</option>`, ``)
+                                    Object.keys(coverData).reduce((acc, key) => acc +`<option value="${key}" ${key == status ? 'selected' : ''}>${this._buildLabel(key)}</option>`, ``)
                                 }
                             </select>
                             </div>`;
