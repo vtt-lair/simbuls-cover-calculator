@@ -196,6 +196,47 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
                 return config;
             }
+        },
+        devPref: {
+            label: "Developer Preference",
+            generateConfig: (sizes) => {
+                const config = {};
+                const maxCover = this.coverData.length - 2;
+                for (const [index, size] of sizes.entries()) {
+                    let x = index / sizes.length;
+                    x = (2 * x) / (x + 1);
+
+                    const coverValue = Math.ceil(x * maxCover) + 1;
+                    config[size] = {
+                        normal: coverValue,
+                        dead: coverValue,
+                        prone: coverValue
+                    };
+                }
+
+                return config;
+            }
+        },
+        devPrefDead: {
+            label: "Developer Preference, half on death",
+            generateConfig: (sizes) => {
+                const config = {};
+                const maxCover = this.coverData.length - 2;
+                for (const [index, size] of sizes.entries()) {
+                    let x = index / sizes.length;
+                    x = (2 * x) / (x + 1);
+
+                    const coverValue = Math.ceil(x * maxCover) + 1;
+                    const deadCoverValue = Math.floor(coverValue / 2);
+                    config[size] = {
+                        normal: coverValue,
+                        dead: deadCoverValue,
+                        prone: deadCoverValue
+                    };
+                }
+
+                return config;
+            }
         }
     }
 
