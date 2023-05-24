@@ -404,6 +404,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         super.activateListeners(html);
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
 
+        html.find(`[name="${MODULE.data.name}.losWithTokens"]`).click(this._onTokenCoverChange.bind(this));
+
         html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
         html.find(".cover-levels-table .cover-control[data-action=\"add\"]").click(this._handleCoverControl.bind(this));
 
@@ -412,9 +414,27 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         html.find("#scc-token-cover-settings-body input").change(this._updateTokenSizeCoverRowWarnings.bind(this));
 
         // unsure if this is the right place
+        this._prepareVisibleForms()
         this._redrawCoverLevels();
         this._updateTokenSizeCoverRowWarnings()
     }
+
+    _onTokenCoverChange(event) {
+        this._toggleTokenSizesTabVisible(event.currentTarget.checked);
+    }
+
+    _prepareVisibleForms() {
+        const isTokenCoverChecked = document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked;
+        this._toggleTokenSizesTabVisible(isTokenCoverChecked);
+    }
+
+    _toggleTokenSizesTabVisible(isVisible) {
+        const tab = document.querySelector(".sheet-tabs :nth-child(3)");
+        if (tab) {
+            tab.style.display = isVisible ? 'block' : 'none';
+        }
+    }
+
 
     /* --------------------------------------------- */
     /* Cover Level Helpers                           */
