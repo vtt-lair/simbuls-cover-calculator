@@ -64,6 +64,9 @@
     "setting.losWithTiles.name": "Tile Cover",
     "setting.losWithTiles.hint": "Allow Tiles to be factored into cover calculation.",
 
+    "setting.coverData.name": "Cover Level Config",
+    "setting.coverData.hint": "Configure the available cover levels and the amount of AC they provide",
+
     "setting.actorSizePath.name" : "Actor Size Path",
     "setting.actorSizePath.hint" : "The path to the variable in the actor that defines it's size.",
     "setting.unconsciousStatusName.name" : "Unconscious Status Name",

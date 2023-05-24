@@ -1,8 +1,11 @@
+<h2>{{this.name}}</h2>
+<p class="notes">{{this.hint}}</p>
 <div class="form-group">
     <label>Presets</label>
     <select class="token-cover-preset">
         {{selectOptions @root.data.tokenPresets labelAttr="label"}}
     </select>
+    <p class="notes">Apply a preset configuration for the Actor Size Cover Levels</p>
 </div>
 <div class="form-group">
     <div class="athenaeum-table token-cover-table">
