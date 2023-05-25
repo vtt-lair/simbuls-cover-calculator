@@ -1,12 +1,16 @@
 import {MODULE} from "../module.js";
 import {calculateCoverLevelLut} from "../cover-utils.js";
+import {HELPER} from "../../../simbuls-athenaeum/scripts/helper.js";
 
 /**
  * A class to allow modification of a specific cover level
  */
 export default class CoverLevelConfig extends FormApplication {
     constructor(add, coverLevel, coverIndex, callback) {
-        super(null, {title: add ? "Add a new cover level" : "Edit Cover Level", icon: (add ? `<i class="fas fa-plus"></i>` : undefined)});
+        super(null, {
+            title: add ? HELPER.localize("scc.coverLevelConfig.titleAdd") : HELPER.localize("scc.coverLevelConfig.titleEdit"),
+            icon: (add ? `<i class="fas fa-plus"></i>` : undefined)
+        });
         this.add = add;
         this.coverLevel = coverLevel;
         this.coverIndex = coverIndex;
@@ -57,7 +61,7 @@ export default class CoverLevelConfig extends FormApplication {
         // Validation
         // Label
         if (formData.label.length === 0) {
-            const error = "You must provide a label";
+            const error = HELPER.localize("scc.coverLevelConfig.errorNoLabel");
             ui.notifications.error(error);
             throw new Error(error);
         }

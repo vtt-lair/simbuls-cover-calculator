@@ -5,15 +5,15 @@
     <select class="token-cover-preset">
         {{selectOptions @root.data.tokenPresets labelAttr="label"}}
     </select>
-    <p class="notes">Apply a preset configuration for the Actor Size Cover Levels</p>
+    <p class="notes">{{localize 'scc.tokenSizesDefault.presetBody'}}</p>
 </div>
 <div class="form-group">
     <div class="athenaeum-table token-cover-table">
         <div class="athenaeum-table-header flexrow">
-            <div class="token-title">Size</div>
-            <div class="token-cover-value" title="The normal cover value for a token of this size">Cover</div>
-            <div class="token-cover-value" title="The cover value for a token of this size when it is dead or unconscious">Dead</div>
-            <div class="token-cover-value" title="The cover value for a token of this size when it is prone">Prone</div>
+            <div class="token-title">{{localize 'scc.tokenSizesDefault.tableSize'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.coverTitle'}}">{{localize 'scc.tokenSizesDefault.tableCover'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.deadTitle'}}">{{localize 'scc.tokenSizesDefault.tableDead'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.proneTitle'}}">{{localize 'scc.tokenSizesDefault.tableProne'}}</div>
         </div>
         <ul class="athenaeum-table-body" id="scc-token-cover-settings-body">
             {{#each this.value}}
@@ -26,13 +26,13 @@
                         </i>
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.normal class="token-cover-normal" step=1 min=0}}
+                        {{numberInput this.normal class="token-cover-normal" title=(localize 'scc.tokenSizesDefault.coverTitle') step=1 min=0}}
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.dead class="token-cover-dead" step=1 min=0}}
+                        {{numberInput this.dead class="token-cover-dead" title=(localize 'scc.tokenSizesDefault.deadTitle') step=1 min=0}}
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.prone class="token-cover-prone" step=1 min=0}}
+                        {{numberInput this.prone class="token-cover-prone" title=(localize 'scc.tokenSizesDefault.proneTitle') step=1 min=0}}
                     </div>
                 </li>
             {{/each}}

@@ -2,16 +2,16 @@
     <div class="cover-title">{{label}}</div>
     <div class="cover-ac-bonus">{{numberFormat value decimals=0 sign=true}}</div>
     <div class="cover-controls flexrow">
-        <a class="cover-control" title="Edit Cover Level" data-action="edit">
+        <a class="cover-control" title="{{localize 'scc.coverData.controlTitleEdit'}}" data-action="edit">
             <i class="fas fa-edit"></i>
         </a>
-        <a class="cover-control {{#if (eq key 0)}}cover-control-disabled{{/if}}" title="Move Up" data-action="up">
+        <a class="cover-control {{#if (eq key 0)}}cover-control-disabled{{/if}}" title="{{localize 'scc.coverData.controlTitleUp'}}" data-action="up">
             <i class="fas fa-arrow-up"></i>
         </a>
-        <a class="cover-control {{#if @last}}cover-control-disabled{{/if}}" title="Move Down" data-action="down">
+        <a class="cover-control {{#if @last}}cover-control-disabled{{/if}}" title="{{localize 'scc.coverData.controlTitleDown'}}" data-action="down">
             <i class="fas fa-arrow-down"></i>
         </a>
-        <a class="cover-control {{#if (or (eq key 0) @last)}}cover-control-disabled{{/if}}" title="Delete Cover Level" data-action="delete">
+        <a class="cover-control {{#if (or (eq key 0) @last)}}cover-control-disabled{{/if}}" title="{{localize 'scc.coverData.controlTitleDelete'}}" data-action="delete">
             <i class="fas fa-trash"></i>
         </a>
     </div>

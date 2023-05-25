@@ -109,12 +109,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     /**
      * Presets available for Cover by Token size, cover config is generated to be scaled to the
      */
-    tokenPresets ={
+    tokenPresets = {
         none: {
             label: ""
         },
         flat: {
-            label: "Flat",
+            label: HELPER.localize("scc.coverPreset.flat"),
             generateConfig: (sizes) => {
                 const config = {};
                 for (const size of sizes) {
@@ -129,7 +129,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         },
         linear: {
-            label: "Linear",
+            label: HELPER.localize("scc.coverPreset.linear"),
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 1;
@@ -164,7 +164,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         },
         linearAlt: {
-            label: "Linear (alt)",
+            label: HELPER.localize("scc.coverPreset.linearAlt"),
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
@@ -181,7 +181,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         },
         linearDeadAlt: {
-            label: "Linear, half on death (alt)",
+            label: HELPER.localize("scc.coverPreset.linearHalfAlt"),
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
@@ -199,7 +199,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         },
         devPref: {
-            label: "Developer Preference",
+            label: HELPER.localize("scc.coverPreset.devPref"),
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
@@ -219,7 +219,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         },
         devPrefDead: {
-            label: "Developer Preference, half on death",
+            label: HELPER.localize("scc.coverPreset.devPrefHalf"),
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
@@ -452,11 +452,11 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         if (add) {
             // Create a template cover level
             data = {
-                label: "New Cover Level", value: null, color : "0x008000",
+                label: HELPER.localize("scc.coverData.newCoverLevelName"), value: null, color : "0x008000",
                 icon : `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
                 partial: calculateCoverLevelLut(index),
                 coverLevels: {
-                    [index]: "New Cover Level",
+                    [index]: HELPER.localize("scc.coverData.newCoverLevelName"),
                     ...this.coverData.reduce((acc, value, currentIndex) => {
                         acc[currentIndex >= index ? currentIndex + 1 : currentIndex] = value.label
                         return acc;
@@ -493,7 +493,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
      * @param event The event that triggered the preset change
      * @private
      */
-    _handleCoverPresetSelected(event) {
+    async _handleCoverPresetSelected(event) {
         try {
             const presetKey = event.currentTarget.value;
             if (presetKey.length === 0) return;
@@ -503,18 +503,15 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
 
             if (!this.checkedCoverChange) {
-                Dialog.confirm({
-                    title: "Are you sure?",
-                    content: "Are you sure you want to completely change the cover levels? Existing walls, tiles, and " +
-                        "tokens in the world will not be updated and may behave unexpectedly unless corrected",
+                await Dialog.confirm({
+                    title: HELPER.localize("scc.sureCheck.title"),
+                    content: HELPER.localize("scc.coverData.sureCheckPreset"),
                     yes: () => {
                         this.checkedCoverChange = true;
-                        this.coverData = Object.values(foundry.utils.deepClone(preset.config));
-                        this._redrawCoverLevels();
                     },
                     defaultYes: false
                 });
-                return;
+                if (!this.checkedCoverChange) return;
             }
 
             this.coverData = Object.values(foundry.utils.deepClone(preset.config));
@@ -540,9 +537,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
         if (["up", "down", "delete"].includes(action) && !this.checkedCoverChange) {
             await Dialog.confirm({
-                title: "Are you sure?",
-                content: "Are you sure you want to modify the order of the cover levels? Existing walls, tiles, and " +
-                    "tokens in the world will not be updated and may behave unexpectedly unless corrected",
+                title: HELPER.localize("scc.sureCheck.title"),
+                content: HELPER.localize("scc.coverData.sureCheckMove"),
                 yes: () => {
                     this.checkedCoverChange = true;
                 },
@@ -568,16 +564,15 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 break;
             case "delete":
                 if (index === 0 || index === this.coverData.length - 1) return;
-                Dialog.confirm({
-                    title: "Are you sure?",
-                    content: "Are you sure you want to delete that cover level?",
+                await Dialog.confirm({
+                    title: HELPER.localize("scc.sureCheck.title"),
+                    content: HELPER.localize("scc.coverData.sureCheckDelete"),
                     yes: () => {
-                        this.coverData.splice(index, 1);
-                        this._redrawCoverLevels();
                     },
                     defaultYes: false
                 });
-                return;
+                this.coverData.splice(index, 1);
+                break;
         }
 
         this._redrawCoverLevels();
@@ -605,20 +600,27 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         this._updateTokenSizeCoverRowWarnings()
     }
 
+    /**
+     * Get a list of warnings of potential errors from the given cover level
+     * @param coverLevel {Object} The cover level to check for warnings
+     * @param index {Number} The index of the cover level being checked
+     * @return {String[]}
+     * @private
+     */
     _getCoverLevelWarnings(coverLevel, index) {
         const warnings = [];
 
         if (!coverLevel.partial.includes(index)) {
-            warnings.push("The partial cover values never return this cover level, an actor will never be regarded as fully in cover of this type.")
+            warnings.push(HELPER.localize("scc.coverData.warningMissingSelf"))
         }
 
         const coverMax = Math.max(...coverLevel.partial);
         if (coverMax > index) {
-            warnings.push("A partial level returns a value greater than this cover level, this may have unexpected results.")
+            warnings.push(HELPER.localize("scc.coverData.warningExceedsSelf"))
         }
 
         if (coverMax >= this.coverData.length) {
-            warnings.push("This partial returns a cover level that doesn't exist, this may have unexpected results.")
+            warnings.push(HELPER.localize("scc.coverData.warningUnknownLevel"))
         }
 
         return warnings;
@@ -633,10 +635,10 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
      */
     _buildCoverLevelElement(index, coverLevel) {
         const controls = [
-            {title: "Edit Cover Level", action: "edit", icon: "fas fa-edit"},
-            {title: "Move up", action: "up", icon: "fas fa-arrow-up", disabled: index === 0},
-            {title: "Move down", action: "down", icon: "fas fa-arrow-down", disabled: index === this.coverData.length - 1},
-            {title: "Delete Cover Level", action: "delete", icon: "fas fa-trash", disabled: index === 0 || index === this.coverData.length - 1}
+            {title: HELPER.localize("scc.coverData.controlTitleEdit"), action: "edit", icon: "fas fa-edit"},
+            {title: HELPER.localize("scc.coverData.controlTitleUp"), action: "up", icon: "fas fa-arrow-up", disabled: index === 0},
+            {title: HELPER.localize("scc.coverData.controlTitleDown"), action: "down", icon: "fas fa-arrow-down", disabled: index === this.coverData.length - 1},
+            {title: HELPER.localize("scc.coverData.controlTitleDelete"), action: "delete", icon: "fas fa-trash", disabled: index === 0 || index === this.coverData.length - 1}
         ]
 
         const containerEl = document.createElement("li");
@@ -723,9 +725,8 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
             if (!this.checkedTokenCoverChange) {
                 Dialog.confirm({
-                    title: "Are you sure?",
-                    content: "Are you sure you want to apply a token cover level preset? Existing tokens already " +
-                        "placed in the world will not be updated",
+                    title: HELPER.localize("scc.sureCheck.title"),
+                    content: HELPER.localize("scc.tokenSizes.sureCheckPreset"),
                     yes: () => {
                         this.checkedTokenCoverChange = true;
                         this._applyTokenPreset(preset);
@@ -803,7 +804,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         {
             const maxCoverLevel = this.coverData.length - 1
             if (Object.values(coverLevels).some(coverLevel => coverLevel > maxCoverLevel)) {
-                warnings.push(`A cover level has been set to greater than the maximum available cover level, this will be clamped to the max cover level: ${maxCoverLevel}.`);
+                warnings.push(HELPER.localize("scc.tokenSizes.warningUnknownLevel"));
             }
         }
 
@@ -811,7 +812,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         if (prevSizeRow) {
             const prevCoverLevels = this._getTokenSizeValues(prevSizeRow);
             if (Object.entries(coverLevels).some(([actorState, coverLevel]) => coverLevel < prevCoverLevels[actorState])) {
-                warnings.push("The cover level of this size is less than the cover level of the previous size, this may be a mistake, or the sizes are out of order.");
+                warnings.push(HELPER.localize("scc.tokenSizes.warningBadSizeOrder"));
             }
         }
 
