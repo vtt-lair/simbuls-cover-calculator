@@ -69,6 +69,14 @@ export default class Migration {
         const proneDeadSetting = game.settings.storage.get("world").getSetting(`${MODULE.data.name}.proneActsLikeDead`);
         const proneDead = proneDeadSetting?.value || false;
 
+        // Specify cover for token sizes
+        {
+            const setting = game.settings.storage.get("world").getSetting(`${MODULE.data.name}.specifyCoverForTokenSizes`);
+            if (setting) {
+                await setting.delete();
+            }
+        }
+
         // No Cover token sizes
         {
             const setting = game.settings.storage.get("world").getSetting(`${MODULE.data.name}.noCoverTokenSizes`);
