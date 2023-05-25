@@ -12,6 +12,9 @@ import {MODULE} from "../module.js";
 const NAME = "simbuls-cover-calculator-migration";
 const currentMigrationVersion = 1;
 
+/**
+ * A module to migrate various features between versions
+ */
 export default class Migration {
     static register() {
         Migration.settings();
