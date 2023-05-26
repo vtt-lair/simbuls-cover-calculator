@@ -12,7 +12,7 @@
     ],
     "esmodules": [
         "/scripts/cover-calculator.js"
-    ],  
+    ],
     "styles": [
         "/styles/athenaeum.css",
         "/styles/cover-calculator.css"
@@ -57,30 +57,12 @@
     "download": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/download/v1.0.0/module.zip",
     "changelog": "https://github.com/vtt-lair/simbuls-cover-calculator/blob/main/CHANGELOG.md",
     "relationships": {
-        "systems": [
-            {
-                "id": "dnd5e",
-                "type": "system",
-                "manifest": "https://gitlab.com/asacolips-projects/foundry-mods/archmage/-/raw/2.0.2/system.json",
-                "compatibility": {
-                    "verified": "2.0.2"
-                }
-            },
-            {
-              "id": "sw5e",
-              "type": "system",
-              "manifest": "https://github.com/unrealkakeman89/sw5e/releases/download/2.0.3.2.3.7/system.json",
-              "compatibility": {
-                "verified": "2.0.3.2.3.7"
-              }
-            }
-        ],
         "requires": [
             {
                 "id": "simbuls-athenaeum",
                 "type": "module",
                 "compatibility": {
-                "verified": "1.0.1"
+                "verified": "1.1.0"
                 }
             }
         ]
