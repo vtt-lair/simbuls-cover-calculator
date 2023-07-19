@@ -505,6 +505,7 @@ class Cover {
             
             origin.ignoresCover = () => { return coordinates.ignoresCover; }
             origin.getCoverEffect = () => { return null; };
+            origin.reducesCover = () => { return 0; };
         } else {
             if (origin.id === target.id) return new Error("Token Error");
         }
