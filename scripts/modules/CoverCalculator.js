@@ -470,7 +470,18 @@ export class CoverCalculator {
                 if (HELPER.setting(MODULE.data.name, "coverApplication") == 2) await cover.addEffect();
                 await cover.toMessage();
             });
-        }
+
+    static async _runCoverCheckForCoordinates(x, y, ignoresCover, originName, showChatMessage, target) {
+        const cover = new Cover(null, target, 5, {x: x, y: y, ignoresCover: ignoresCover, name: originName});
+
+        //apply cover bonus automatically if requested
+        queueUpdate( async () => {
+            if (showChatMessage) {
+                await cover.toMessage();
+            }
+        });
+
+        return cover;
     }
 
     /**
@@ -583,9 +594,30 @@ class Cover {
         results : {},
         calculations : 0,
     };
+    isViaCoords = false;
 
     constructor(origin, target, padding = 5, coordinates = {}) {
-        if (origin.id === target.id) return new Error("Token Error");
+        if (coordinates.x && coordinates.y) {
+            this.isViaCoords = true;
+            origin = {
+                center: {
+                    x: coordinates.x,
+                    y: coordinates.y
+                },
+                w: 1,
+                h: 1,
+                name: coordinates.name ?? "Template",
+                document: {
+                    uuid: -1,
+                }
+            };
+            
+            origin.ignoresCover = () => { return coordinates.ignoresCover; }
+            origin.getCoverEffect = () => { return null; };
+            origin.reducesCover = () => { return 0; };
+        } else {
+            if (origin.id === target.id) return new Error("Token Error");
+        }
 
         this.data.origin.object = origin;
         this.data.target.object = target;
@@ -647,7 +679,7 @@ class Cover {
         this.data.origin.shapes = [];
         this.data.origin.points = [];
 
-        if (HELPER.setting(MODULE.data.name, 'losSystem') === 1) {
+        if (HELPER.setting(MODULE.data.name, 'losSystem') === 1 || this.isViaCoords) {
             this.data.origin.points.push(new Point(this.data.origin.object.center));
         } else {
             let c = Math.round(this.data.origin.object.w / canvas.grid.size), d = Math.round(this.data.origin.object.h / canvas.grid.size);
@@ -822,7 +854,7 @@ class Cover {
             </div>
         `;
 
-        if (HELPER.setting(MODULE.data.name, "coverApplication") > 0) {
+        if (HELPER.setting(MODULE.data.name, "coverApplication") > 0 && !this.isViaCoords) {
             content += `<div class="cover-calc">`;
 
             const coverData = HELPER.setting(MODULE.data.name, "coverData");

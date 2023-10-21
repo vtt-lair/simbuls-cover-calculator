@@ -1,5 +1,6 @@
 import { Point } from './Point.js';
 import { Segment } from './Segment.js';
+import { MODULE } from "../module.js";
 
 export class Shape {
     segments = [];
