@@ -118,7 +118,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                     label: HELPER.localize("SCC.LoS_lessercover"),
                     value: 1,
                     color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Quarter_Cover.svg`,
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Q_Cover.svg`,
                     partial: [0, 1, 1, 1, 1]
                 },
                 2: {
