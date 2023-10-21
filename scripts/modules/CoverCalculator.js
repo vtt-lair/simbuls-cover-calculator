@@ -316,13 +316,13 @@ export class CoverCalculator {
 
     static _renderTileConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTiles") || app.object.overhead ) return;
-        const adjacentElement = html.find('[data-tab="basic"] .form-group').last();
+        const adjacentElement = html.find('[data-tab="basic"] > *').last();
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
 
     static _renderTokenConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0 || !HELPER.setting(MODULE.data.name, "losWithTokens")) return;
-        const adjacentElement = html.find('[data-tab="character"] .form-group').last();
+        const adjacentElement = html.find('[data-tab="character"] > *').last();
 
         // Inject Cover flag config for each token cover value, as it's relative to adjacentElement (defined once above),
         // insert them backwards to ensure correct order
@@ -356,7 +356,7 @@ export class CoverCalculator {
 
     static _renderWallConfig(app, html){
         if (HELPER.setting(MODULE.data.name, "losSystem") === 0) return;
-        const adjacentElement = html.find('.form-group').last();
+        const adjacentElement = html.find("form > *").eq(-2);
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
 
