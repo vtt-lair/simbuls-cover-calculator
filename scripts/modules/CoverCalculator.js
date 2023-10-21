@@ -223,20 +223,6 @@ export class CoverCalculator {
     /**
      * Hook Functions
      */
-
-    static async _deleteCombat(combat, /*settings, id*/){
-        if (HELPER.setting(MODULE.data.name, "losSystem") > 0 && HELPER.isFirstGM()) {
-            for(let combatant of combat.combatants){
-                const token = combatant?.token?.object;
-                if (token) {
-                    queueUpdate( () => {
-                        return Cover._removeEffect(token);
-                    });
-                }
-            }
-        }
-    }
-
     static async _targetToken(user, target, onOff) {
         if (game.user !== user || HELPER.setting(MODULE.data.name, 'losOnTarget') == false) return;
 
@@ -262,6 +248,19 @@ export class CoverCalculator {
                 queueUpdate( async () => {
                     await Cover._removeEffect(token);
                 });
+            }
+        }
+    }
+
+    static async _deleteCombat(combat, /*settings, id*/){
+        if (HELPER.setting(MODULE.data.name, "losSystem") > 0 && HELPER.isFirstGM()) {
+            for(let combatant of combat.combatants){
+                const token = combatant?.token?.object;
+                if (token) {
+                    queueUpdate( () => {
+                        return Cover._removeEffect(token);
+                    });
+                }
             }
         }
     }
@@ -466,10 +465,12 @@ export class CoverCalculator {
             let cover = new Cover(selected, target);
 
             //apply cover bonus automatically if requested
-            queueUpdate( async () => {
+            queueUpdate(async () => {
                 if (HELPER.setting(MODULE.data.name, "coverApplication") == 2) await cover.addEffect();
                 await cover.toMessage();
             });
+        }
+    }
 
     static async _runCoverCheckForCoordinates(x, y, ignoresCover, originName, showChatMessage, target) {
         const cover = new Cover(null, target, 5, {x: x, y: y, ignoresCover: ignoresCover, name: originName});
@@ -611,7 +612,7 @@ class Cover {
                     uuid: -1,
                 }
             };
-            
+
             origin.ignoresCover = () => { return coordinates.ignoresCover; }
             origin.getCoverEffect = () => { return null; };
             origin.reducesCover = () => { return 0; };

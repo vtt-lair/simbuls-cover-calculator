@@ -103,7 +103,47 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                     partial: [0, 1, 2, 3, 4]
                 },
             }
-        }
+        },
+        pf2e: {
+            label: "PF2e",
+            config: {
+                0: {
+                    label: HELPER.localize("SCC.LoS_nocover"),
+                    value: 0,
+                    color: "0xff0000",
+                    icon: "",
+                    partial: [0, 0, 0, 0, 0]
+                },
+                1: {
+                    label: HELPER.localize("SCC.LoS_lessercover"),
+                    value: 1,
+                    color: "0xffa500",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Quarter_Cover.svg`,
+                    partial: [0, 1, 1, 1, 1]
+                },
+                2: {
+                    label: HELPER.localize("SCC.LoS_standardcover"),
+                    value: 2,
+                    color: "0xffa500",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
+                    partial: [0, 1, 1, 2, 2]
+                },
+                3: {
+                    label: HELPER.localize("SCC.LoS_greatercover"),
+                    value: 4,
+                    color: "0xffff00",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
+                    partial: [0, 1, 2, 2, 3]
+                },
+                4: {
+                    label: HELPER.localize("SCC.LoS_fullcover"),
+                    value: 40,
+                    color: "0x008000",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
+                    partial: [0, 1, 2, 3, 4]
+                },
+            }
+        },
     }
 
     /**
