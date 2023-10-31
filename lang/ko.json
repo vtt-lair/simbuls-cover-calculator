@@ -10,6 +10,7 @@
     "setting.losOnTarget.hint": "Always compute cover when targeting a token, regardless of hotkey.",
     "setting.losSystem.name": "Cover computation mode",
     "setting.losSystem.hint": "Selects algorithm to be used during cover checks, or disables this feature entirely.",
+    "option.default.disabled": "Disabled",
     "option.losOnTarget.center": "중앙 지점 시야 (Foundry 시야)",
     "option.losOnTarget.corner": "네 모서리 시야 (DMG pg. 251)",
     "setting.debugDrawing.name": "Debug Line-of-Sight",
@@ -129,5 +130,7 @@
     "scc.coverPreset.devPref": "Developer's Preference",
     "scc.coverPreset.devPrefHalf": "Developer's Preference, half on death",
     "SCC.flagsReduceCover": "Reduce target partial cover",
-    "SCC.flagsReduceCoverHint": "When attacking a target, their partial cover is reduced by the specified number of steps."
+    "SCC.flagsReduceCoverHint": "When attacking a target, their partial cover is reduced by the specified number of steps.",
+    "setting.migrationVersion.name": "Migration Version",
+    "setting.migrationVersion.hint": "The current migration version the world is on"
 }

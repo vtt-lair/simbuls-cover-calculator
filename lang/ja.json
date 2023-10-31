@@ -10,6 +10,7 @@
     "setting.losOnTarget.hint": "ホットキーに関わらず、コマを目標選択したとき常に遮蔽の判定が行われます。",
     "setting.losSystem.name": "遮蔽判定モード",
     "setting.losSystem.hint": "遮蔽判定に使用するアルゴリズムを選択します。あるいはこの機能を無効にします。",
+    "option.default.disabled": "Disabled",
     "option.losOnTarget.center": "中心点からの視線（FVTTの視界準拠）",
     "option.losOnTarget.corner": "四隅の一点からの視線（DMG p.251）",
     "setting.debugDrawing.name": "視線のデバッグ",
@@ -129,5 +130,7 @@
     "scc.coverPreset.devPref": "Developer's Preference",
     "scc.coverPreset.devPrefHalf": "Developer's Preference, half on death",
     "SCC.flagsReduceCover": "Reduce target partial cover",
-    "SCC.flagsReduceCoverHint": "When attacking a target, their partial cover is reduced by the specified number of steps."
+    "SCC.flagsReduceCoverHint": "When attacking a target, their partial cover is reduced by the specified number of steps.",
+    "setting.migrationVersion.name": "Migration Version",
+    "setting.migrationVersion.hint": "The current migration version the world is on"
 }

@@ -6,6 +6,7 @@
         {{selectOptions @root.data.tokenPresets labelAttr="label"}}
     </select>
     <p class="notes">{{localize 'scc.tokenSizesDefault.presetBody'}}</p>
+    <p class="notes">{{localize 'scc.tokenSizesDefault.presetWarning'}}</p>
 </div>
 <div class="form-group">
     <div class="athenaeum-table token-cover-table">
@@ -26,13 +27,31 @@
                         </i>
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.normal class="token-cover-normal" title=(localize 'scc.tokenSizesDefault.coverTitle') step=1 min=0}}
+                        <select class="token-cover-normal">
+                            {{#select this.normal}}
+                                {{#each ../additional}}
+                                    <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.dead class="token-cover-dead" title=(localize 'scc.tokenSizesDefault.deadTitle') step=1 min=0}}
+                        <select class="token-cover-dead">
+                            {{#select this.dead}}
+                                {{#each ../additional}}
+                                    <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
                     </div>
                     <div class="token-cover-value">
-                        {{numberInput this.prone class="token-cover-prone" title=(localize 'scc.tokenSizesDefault.proneTitle') step=1 min=0}}
+                        <select class="token-cover-prone">
+                            {{#select this.prone}}
+                                {{#each ../additional}}
+                                    <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
+                                {{/each}}
+                            {{/select}}
+                        </select>
                     </div>
                 </li>
             {{/each}}

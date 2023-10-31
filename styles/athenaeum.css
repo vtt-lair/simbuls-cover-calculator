@@ -1,4 +1,4 @@
-.simbuls-athenaeum .container {
+  .simbuls-athenaeum .container {
     flex: 1;
     width: 100%;
     height: auto;
@@ -163,6 +163,10 @@
     display: block;
   }
 
+  #cover-calculator-cover-level-settings {
+    height: auto !important;
+  }
+
 /* Table */
 .athenaeum-table {
   margin: 10px;
@@ -215,7 +219,7 @@
 .athenaeum-warn-parent {
   position: relative;
   margin-left: 5px;
-  color: gold;
+  color: #ffc107;
 }
 
 .athenaeum-warn-parent.hidden {
