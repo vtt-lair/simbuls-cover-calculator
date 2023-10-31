@@ -49,7 +49,7 @@ export class Segment {
         return s.points.reduce((a, s_point) => a && this.points.reduce((b, t_point) => b || s_point.is(t_point), false) , true);
     }
 
-    draw({ thickness = 1, color = "0xfffffff" } = {}) {
+    draw({ thickness = 1, color = "0xffffff" } = {}) {
         const [p1, p2] = this.points;
         const line = new PIXI.Graphics();
 

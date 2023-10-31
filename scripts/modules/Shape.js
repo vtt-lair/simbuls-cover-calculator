@@ -42,7 +42,7 @@ export class Shape {
         if (index) this.segments.splice(index, 1);
     }
 
-    draw({ thickness = 1, color = "0xfffffff" } = {}) {
+    draw({ thickness = 1, color = "0xffffff" } = {}) {
         for (let s of this.segments)
         s.draw({ thickness, color });
     }
