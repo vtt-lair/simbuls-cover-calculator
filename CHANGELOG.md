@@ -1,3 +1,9 @@
+# v 1.4.0
+
+* Implemented system to allow custom cover levels
+* Reimplemented token size cover levels for new cover level system
+* Removed system dependencies to allow use on any system
+
 # v 1.3.1
 
 * Fix an issue where the hotkey didn't properly kick of the cover calculation

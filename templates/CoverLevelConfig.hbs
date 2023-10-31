@@ -1,0 +1,65 @@
+<form>
+    <div class="cover-settings flexrow">
+        <img class="cover-settings-image" src="{{icon}}">
+        <div class="cover-settings-main flexcol">
+            <div class="form-group">
+                <label>{{localize 'scc.coverData.name'}}</label>
+                <input type="text" name="label" value="{{label}}" placeholder="{{localize 'scc.coverData.name'}}" title="{{localize 'scc.coverData.nameTitle'}}">
+            </div>
+            <div class="form-group">
+                <label>{{localize 'scc.coverData.acBonus'}}</label>
+                <input type="number" name="value" value="{{value}}" placeholder="{{localize 'scc.coverData.acBonus'}}" title="{{localize 'scc.coverData.acBonusTitle'}}">
+            </div>
+            <div class="form-group">
+                <label>{{localize 'scc.coverData.icon'}}</label>
+                <div class="cover-settings-subwrap">
+                    <input type="text" name="icon" value="{{icon}}" placeholder="{{localize 'scc.coverData.icon'}}" title="{{localize 'scc.coverData.iconTitle'}}">
+                    {{filePicker type="image" target="icon"}}
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{localize 'scc.coverData.color'}}</label>
+                <div class="cover-settings-subwrap">
+                    {{colorPicker name="color" value=color default="#000000" title=(localize 'scc.coverData.colorTitle')}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cover-partials">
+        <h3>{{localize 'scc.coverData.coverPartialsHeading'}}</h3>
+        <p>{{localize 'scc.coverData.coverPartialsBody1'}}</p>
+        <p>{{localize 'scc.coverData.coverPartialsBody2'}}</p>
+        <div class="form-group flexrow">
+            <label>{{localize 'scc.coverData.coverPartialsQuarter'}}</label>
+            <select name="quarter-cover" title="{{localize 'scc.coverData.coverPartialsQuarterTitle'}}">
+                {{selectOptions coverLevels selected=partial.[1]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>{{localize 'scc.coverData.coverPartialsHalf'}}</label>
+            <select name="half-cover" title="{{localize 'scc.coverData.coverPartialsHalfTitle'}}">
+                {{selectOptions coverLevels selected=partial.[2]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>{{localize 'scc.coverData.coverPartialsThreeQuarter'}}</label>
+            <select name="three-q-cover" title="{{localize 'scc.coverData.coverPartialsThreeQuarterTitle'}}">
+                {{selectOptions coverLevels selected=partial.[3]}}
+            </select>
+        </div>
+        <div class="form-group flexrow">
+            <label>{{localize 'scc.coverData.coverPartialsFull'}}</label>
+            <select name="full-cover" title="{{localize 'scc.coverData.coverPartialsFullTitle'}}">
+                {{selectOptions coverLevels selected=partial.[4]}}
+            </select>
+        </div>
+        <button type="button" name="reset-partials">{{localize 'scc.coverData.coverPartialsReset'}}</button>
+    </div>
+    <!-- Settings Footer -->
+    <footer class="sheet-footer flexrow settings-footer">
+        <button type="submit" name="submit">
+            <i class="far fa-save"></i> {{localize 'SETTINGS.Save'}}
+        </button>
+    </footer>
+</form>

@@ -1,0 +1,41 @@
+<h2>{{this.name}}</h2>
+<p class="notes">{{this.hint}}</p>
+<div class="form-group">
+    <label>Presets</label>
+    <select class="token-cover-preset">
+        {{selectOptions @root.data.tokenPresets labelAttr="label"}}
+    </select>
+    <p class="notes">{{localize 'scc.tokenSizesDefault.presetBody'}}</p>
+</div>
+<div class="form-group">
+    <div class="athenaeum-table token-cover-table">
+        <div class="athenaeum-table-header flexrow">
+            <div class="token-title">{{localize 'scc.tokenSizesDefault.tableSize'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.coverTitle'}}">{{localize 'scc.tokenSizesDefault.tableCover'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.deadTitle'}}">{{localize 'scc.tokenSizesDefault.tableDead'}}</div>
+            <div class="token-cover-value" title="{{localize 'scc.tokenSizesDefault.proneTitle'}}">{{localize 'scc.tokenSizesDefault.tableProne'}}</div>
+        </div>
+        <ul class="athenaeum-table-body" id="scc-token-cover-settings-body">
+            {{#each this.value}}
+                <li class="athenaeum-table-row flexrow" data-size="{{@key}}">
+                    <div class="token-title">
+                        {{this.label}}
+                        <i class="athenaeum-warn-parent hidden fas fa-triangle-exclamation">
+                            <ul class="athenaeum-warn-container">
+                            </ul>
+                        </i>
+                    </div>
+                    <div class="token-cover-value">
+                        {{numberInput this.normal class="token-cover-normal" title=(localize 'scc.tokenSizesDefault.coverTitle') step=1 min=0}}
+                    </div>
+                    <div class="token-cover-value">
+                        {{numberInput this.dead class="token-cover-dead" title=(localize 'scc.tokenSizesDefault.deadTitle') step=1 min=0}}
+                    </div>
+                    <div class="token-cover-value">
+                        {{numberInput this.prone class="token-cover-prone" title=(localize 'scc.tokenSizesDefault.proneTitle') step=1 min=0}}
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

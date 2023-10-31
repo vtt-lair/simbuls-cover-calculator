@@ -1,0 +1,24 @@
+<h2>{{this.name}}</h2>
+<p class="notes">{{this.hint}}</p>
+<div class="form-group">
+    <label>{{localize 'scc.presets.title'}}</label>
+    <select class="cover-preset">
+        {{selectOptions @root.data.coverPresets labelAttr="label"}}
+    </select>
+    <p class="notes">{{localize 'scc.coverData.presetBody'}}</p>
+</div>
+<div class="form-group">
+    <div class="athenaeum-table cover-levels-table">
+        <div class="athenaeum-table-header flexrow">
+            <div class="cover-title">{{localize 'scc.coverData.name'}}</div>
+            <div class="cover-ac-bonus">{{localize 'scc.coverData.acBonus'}}</div>
+            <div class="cover-controls flexrow">
+                <a class="cover-control" title="{{localize 'scc.coverData.controlTitleAdd'}}" data-action="add">
+                    <i class="fas fa-plus"></i> {{localize 'scc.coverData.add'}}
+                </a>
+            </div>
+        </div>
+        <ul class="athenaeum-table-body" id="scc-cover-levels-settings-body">
+        </ul>
+    </div>
+</div>
