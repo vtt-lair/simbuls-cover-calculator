@@ -290,9 +290,9 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     static get defaultGroupLabels() {
         return {
             'system': { faIcon: 'fas fa-cog', tabLabel: 'SCC.groupLabel.system'},
-            'combat': { faIcon: 'fas fa-dice-d20', tabLabel: 'SCC.groupLabel.combat'},
-            'token-sizes': { faIcon: 'fas fa-expand-arrows-alt', tabLabel: 'SCC.groupLabel.token-sizes'},
             'cover': { faIcon: 'fas fa-chart-simple', tabLabel: 'SCC.groupLabel.cover-levels'},
+            'combat': { faIcon: 'fas fa-dice-d20', tabLabel: 'SCC.groupLabel.combat'},
+            'token-sizes': { faIcon: 'fas fa-expand-arrows-alt', tabLabel: 'SCC.groupLabel.token-sizes'},            
             'misc': { faIcon: 'fas fa-list-alt', tabLabel: 'SCC.groupLabel.misc'},
         }
     }
@@ -307,7 +307,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             title : HELPER.localize("Helpers"),
             id : "cover-calculator-client-settings",
             template : `${MODULE.data.athenaeum}/templates/ModularSettings.html`,
-            width : 600,
+            width : 830,
             height : "auto",
             tabs : [
                 {navSelector: ".tabs", contentSelector: ".content", initial: "general"}
@@ -315,12 +315,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         });
     }
 
-    _onClickReturn(event) {
-        event.preventDefault();
+    _onClickReturn(event, options) {
+        event?.preventDefault();
         const menu = game.settings.menus.get('simbuls-cover-calculator.helperOptions');
         if ( !menu ) return ui.notifications.error("No parent menu found");
         const app = new menu.type();
-        return app.render(true);
+        return app.render(true, options);
     }
 
     /**@override */
@@ -367,16 +367,25 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 registerTabSetting(setting.group);
 
                 let groupTab = data.tabs[setting.group] ?? false;
-                if(groupTab) groupTab.settings.push({
-                    ...setting,
-                    type : setting.type instanceof Function ? setting.type.name : "String",
-                    isCheckbox : setting.type === Boolean,
-                    isSelect : setting.choices !== undefined,
-                    isRange : setting.type === Number && setting.range,
-                    isCustom : !!setting.customPartial,
-                    value : HELPER.setting(MODULE.data.name, setting.key),
-                    path: `${setting.namespace}.${setting.key}`
-                });
+                if (groupTab) {
+                    let additional;
+                    if (setting.additional) {
+                        additional = HELPER.setting(MODULE.data.name, `temporary_${setting.additional}`) 
+                            ?? HELPER.setting(MODULE.data.name, setting.additional);
+                    }                    
+
+                    groupTab.settings.push({
+                        ...setting,
+                        type : setting.type instanceof Function ? setting.type.name : "String",
+                        isCheckbox : setting.type === Boolean,
+                        isSelect : setting.choices !== undefined,
+                        isRange : setting.type === Number && setting.range,
+                        isCustom : !!setting.customPartial,
+                        value : HELPER.setting(MODULE.data.name, setting.key),
+                        path: `${setting.namespace}.${setting.key}`,
+                        additional: setting.additional ? Object.values(additional) : null
+                    });                    
+                } 
             }
         }
 
@@ -385,7 +394,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         childMenus.forEach( menu => {
             registerTabMenu(menu.tab);
             let groupTab = data.tabs[menu.tab] ?? false;
-            if(groupTab) groupTab.menus.push(menu);
+            if (groupTab) groupTab.menus.push(menu);
         });
 
         /* clean out tabs that have no entries */
@@ -396,7 +405,9 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }, {})
 
         // Store coverData and token cover data for manipulation
-        this.coverData = Object.values(HELPER.setting(MODULE.data.name, "coverData"));
+        this.coverData = HELPER.setting(MODULE.data.name, "temporary_coverData") 
+            ?? HELPER.setting(MODULE.data.name, "coverData");
+        this.coverData = Object.values(this.coverData);
 
         // Presets
         data.coverPresets = this.coverPresets;
@@ -410,8 +421,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     }
 
     async _onSubmit(...args) {
-        const formData = await super._onSubmit(...args);
-
         // We need to save the cover data separately as the FormApplication#_updateObject function will flatten the object and break
         game.settings.set(MODULE.data.name, "coverData",
             this.coverData.reduce((acc, coverLevel, index) => {
@@ -432,6 +441,11 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
         }
 
+        // save the rest
+        const formData = await super._onSubmit(...args);
+
+        game.settings.set(MODULE.data.name, "temporary_coverData", null);
+
         if( this.options.subMenuId ){
             /* submitting from a subMenu, re-render parent */
             await this._onClickReturn(...args);
@@ -446,22 +460,36 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         html.find('button[name="return"]').click(this._onClickReturn.bind(this));
 
         html.find(`[name="${MODULE.data.name}.losWithTokens"]`).click(this._onTokenCoverChange.bind(this));
+        html.find('[data-tab]').click(this._resizeScreen.bind(this));
+        html.find('[data-tab="token-sizes"]').click(this._onTokenSizeTabClick.bind(this));
 
         html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
         html.find(".cover-levels-table .cover-control[data-action=\"add\"]").click(this._handleCoverControl.bind(this));
 
         html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
 
-        html.find("#scc-token-cover-settings-body input").change(this._updateTokenSizeCoverRowWarnings.bind(this));
+        html.find("#scc-token-cover-settings-body select").change(this._updateTokenSizeCoverRowWarnings.bind(this));        
 
         // unsure if this is the right place
         this._prepareVisibleForms()
-        this._redrawCoverLevels();
+        this._redrawCoverLevels(false);
         this._updateTokenSizeCoverRowWarnings()
     }
 
     _onTokenCoverChange(event) {
         this._toggleTokenSizesTabVisible(event.currentTarget.checked);
+    }
+
+    _onTokenSizeTabClick(event) {
+        if (this.coverDataChanged) {
+            this.coverDataChanged = false;
+            this._onClickReturn(null, {activeCategory: 'token-sizes'});
+        }
+    }
+
+    _resizeScreen(event) {
+        console.log("blah");
+        document.querySelector('#cover-calculator-client-settings').style.height = 'auto';
     }
 
     _prepareVisibleForms() {
@@ -470,7 +498,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     }
 
     _toggleTokenSizesTabVisible(isVisible) {
-        const tab = document.querySelector(".sheet-tabs :nth-child(3)");
+        const tab = document.querySelector(".sheet-tabs :nth-child(4)");
         if (tab) {
             tab.style.display = isVisible ? 'block' : 'none';
         }
@@ -524,7 +552,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 this.coverData[index] = coverLevel;
             }
 
-            this._redrawCoverLevels();
+            this._redrawCoverLevels(true);
         }).render(true);
     }
 
@@ -555,7 +583,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
 
             this.coverData = Object.values(foundry.utils.deepClone(preset.config));
-            this._redrawCoverLevels();
+            this._redrawCoverLevels(true);
         } finally {
             event.currentTarget.value = "none";
         }
@@ -615,14 +643,14 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 break;
         }
 
-        this._redrawCoverLevels();
+        this._redrawCoverLevels(true);
     }
 
     /**
      * Redraw all the cover levels in the config tab
      * @private
      */
-    _redrawCoverLevels() {
+    _redrawCoverLevels(flagForRerender) {
         const coverElement = document.querySelector("#scc-cover-levels-settings-body");
         coverElement.innerHTML = "";
 
@@ -637,7 +665,19 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
 
         // When we redraw we may have done something that has messed up the token cover levels, so check for warnings
-        this._updateTokenSizeCoverRowWarnings()
+        this._updateTokenSizeCoverRowWarnings();
+        if (flagForRerender && document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked) {
+            // we need to save this for the rerender on token size click, 
+            // so that the selects on that form shows the correct data
+            // we save it as temporary cover data, if we exit out without saving, we don't want to have the data saved
+            game.settings.set(MODULE.data.name, "temporary_coverData",
+                this.coverData.reduce((acc, coverLevel, index) => {
+                    acc[index] = coverLevel;
+                    return acc;
+                }, {})
+            );            
+            this.coverDataChanged = true;
+        }        
     }
 
     /**

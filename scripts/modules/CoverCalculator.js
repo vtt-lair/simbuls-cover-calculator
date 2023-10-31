@@ -100,7 +100,7 @@ export class CoverCalculator {
                 default : "Prone"
             },
             tokenSizesDefault : {
-                scope : "world", config, group : "token-sizes", type : Object, customPartial: "scc.tokenSizesDefaultsPartial",
+                scope : "world", config, group : "token-sizes", type : Object, customPartial: "scc.tokenSizesDefaultsPartial", additional: "coverData",
                 // As systems can have differing actor sizes, fetch the systems actor sizes and
                 default : Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
                     .reduce((acc, [key, name]) => {
@@ -147,6 +147,10 @@ export class CoverCalculator {
                         partial: [0,1,1,2,3]
                     },
                 }
+            },
+
+            temporary_coverData : {
+                scope : "world", config, type : Object, customPartial: "scc.coverDataPartial",
             },
 
             // Misc Config
@@ -201,6 +205,9 @@ export class CoverCalculator {
 
         // Apply token defaults
         Hooks.on(`preCreateToken`, CoverCalculator._preCreateToken);
+
+        // Handlerbars Helpers
+        Hooks.on(`ready`, CoverCalculator._handlerbarSelectHelper);        
     }
 
     static patch(){
@@ -379,6 +386,14 @@ export class CoverCalculator {
                 }
             });
         }
+    }
+
+    static async _handlerbarSelectHelper() {
+        Handlebars.registerHelper('select', function( value, options ) {
+            var $el = $('<select />').html( options.fn(this) );
+            $el.find('[value="' + value + '"]').attr({'selected':'selected'});
+            return $el.html();
+        });
     }
 
     /**

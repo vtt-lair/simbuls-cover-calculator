@@ -22,14 +22,14 @@ export default class Migration {
     }
 
     static settings() {
-        game.settings.register(MODULE.data.name, "migrationVersion", {
-            name : "migrationVersion",
-            hint : "The current migration version the world is on",
-            scope : "world",
-            config : false,
-            type : Number,
-            default : -1
-        });
+        const config = false;
+        const menuData = {
+            migrationVersion : {
+                scope : "world", config, group: 'misc', default : -1, type : Number,
+            }
+        }
+
+        MODULE.applySettings(menuData);
     }
 
     static hooks() {
