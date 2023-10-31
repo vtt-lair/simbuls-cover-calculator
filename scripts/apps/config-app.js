@@ -430,20 +430,20 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         )
 
         // Save the changes to token sizes
+        if (document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked)
         {
             const defaultTokenSizes = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
             const tokenCoverSettings = this.form.querySelector("#scc-token-cover-settings-body");
             for (const tokenCover of tokenCoverSettings.children) {
-                const tokenSize = defaultTokenSizes[tokenCover.dataset.size];
-                foundry.utils.mergeObject(tokenSize, this._getTokenSizeValues(tokenCover));
+                foundry.utils.mergeObject(defaultTokenSizes[tokenCover.dataset.size], this._getTokenSizeValues(tokenCover));
             }
 
             game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
-        }
+        }        
 
         // save the rest
         const formData = await super._onSubmit(...args);
-
+        
         game.settings.set(MODULE.data.name, "temporary_coverData", null);
 
         if( this.options.subMenuId ){

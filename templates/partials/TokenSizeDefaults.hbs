@@ -27,7 +27,7 @@
                         </i>
                     </div>
                     <div class="token-cover-value">
-                        <select class="token-cover-normal" title=(localize 'scc.tokenSizesDefault.coverTitle')>
+                        <select class="token-cover-normal">
                             {{#select this.normal}}
                                 {{#each ../additional}}
                                     <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
@@ -36,8 +36,8 @@
                         </select>
                     </div>
                     <div class="token-cover-value">
-                        <select class="token-cover-dead" title=(localize 'scc.tokenSizesDefault.deadTitle')>
-                            {{#select this.normal}}
+                        <select class="token-cover-dead">
+                            {{#select this.dead}}
                                 {{#each ../additional}}
                                     <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
                                 {{/each}}
@@ -45,8 +45,8 @@
                         </select>
                     </div>
                     <div class="token-cover-value">
-                        <select class="token-cover-prone" title=(localize 'scc.tokenSizesDefault.proneTitle')>
-                            {{#select this.normal}}
+                        <select class="token-cover-prone">
+                            {{#select this.prone}}
                                 {{#each ../additional}}
                                     <option value="{{@index}}">{{this.label}} (+{{this.value}})</option>
                                 {{/each}}
