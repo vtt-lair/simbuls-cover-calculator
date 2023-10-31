@@ -52,6 +52,14 @@
         "path": "lang/ja.json"
       }
     ],
+    "packs": [
+      {
+        "label": "Simbul's: Macros",
+        "name": "simbuls-macros",
+        "path": "./packs/simbuls-macros.db",
+        "type": "Macro"
+      }
+    ],
     "url": "https://github.com/vtt-lair/simbuls-cover-calculator",
     "manifest": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/latest/download/module.json",
     "download": "https://github.com/vtt-lair/simbuls-cover-calculator/releases/download/v1.0.0/module.zip",
@@ -62,7 +70,8 @@
                 "id": "simbuls-athenaeum",
                 "type": "module",
                 "compatibility": {
-                "verified": "1.1.0"
+                  "minimum": "1.0.6",
+                  "verified": "1.0.6"
                 }
             }
         ]
