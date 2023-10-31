@@ -205,6 +205,7 @@ export class CoverCalculator {
 
         // Apply token defaults
         Hooks.on(`preCreateToken`, CoverCalculator._preCreateToken);
+        Hooks.on(`preUpdateActor`, CoverCalculator._preUpdateActor);
 
         // Handlerbars Helpers
         Hooks.on(`ready`, CoverCalculator._handlerbarSelectHelper);        
@@ -368,9 +369,8 @@ export class CoverCalculator {
     }
 
     static async _preCreateToken(document, data, options, userId) {
-        const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath")
-        const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault")
-
+        const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
+        const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
         const sizeKey = foundry.utils.getProperty(document.actor, sizePath);
 
         const sizeCoverLevels = sizesCoverLevels[sizeKey];
@@ -386,6 +386,23 @@ export class CoverCalculator {
                 }
             });
         }
+    }
+
+    static async _preUpdateActor(document, data, options, userId) {
+        const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
+        const sizeKey = foundry.utils.getProperty(data, sizePath);
+        if (sizeKey) {
+            const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
+            const sizeCoverLevels = sizesCoverLevels[sizeKey];
+
+            document.updateSource({
+                "flags.simbuls-cover-calculator": {
+                    coverLevel: sizeCoverLevels.normal,
+                    coverLevelDead: sizeCoverLevels.dead,
+                    coverLevelProne: sizeCoverLevels.prone
+                }
+            });           
+        }        
     }
 
     static async _handlerbarSelectHelper() {
