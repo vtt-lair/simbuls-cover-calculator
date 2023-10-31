@@ -420,6 +420,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
+    /**@override */
     close(options) {
         game.settings.set(MODULE.data.name, "temporary_coverData", null);
 
