@@ -355,7 +355,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             data.tabs[tabName].menus = [];
         }
 
-        for (let [_, setting] of settings.filter(([_, setting]) => setting.namespace == MODULE.data.name)) {
+        for (let [_, setting] of settings.filter(([_, setting]) => setting.namespace == MODULE.data.name && setting.hidden != true)) {
 
             /* only add an actual setting if the menu ids match */
             if (!setting.config) {
@@ -443,7 +443,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
         // save the rest
         const formData = await super._onSubmit(...args);
-        
+
         game.settings.set(MODULE.data.name, "temporary_coverData", null);
 
         if( this.options.subMenuId ){

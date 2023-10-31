@@ -150,7 +150,7 @@ export class CoverCalculator {
             },
 
             temporary_coverData : {
-                scope : "world", config, type : Object, customPartial: "scc.coverDataPartial",
+                scope : "world", config, hidden: true, type : Object, customPartial: "scc.coverDataPartial",
             },
 
             // Misc Config
