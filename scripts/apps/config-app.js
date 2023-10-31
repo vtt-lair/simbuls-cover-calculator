@@ -420,6 +420,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
+    close(options) {
+        game.settings.set(MODULE.data.name, "temporary_coverData", null);
+
+        super.close(options);
+    }
+
     async _onSubmit(...args) {
         // We need to save the cover data separately as the FormApplication#_updateObject function will flatten the object and break
         game.settings.set(MODULE.data.name, "coverData",
@@ -442,9 +448,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }        
 
         // save the rest
-        const formData = await super._onSubmit(...args);
-
-        game.settings.set(MODULE.data.name, "temporary_coverData", null);
+        const formData = await super._onSubmit(...args);        
 
         if( this.options.subMenuId ){
             /* submitting from a subMenu, re-render parent */
