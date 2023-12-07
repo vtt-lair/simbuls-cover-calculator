@@ -54,10 +54,14 @@
     ],
     "packs": [
       {
-        "label": "Simbul's: Macros",
         "name": "simbuls-macros",
-        "path": "./packs/simbuls-macros.db",
-        "type": "Macro"
+        "label": "Simbul's Macros",
+        "path": "packs/simbuls-macros",
+        "type": "Macro",
+        "ownership": {
+          "PLAYER": "OBSERVER",
+          "ASSISTANT": "OWNER"
+        }
       }
     ],
     "url": "https://github.com/vtt-lair/simbuls-cover-calculator",

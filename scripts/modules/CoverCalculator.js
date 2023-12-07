@@ -389,20 +389,31 @@ export class CoverCalculator {
     }
 
     static async _preUpdateActor(document, data, options, userId) {
-        const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
-        const sizeKey = foundry.utils.getProperty(data, sizePath);
-        if (sizeKey) {
-            const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
-            const sizeCoverLevels = sizesCoverLevels[sizeKey];
+        if (!data?.prototypeToken?.height || !data?.prototypeToken?.width || !data?.system?.traits?.size) {
+            return;
+        }
 
-            document.updateSource({
-                "flags.simbuls-cover-calculator": {
-                    coverLevel: sizeCoverLevels.normal,
-                    coverLevelDead: sizeCoverLevels.dead,
-                    coverLevelProne: sizeCoverLevels.prone
-                }
-            });           
-        }        
+        // if the size and token height & width changed
+        if (
+            data?.prototypeToken?.height != document.prototypeToken?.height &&
+            data?.prototypeToken?.width != document.prototypeToken?.width &&
+            data?.system?.traits?.size != document.system?.traits?.size
+        ) {
+            const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
+            const sizeKey = foundry.utils.getProperty(data, sizePath);
+            if (sizeKey) {
+                const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
+                const sizeCoverLevels = sizesCoverLevels[sizeKey];
+
+                document.updateSource({
+                    "flags.simbuls-cover-calculator": {
+                        coverLevel: sizeCoverLevels.normal,
+                        coverLevelDead: sizeCoverLevels.dead,
+                        coverLevelProne: sizeCoverLevels.prone
+                    }
+                });           
+            }   
+        }    
     }
 
     static async _handlerbarSelectHelper() {
