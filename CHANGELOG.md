@@ -1,3 +1,6 @@
+# v 2.0.0
+* Change module to be system agnostic by allowing you to setup your own cover levels as well as cover for token sizes. Comes with predefined cover levels for DnD5e, SW5e & Pf2e - thanks @jtljac 
+
 # v 1.4.0
 
 * Implemented system to allow custom cover levels
