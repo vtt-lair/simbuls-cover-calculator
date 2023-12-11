@@ -162,21 +162,23 @@ export class CoverCalculator {
         MODULE.applySettings(menuData);
 
         // NOTE: this only work with systems that has the characterFlags in the config
-        CONFIG[game.system.id.toUpperCase()].characterFlags?.helpersIgnoreCover = {
-            hint: HELPER.localize("SCC.flagsNoCoverHint"),
-            name: HELPER.localize("SCC.flagsNoCover"),
-            section: "Feats",
-            placeholder: 0,
-            type: Number
-        };
-
-        CONFIG[game.system.id.toUpperCase()].characterFlags?.helpersReduceCover = {
-            hint: HELPER.localize("SCC.flagsReduceCoverHint"),
-            name: HELPER.localize("SCC.flagsReduceCover"),
-            section: "Feats",
-            placeholder: 0,
-            type: Number
-        };
+        if (CONFIG[game.system.id.toUpperCase()].characterFlags) {
+            CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
+                hint: HELPER.localize("SCC.flagsNoCoverHint"),
+                name: HELPER.localize("SCC.flagsNoCover"),
+                section: "Feats",
+                placeholder: 0,
+                type: Number
+            };
+    
+            CONFIG[game.system.id.toUpperCase()].characterFlags.helpersReduceCover = {
+                hint: HELPER.localize("SCC.flagsReduceCoverHint"),
+                name: HELPER.localize("SCC.flagsReduceCover"),
+                section: "Feats",
+                placeholder: 0,
+                type: Number
+            };
+        }        
 
         /* insert keybindings */
         game.keybindings.register(MODULE.data.name, "coverReport", {
