@@ -161,7 +161,8 @@ export class CoverCalculator {
 
         MODULE.applySettings(menuData);
 
-        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
+        // NOTE: this only work with systems that has the characterFlags in the config
+        CONFIG[game.system.id.toUpperCase()].characterFlags?.helpersIgnoreCover = {
             hint: HELPER.localize("SCC.flagsNoCoverHint"),
             name: HELPER.localize("SCC.flagsNoCover"),
             section: "Feats",
@@ -169,7 +170,7 @@ export class CoverCalculator {
             type: Number
         };
 
-        CONFIG[game.system.id.toUpperCase()].characterFlags.helpersReduceCover = {
+        CONFIG[game.system.id.toUpperCase()].characterFlags?.helpersReduceCover = {
             hint: HELPER.localize("SCC.flagsReduceCoverHint"),
             name: HELPER.localize("SCC.flagsReduceCover"),
             section: "Feats",
