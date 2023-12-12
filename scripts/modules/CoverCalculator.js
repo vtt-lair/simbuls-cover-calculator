@@ -555,12 +555,12 @@ export class CoverCalculator {
             // Dead
             if (
                 this.actor?.system.attributes.hp.value <= 0
-                || this.actor?.effects.find(eff => eff.label === HELPER.setting(MODULE.data.name, "unconsciousStatusName"))
+                || this.actor?.effects.find(eff => eff.name ?? eff.label === HELPER.setting(MODULE.data.name, "unconsciousStatusName"))
             ) return this.document.getFlag(MODULE.data.name, MODULE[NAME].flagDead) ?? 1;
 
             // Prone
             if (
-                this.actor?.effects.find(eff => eff.label === HELPER.setting(MODULE.data.name, "proneStatusName"))
+                this.actor?.effects.find(eff => eff.name ?? eff.label === HELPER.setting(MODULE.data.name, "proneStatusName"))
             ) return this.document.getFlag(MODULE.data.name, MODULE[NAME].flagProne) ?? 1;
 
             // Normal
