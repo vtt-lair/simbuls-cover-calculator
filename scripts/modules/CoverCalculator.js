@@ -211,7 +211,7 @@ export class CoverCalculator {
         Hooks.on(`preUpdateActor`, CoverCalculator._preUpdateActor);
 
         // Handlerbars Helpers
-        Hooks.on(`ready`, CoverCalculator._handlerbarSelectHelper);        
+        Hooks.on(`renderCoverCalculatorSettingsConfig`, CoverCalculator._handlerbarSelectHelper);        
     }
 
     static patch(){
@@ -376,6 +376,7 @@ export class CoverCalculator {
         const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
         const sizeKey = foundry.utils.getProperty(document.actor, sizePath);
 
+        if (sizeKey?.value) sizeKey = sizeKey.value;
         const sizeCoverLevels = sizesCoverLevels[sizeKey];
 
         // Ensure we're not overriding set values. As the user can't normally configure the cover level of prototype
