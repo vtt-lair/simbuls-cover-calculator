@@ -11,7 +11,7 @@
     <div class="athenaeum-table cover-levels-table">
         <div class="athenaeum-table-header flexrow">
             <div class="cover-title">{{localize 'scc.coverData.name'}}</div>
-            <div class="cover-ac-bonus">{{localize 'scc.coverData.acBonus'}}</div>
+            {{#if (covercalc-isdemonlord this)}}<div class="cover-ac-bonus">{{localize 'DL.DialogBane'}}</div>{{else}}<div class="cover-ac-bonus">{{localize 'scc.coverData.acBonus'}}</div>{{/if}}
             <div class="cover-controls flexrow">
                 <a class="cover-control" title="{{localize 'scc.coverData.controlTitleAdd'}}" data-action="add">
                     <i class="fas fa-plus"></i> {{localize 'scc.coverData.add'}}

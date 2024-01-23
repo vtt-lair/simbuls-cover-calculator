@@ -8,6 +8,77 @@ import {queueUpdate} from "../../../simbuls-athenaeum/scripts/update-queue.js"
 
 const NAME = "CoverCalculator";
 
+export function getDemonlordTokenSizes() {
+    return {
+        "tiny": {
+            "label": "1/4 or less"
+        },
+        "sm": {
+            "label": "1/2"
+        },
+        "med": {
+            "label": "1 by 1"
+        },
+        "lg": {
+            "label": "2 by 2"
+        },
+        "huge": {
+            "label": "3 by 3"
+        },
+        "grg": {
+            "label": "4 by 4 or more"
+        }
+    }
+}
+
+function getDemonlordSizeKey(sizeKey) {
+    let nsizeKey = ''
+    switch (sizeKey) {
+        case '1/2':
+            nsizeKey = "sm"
+            break
+        case '½':
+            nsizeKey = "sm"
+            break
+        case '¼':
+            nsizeKey = "tiny"
+            break
+        case '⅛':
+            nsizeKey = "tiny"
+            break
+        case '1':
+            nsizeKey = "med"
+            break
+        case '2':
+            nsizeKey = "lg"
+            break
+        case '3':
+            nsizeKey = "huge"
+            break
+        case '4':
+            nsizeKey = "grg"
+            break
+        default:
+            let size = Number(eval(sizeKey))
+            if (size <= 0.25) {
+                nsizeKey = "tiny"
+            } else if (size > 4) {
+                nsizeKey = "grg"
+            } else nsizeKey = "med"
+    }
+    return nsizeKey
+}    
+
+function registerDemonlordHelper() {
+    Handlebars.registerHelper('covercalc-isdemonlord', function(actor) {
+        if (game.system.id === 'demonlord') {
+            return true;
+        } else {
+            return false;
+        }
+    });
+}
+
 export class CoverCalculator {
     static register(){
         CoverCalculator.defaults();
@@ -16,6 +87,7 @@ export class CoverCalculator {
         CoverCalculator.hooks();
         CoverCalculator.patch();
         CoverCalculator.globals();
+        registerDemonlordHelper();
     }
 
     static defaults(){
@@ -86,11 +158,6 @@ export class CoverCalculator {
                 scope : "world", config, group : "combat", default : false, type : Boolean,
             },
 
-            // Token Cover Sizes Config
-            actorSizePath: {
-                scope : "world", config, group : "token-sizes", type : String,
-                default : "system.traits.size"
-            },
             unconsciousStatusName: {
                 scope : "world", config, group : "token-sizes", type : String,
                 default : "Unconscious"
@@ -98,20 +165,6 @@ export class CoverCalculator {
             proneStatusName: {
                 scope : "world", config, group : "token-sizes", type : String,
                 default : "Prone"
-            },
-            tokenSizesDefault : {
-                scope : "world", config, group : "token-sizes", type : Object, customPartial: "scc.tokenSizesDefaultsPartial", additional: "coverData",
-                // As systems can have differing actor sizes, fetch the systems actor sizes and
-                default : Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
-                    .reduce((acc, [key, name]) => {
-                        acc[key] = {
-                            label: name,
-                            normal : 1,
-                            dead : 1,
-                            prone : 1
-                        }
-                        return acc;
-                    }, {})
             },
 
             // Cover Config
@@ -159,10 +212,52 @@ export class CoverCalculator {
             }
         };
 
+        let systemSpecificTokenSizes
+        let systemSpecificactorSizePath
+
+        // As systems can have differing actor sizes and pathes, fetch the systems actor sizes and pathes
+        if (game.system.id === 'demonlord') {
+                // actorSizes not available in demonlord and actorSizePath differs
+                systemSpecificTokenSizes = getDemonlordTokenSizes()
+                systemSpecificactorSizePath = "system.characteristics.size"
+        } else {
+                systemSpecificTokenSizes = Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
+                    .reduce((acc, [key, name]) => {
+                        acc[key] = {
+                            label: name,
+                            normal: 1,
+                            dead: 1,
+                            prone: 1
+                        }
+                        return acc;
+                    }, {})
+                systemSpecificactorSizePath = "system.traits.size"
+        }
+
+        let tokenSizesDefault = {
+            scope: "world",
+            config,
+            group: "token-sizes",
+            type: Object,
+            customPartial: "scc.tokenSizesDefaultsPartial",
+            additional: "coverData",
+            default: systemSpecificTokenSizes
+        }
+
+        let actorSizePath = {
+            scope: "world",
+            config,
+            group: "token-sizes",
+            type: String,
+            default: systemSpecificactorSizePath
+        }
+
+        jQuery.extend(menuData, { tokenSizesDefault: tokenSizesDefault });
+        jQuery.extend(menuData, { actorSizePath: actorSizePath });
         MODULE.applySettings(menuData);
 
         // NOTE: this only work with systems that has the characterFlags in the config
-        if (CONFIG[game.system.id.toUpperCase()].characterFlags) {
+        if (CONFIG[game.system.id.toUpperCase()]?.characterFlags) {
             CONFIG[game.system.id.toUpperCase()].characterFlags.helpersIgnoreCover = {
                 hint: HELPER.localize("SCC.flagsNoCoverHint"),
                 name: HELPER.localize("SCC.flagsNoCover"),
@@ -208,7 +303,11 @@ export class CoverCalculator {
 
         // Apply token defaults
         Hooks.on(`preCreateToken`, CoverCalculator._preCreateToken);
-        Hooks.on(`preUpdateActor`, CoverCalculator._preUpdateActor);
+        if (game.system.id === "demonlord") {
+            Hooks.on(`preUpdateActor`, CoverCalculator._preUpdateActorDemonlord);
+        } else {
+            Hooks.on(`preUpdateActor`, CoverCalculator._preUpdateActor);
+        }
 
         // Handlerbars Helpers
         Hooks.on(`renderCoverCalculatorSettingsConfig`, CoverCalculator._handlerbarSelectHelper);        
@@ -374,9 +473,12 @@ export class CoverCalculator {
     static async _preCreateToken(document, data, options, userId) {
         const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
         const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
-        const sizeKey = foundry.utils.getProperty(document.actor, sizePath);
+        let sizeKey = foundry.utils.getProperty(document.actor, sizePath);
 
         if (sizeKey?.value) sizeKey = sizeKey.value;
+        if (game.system.id === "demonlord") {
+            sizeKey = getDemonlordSizeKey(sizeKey)
+        }
         const sizeCoverLevels = sizesCoverLevels[sizeKey];
 
         // Ensure we're not overriding set values. As the user can't normally configure the cover level of prototype
@@ -415,9 +517,38 @@ export class CoverCalculator {
                         coverLevelDead: sizeCoverLevels.dead,
                         coverLevelProne: sizeCoverLevels.prone
                     }
-                });           
-            }   
-        }    
+                });
+            }
+        }
+    }
+
+    static async _preUpdateActorDemonlord(document, data, options, userId) {
+        if (!data?.system?.characteristics?.size) {
+            return;
+        }
+
+        // if the size and token height & width changed
+        if (
+            data?.token?.height != document.prototypeToken?.height &&
+            data?.token?.width != document.prototypeToken?.width &&
+            data?.system?.traits?.size != document.system?.characteristics?.size
+        ) {
+            const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
+            let sizeKey = foundry.utils.getProperty(data, sizePath);
+            sizeKey = getDemonlordSizeKey(sizeKey)
+            if (sizeKey) {
+                const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
+                const sizeCoverLevels = sizesCoverLevels[sizeKey];
+
+                document.updateSource({
+                    "flags.simbuls-cover-calculator": {
+                        coverLevel: sizeCoverLevels.normal,
+                        coverLevelDead: sizeCoverLevels.dead,
+                        coverLevelProne: sizeCoverLevels.prone
+                    }
+                });
+            }
+        }
     }
 
     static async _handlerbarSelectHelper() {
@@ -444,7 +575,17 @@ export class CoverCalculator {
         if (coverLevel == 0 || coverLevel == Object.keys(coverData).length - 1) return coverData[coverLevel].label;
 
         const sign = coverData[coverLevel].value < 0 ? "-" : "+";
-        return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: sign + coverData[coverLevel].value})
+        if (game.system.id === 'demonlord') {
+            let bane
+            if (coverData[coverLevel].value === 1) {
+                bane = game.i18n.localize("DL.DialogBane")
+            } else if (coverData[coverLevel].value < Object.keys(HELPER.setting(MODULE.data.name, "coverData")).length - 1) {
+                bane = game.i18n.localize("DL.DialogBanes")
+            }
+            return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: coverData[coverLevel].value + ' ' + bane.toLowerCase()})
+        } else {
+            return HELPER.format("SCC.LoS_coverstring", {coverType: coverData[coverLevel].label, acBonus: sign + coverData[coverLevel].value})
+        }
     }
 
     /**
@@ -554,10 +695,15 @@ export class CoverCalculator {
 
         Token.prototype.coverValue = function() {
             // Dead
-            if (
-                this.actor?.system.attributes.hp.value <= 0
-                || this.actor?.effects.find(eff => eff.name ?? eff.label === HELPER.setting(MODULE.data.name, "unconsciousStatusName"))
-            ) return this.document.getFlag(MODULE.data.name, MODULE[NAME].flagDead) ?? 1;
+			let isDead = false
+			if (game.system.id === 'demonlord') {
+			    isDead = this.actor?.system.characteristics.health.max <= this.actor?.system.characteristics.health.value
+			} else {
+			    isDead = this.actor?.system.attributes.hp.value <= 0
+			}
+
+			if ( isDead || this.actor?.effects.find(eff => eff.name ?? eff.label === HELPER.setting(MODULE.data.name, "unconsciousStatusName"))
+			) return this.document.getFlag(MODULE.data.name, MODULE[NAME].flagDead) ?? 1;
 
             // Prone
             if (
@@ -917,6 +1063,7 @@ class Cover {
             content += `</div>`;
         }
 
+       if (game.system.id === 'demonlord') { content = content.replaceAll(`class=\"cover-calc\"`, `class=\"cover-calcdemonlord\"` ) }
         return await ChatMessage.create({
             whisper : HELPER.setting(MODULE.data.name, "whisperToSelf")?[game.user]:ChatMessage.getWhisperRecipients("GM"),
             speaker : { alias : HELPER.localize("setting.coverApplication.name") },
@@ -947,13 +1094,24 @@ class Cover {
         await Cover._removeEffect(token);
         if(cover == 0) return;
 
+        let changes
+        if (game.system.id === 'demonlord') {
+            if (value <= Object.keys(HELPER.setting(MODULE.data.name, "coverData")).length -1 ) {
+                changes = ["weapon", "spell"].map(s => ({ key: `system.bonuses.attack.boons.${s}`, mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: -value }))
+            } else {
+                changes = ["noAttacks", "noSpells", "noSpecialAttacks"].map(s => ({ key: `system.maluses.${s}`, mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: 1 }))
+            }
+        } else {
+            changes = ["rwak", "rsak", "mwak", "msak"].map(s => ({ key: `data.bonuses.${s}.attack`, mode: CONST.ACTIVE_EFFECT_MODES.ADD, value: -value }))
+        }
         const effectData = {
-            changes : ["rwak", "rsak", "mwak", "msak"].map(s => ({ key : `data.bonuses.${s}.attack`, mode : CONST.ACTIVE_EFFECT_MODES.ADD , value: -value })),
+            changes: changes,
             icon : icon,
-            label : `DnD5e Helpers - ${label}`,
+            label : `${MODULE.data.title} - ${label}`,
             flags : { [MODULE.data.name] : {
-                ["cover"] : true,
-                ["level"] : cover }
+                    ["cover"] : true,
+                    ["level"] : cover
+                }
             },
             disabled : false, duration : {rounds : 1}, tint : "#747272",
         };

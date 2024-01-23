@@ -3,6 +3,7 @@ import {calculateCoverLevelLut} from "../cover-utils.js";
 import {HELPER} from "../../../simbuls-athenaeum/scripts/helper.js";
 import {logger} from "../../../simbuls-athenaeum/scripts/logger.js";
 import CoverLevelConfig from "./cover-level-app.js";
+import {getDemonlordTokenSizes} from '../modules/CoverCalculator.js';
 
 /**
  * HelpersSettingConfig extends {SettingsConfig}
@@ -141,6 +142,39 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                     color: "0x008000",
                     icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
                     partial: [0, 1, 2, 3, 4]
+                },
+            }
+        },
+        demonlord: {
+            label: "Shadow of the Demon Lord",
+            config: {
+                0: {
+                    label: HELPER.localize("SCC.LoS_nocover"),
+                    value: 0,
+                    color: "0xff0000",
+                    icon: "",
+                    partial: [0, 0, 0, 0, 0]
+                },
+                1: {
+                    label: HELPER.localize("SCC.LoS_halfcover"),
+                    value: 1,
+                    color: "0xffa500",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
+                    partial: [0, 1, 1, 1, 1]
+                },
+                2: {
+                    label: HELPER.localize("SCC.LoS_34cover"),
+                    value: 2,
+                    color: "0xffff00",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
+                    partial: [0, 1, 1, 2, 2]
+                },
+                3: {
+                    label: HELPER.localize("SCC.LoS_fullcover"),
+                    value: 40,
+                    color: "0x008000",
+                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
+                    partial: [0, 1, 1, 2, 3]
                 },
             }
         },
@@ -835,7 +869,20 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     _applyTokenPreset(preset) {
         const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
 
-        const presetConfig = preset.generateConfig(Object.keys(CONFIG[game.system.id.toUpperCase()].actorSizes));
+        let presetConfig
+        switch (game.system.id) {
+            case 'demonlord':
+                let actorSizes  = getDemonlordTokenSizes()
+                let actorSizeArray = []
+                Object.entries(actorSizes).forEach(([key]) => {
+                        actorSizeArray.push(key)
+                });
+                presetConfig = preset.generateConfig(actorSizeArray)
+                break
+            default:
+                presetConfig = preset.generateConfig(Object.keys(CONFIG[game.system.id.toUpperCase()].actorSizes))
+        }
+
         for (const [key, value] of Object.entries(presetConfig)) {
             const settingsEle = tokenCoverSettingsEle.querySelector(`[data-size="${key}"]`);
             settingsEle.querySelector(".token-cover-normal").value = value.normal;
