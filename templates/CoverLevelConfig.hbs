@@ -7,7 +7,7 @@
                 <input type="text" name="label" value="{{label}}" placeholder="{{localize 'scc.coverData.name'}}" title="{{localize 'scc.coverData.nameTitle'}}">
             </div>
             <div class="form-group">
-                <label>{{localize 'scc.coverData.acBonus'}}</label>
+            {{#if (covercalc-isdemonlord this)}}<label>{{localize 'DL.DialogBane'}}</label>{{else}}<label>{{localize 'scc.coverData.acBonus'}}</label>{{/if}}
                 <input type="number" name="value" value="{{value}}" placeholder="{{localize 'scc.coverData.acBonus'}}" title="{{localize 'scc.coverData.acBonusTitle'}}">
             </div>
             <div class="form-group">
