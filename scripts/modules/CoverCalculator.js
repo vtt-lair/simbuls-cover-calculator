@@ -104,8 +104,9 @@ export class CoverCalculator {
                 // As systems can have differing actor sizes, fetch the systems actor sizes and
                 default : Object.entries(CONFIG[game.system.id.toUpperCase()].actorSizes)
                     .reduce((acc, [key, name]) => {
+                        const label = name.label ?? name;
                         acc[key] = {
-                            label: name,
+                            label: label,
                             normal : 1,
                             dead : 1,
                             prone : 1
