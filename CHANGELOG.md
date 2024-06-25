@@ -1,6 +1,6 @@
 # v 2.0.1 - 2.0.5
 * Fix issue with script name
-* Fix issue with PF2e
+* Fix issue with PF2e (ultimately removed PF2e support)
 * Fix deprecation warnings
 * Fixed issue with handlebar helper causing issues in other modules
 * Fixed visual issue on Token Sizes settings when module is installed on new install of DnD5e v3
