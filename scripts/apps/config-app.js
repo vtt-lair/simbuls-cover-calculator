@@ -372,7 +372,16 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                     if (setting.additional) {
                         additional = HELPER.setting(MODULE.data.name, `temporary_${setting.additional}`) 
                             ?? HELPER.setting(MODULE.data.name, setting.additional);
-                    }                    
+                    }
+
+                    const value = HELPER.setting(MODULE.data.name, setting.key)
+                    if (setting.key === 'tokenSizesDefault') {
+                        for (var key in value) {
+                            if (value.hasOwnProperty(key)) {
+                                value[key].label = value[key].label.label ?? value[key].label;
+                            }
+                        }
+                    }
 
                     groupTab.settings.push({
                         ...setting,
@@ -381,7 +390,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                         isSelect : setting.choices !== undefined,
                         isRange : setting.type === Number && setting.range,
                         isCustom : !!setting.customPartial,
-                        value : HELPER.setting(MODULE.data.name, setting.key),
+                        value : value,
                         path: `${setting.namespace}.${setting.key}`,
                         additional: setting.additional ? Object.values(additional) : null
                     });                    
