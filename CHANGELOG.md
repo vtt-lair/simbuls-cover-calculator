@@ -1,10 +1,14 @@
+# v 2.1.0
+
+* v12 compatiblity (finally)
+* 
 # v 2.0.1 - 2.0.5
+
 * Fix issue with script name
 * Fix issue with PF2e (ultimately removed PF2e support)
 * Fix deprecation warnings
 * Fixed issue with handlebar helper causing issues in other modules
 * Fixed visual issue on Token Sizes settings when module is installed on new install of DnD5e v3
-
   
 # v 2.0.0
 * Change module to be system agnostic by allowing you to setup your own cover levels as well as cover for token sizes. Comes with predefined cover levels for DnD5e, SW5e & Pf2e - thanks @jtljac 
