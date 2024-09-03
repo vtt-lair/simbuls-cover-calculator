@@ -251,7 +251,7 @@ export class CoverCalculator {
         }
     }
 
-    static async _updateCombat(combat, changed /*, options, userId */) {
+    static async _updateCombat(combat, changed) {
         /** only concerned with turn changes during active combat that is NOT turn 1 */
         if (HELPER.setting(MODULE.data.name, "removeCover") && HELPER.isFirstGM() && HELPER.isTurnChange(combat, changed)) {
             const token = combat.combatants.get(combat.previous.combatantId)?.token?.object;
@@ -264,7 +264,7 @@ export class CoverCalculator {
         }
     }
 
-    static async _deleteCombat(combat, /*settings, id*/){
+    static async _deleteCombat(combat){
         if (HELPER.setting(MODULE.data.name, "losSystem") > 0 && HELPER.isFirstGM()) {
             for(let combatant of combat.combatants){
                 const token = combatant?.token?.object;
@@ -277,7 +277,7 @@ export class CoverCalculator {
         }
     }
 
-    static async _deleteCombatant(combatant, /*render*/){
+    static async _deleteCombatant(combatant){
         if (HELPER.setting(MODULE.data.name, "losSystem") > 0 && HELPER.isFirstGM()) {
 
             /* need to grab a fresh copy in case this
@@ -372,7 +372,7 @@ export class CoverCalculator {
         CoverCalculator._injectCoverAdjacent(app, html, adjacentElement);
     }
 
-    static async _preCreateToken(document, data, options, userId) {
+    static async _preCreateToken(document, data) {
         const sizePath = HELPER.setting(MODULE.data.name, "actorSizePath");
         const sizesCoverLevels = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
         const sizeKey = foundry.utils.getProperty(document.actor, sizePath);
@@ -393,7 +393,7 @@ export class CoverCalculator {
         }
     }
 
-    static async _preUpdateActor(document, data, options, userId) {
+    static async _preUpdateActor(document, data) {
         if (!data?.prototypeToken?.height || !data?.prototypeToken?.width || !data?.system?.traits?.size) {
             return;
         }
@@ -491,7 +491,7 @@ export class CoverCalculator {
 
         if (!(layer instanceof TokenLayer)) return false;
 
-        const hovered = layer.placeables.find(t => t._isHoverIn);
+        const hovered = layer.placeables.find(t => t.hover);
         if ( !hovered ) {
 
             /* remove cover bonuses for any selected */
@@ -689,7 +689,7 @@ class Cover {
         this.pointSquareCoverCalculator();
     }
 
-    buildTokenData(){
+    buildTokenData() {
         //create list of tokens to find collisions with
         this.data.tokens.objects = HELPER.setting(MODULE.data.name, "losWithTokens") ? canvas.tokens.placeables.filter(token => token.id !== this.data.origin.object.id && token.id !== this.data.target.object.id) : [];
         this.data.tokens.shapes =  this.data.tokens.objects.map(token => Shape.buildX(token, this.data.padding, { cover : token.coverValue() }));
@@ -699,10 +699,10 @@ class Cover {
         }
     }
 
-    buildTileData(){
+    buildTileData() {
         //create list of tiles to find collisions with
         this.data.tiles.objects = HELPER.setting(MODULE.data.name, "losWithTiles") ? canvas.tiles.placeables.filter(tile => (tile.coverValue() ?? 0) !== 0) : [];
-        this.data.tiles.shapes = this.data.tiles.objects.map(tile => Shape.buildX({ x : tile.x, y : tile.y, w : tile.data.width, h : tile.data.height}, this.data.padding, { cover : tile.coverValue() }));
+        this.data.tiles.shapes = this.data.tiles.objects.map(tile => Shape.buildX({ x : tile.x, y : tile.y, w : tile.document.width, h : tile.document.height}, this.data.padding, { cover : tile.coverValue() }));
 
         if (HELPER.setting(MODULE.data.name, "debugDrawing")) {
             this.data.tiles.shapes.forEach(shape => shape.draw());
@@ -710,7 +710,7 @@ class Cover {
 
     }
 
-    buildWallData(){
+    buildWallData() {
         //create list of walls to find collisions with
         this.data.walls.objects = canvas.walls.placeables.filter(wall => wall.coverValue() !== 0 && wall.document.ds !== CONST.WALL_DOOR_STATES.OPEN);
         this.data.walls.shapes = this.data.walls.objects.map(wall => Shape.buildWall(wall, { cover : wall.coverValue(), limited: wall.document.sight == CONST.WALL_SENSE_TYPES.LIMITED }));
@@ -755,7 +755,7 @@ class Cover {
         }
     }
 
-    buildSquares(){
+    buildSquares() {
         this.data.target.shapes = [];
         this.data.target.points = [];
 
@@ -949,7 +949,7 @@ class Cover {
         if(cover == 0) return;
 
         const effectData = {
-            changes : ["rwak", "rsak", "mwak", "msak"].map(s => ({ key : `data.bonuses.${s}.attack`, mode : CONST.ACTIVE_EFFECT_MODES.ADD , value: -value })),
+            changes : ["rwak", "rsak", "mwak", "msak"].map(s => ({ key : `system.bonuses.${s}.attack`, mode : CONST.ACTIVE_EFFECT_MODES.ADD , value: -value })),
             icon : icon,
             label : `DnD5e Helpers - ${label}`,
             flags : { [MODULE.data.name] : {
@@ -962,7 +962,7 @@ class Cover {
         await token.actor.createEmbeddedDocuments("ActiveEffect", [effectData]);
     }
 
-    static async _removeEffect(token){
+    static async _removeEffect(token) {
         const effects = token.getCoverEffects();
         return effects.length === 0 ? false : await token.actor.deleteEmbeddedDocuments("ActiveEffect", effects.map(e => e.id));
     }
