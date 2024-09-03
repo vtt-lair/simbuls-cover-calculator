@@ -1,7 +1,7 @@
 # v 2.1.0
 
 * v12 compatiblity (finally)
-* 
+  
 # v 2.0.1 - 2.0.5
 
 * Fix issue with script name
