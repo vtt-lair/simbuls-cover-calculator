@@ -303,7 +303,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     }
     /**@override */
     static get defaultOptions(){
-        return mergeObject(super.defaultOptions, {
+        return foundry.utils.mergeObject(super.defaultOptions, {
             title : HELPER.localize("Helpers"),
             id : "cover-calculator-client-settings",
             template : `${MODULE.data.athenaeum}/templates/ModularSettings.html`,
@@ -325,12 +325,12 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
     /**@override */
     getData(options){
-        const canConfigure = game.user.can("SETTING_MODIFY");
+        const canConfigure = game.user.can("SETTING_MODIFY") || game.user.can("SETTINGS_MODIFY");
         const settings = Array.from(game.settings.settings);
 
         options.title = HELPER.format('SCC.ConfigApp.title');
         let data = {
-            tabs: duplicate(options.groupLabels),
+            tabs: foundry.utils.duplicate(options.groupLabels),
             hasParent: !!options.subMenuId,
             parentMenu: options.parentMenu
         }
@@ -502,7 +502,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     }
 
     _resizeScreen(event) {
-        console.log("blah");
         document.querySelector('#cover-calculator-client-settings').style.height = 'auto';
     }
 

@@ -74,14 +74,14 @@
                 "id": "simbuls-athenaeum",
                 "type": "module",
                 "compatibility": {
-                  "minimum": "1.0.6",
-                  "verified": "1.0.6"
+                  "minimum": "1.1.6",
+                  "verified": "1.1.6"
                 }
             }
         ]
     },
     "compatibility": {
-        "minimum": "10",
-        "verified": "11"
+        "minimum": "12",
+        "verified": "12"
     }
 }

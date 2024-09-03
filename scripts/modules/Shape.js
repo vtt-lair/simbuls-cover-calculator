@@ -48,7 +48,7 @@ export class Shape {
     }
 
     checkIntersection(s) {
-        let r = mergeObject({cover: 3, limited: false}, this.options ?? {});
+        let r = foundry.utils.mergeObject({cover: 3, limited: false}, this.options ?? {});
         return this.segments.reduce((a,v) => a || s.checkIntersection(v), false) ? r : {cover: 0, limited: r.limited};
     } 
 
