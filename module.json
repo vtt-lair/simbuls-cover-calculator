@@ -74,8 +74,8 @@
                 "id": "simbuls-athenaeum",
                 "type": "module",
                 "compatibility": {
-                  "minimum": "1.1.6",
-                  "verified": "1.1.6"
+                  "minimum": "1.1.0",
+                  "verified": "1.1.0"
                 }
             }
         ]
