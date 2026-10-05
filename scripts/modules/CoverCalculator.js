@@ -690,9 +690,11 @@ class Cover {
     }
 
     buildTokenData() {
-        //create list of tokens to find collisions with
         this.data.tokens.objects = HELPER.setting(MODULE.data.name, "losWithTokens") ? canvas.tokens.placeables.filter(token => token.id !== this.data.origin.object.id && token.id !== this.data.target.object.id) : [];
-        this.data.tokens.shapes =  this.data.tokens.objects.map(token => Shape.buildX(token, this.data.padding, { cover : token.coverValue() }));
+        this.data.tokens.shapes =  this.data.tokens.objects.map(token => {
+            const z = token.document.elevation ?? 0;
+            return Shape.buildX(token, this.data.padding, { cover : token.coverValue(), bottom: z, top: z + 10 });
+        });
 
         if (HELPER.setting(MODULE.data.name, "debugDrawing")) {
             this.data.tokens.shapes.forEach(shape => shape.draw());
@@ -700,28 +702,31 @@ class Cover {
     }
 
     buildTileData() {
-        //create list of tiles to find collisions with
         this.data.tiles.objects = HELPER.setting(MODULE.data.name, "losWithTiles") ? canvas.tiles.placeables.filter(tile => (tile.coverValue() ?? 0) !== 0) : [];
-        this.data.tiles.shapes = this.data.tiles.objects.map(tile => Shape.buildX({ x : tile.x, y : tile.y, w : tile.document.width, h : tile.document.height}, this.data.padding, { cover : tile.coverValue() }));
+        this.data.tiles.shapes = this.data.tiles.objects.map(tile => {
+            const z = tile.document.elevation ?? 0;
+            return Shape.buildX({ x : tile.x, y : tile.y, w : tile.document.width, h : tile.document.height}, this.data.padding, { cover : tile.coverValue(), bottom: z, top: z });
+        });
 
         if (HELPER.setting(MODULE.data.name, "debugDrawing")) {
             this.data.tiles.shapes.forEach(shape => shape.draw());
         }
-
     }
 
     buildWallData() {
-        //create list of walls to find collisions with
         this.data.walls.objects = canvas.walls.placeables.filter(wall => wall.coverValue() !== 0 && wall.document.ds !== CONST.WALL_DOOR_STATES.OPEN);
-        this.data.walls.shapes = this.data.walls.objects.map(wall => Shape.buildWall(wall, { cover : wall.coverValue(), limited: wall.document.sight == CONST.WALL_SENSE_TYPES.LIMITED }));
+        this.data.walls.shapes = this.data.walls.objects.map(wall => Shape.buildWall(wall, { 
+            cover : wall.coverValue(), 
+            limited: wall.document.sight == CONST.WALL_SENSE_TYPES.LIMITED,
+            bottom: wall.document.elevation?.bottom ?? -Infinity,
+            top: wall.document.elevation?.top ?? Infinity
+        }));
 
-        //filter out garbage walls (i.e. null)
         this.data.walls.shapes = this.data.walls.shapes.filter( shape => !!shape );
 
         if (HELPER.setting(MODULE.data.name, "debugDrawing")) {
             this.data.walls.shapes.forEach(shape => shape.draw());
         }
-
     }
 
     buildPoints(){
@@ -809,11 +814,14 @@ class Cover {
     }
 
     pointSquareCoverCalculator() {
+        const tMin = this.data.origin.object.document?.elevation ?? 0;
+        const tMax = this.data.target.object.document?.elevation ?? 0;
+
         const results = this.data.origin.points.map(point => {
             return this.data.target.shapes.map(square => {
                 let collisions = square.points
                     .map(p => {
-                        let s = new Segment({ points : [point, p]});
+                        let s = new Segment({ points : [point, p]}, { tMin, tMax });
 
                         let r = {
                             tiles : Math.max.apply(null, Cover._processLimitedSightCollisions(this.data.tiles.shapes.map(shape => { this.data.calculations++; return shape.checkIntersection(s) }))),
@@ -949,9 +957,11 @@ class Cover {
         if(cover == 0) return;
 
         const effectData = {
-            changes : ["rwak", "rsak", "mwak", "msak"].map(s => ({ key : `system.bonuses.${s}.attack`, mode : CONST.ACTIVE_EFFECT_MODES.ADD , value: -value })),
-            icon : icon,
-            label : `DnD5e Helpers - ${label}`,
+            system: {
+                changes : ["rwak", "rsak", "mwak", "msak"].map(s => ({ key : `system.bonuses.${s}.attack`, mode : CONST.ACTIVE_EFFECT_MODES.ADD , value: `${-value}` }))
+            },
+            img : icon,
+            name : `DnD5e Helpers - ${label}`,
             flags : { [MODULE.data.name] : {
                 ["cover"] : true,
                 ["level"] : cover }

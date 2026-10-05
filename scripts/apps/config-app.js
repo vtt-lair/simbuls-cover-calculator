@@ -4,184 +4,71 @@ import {HELPER} from "../../../simbuls-athenaeum/scripts/helper.js";
 import {logger} from "../../../simbuls-athenaeum/scripts/logger.js";
 import CoverLevelConfig from "./cover-level-app.js";
 
-/**
- * HelpersSettingConfig extends {SettingsConfig}
- *
- * Additional window for 5e Helper specific settings
- * Allows for Settings to be organized in 4 categories
- *  System Helpers
- *  NPC Features
- *  PC Features
- *  Combat Helpers
- *
- * @todo "display" value which is true or false based on some other setting
- * @todo "reRender" grabs (possibly saves) values and rerenders the Config to change what is displayed dynamically
- */
-export class CoverCalculatorSettingsConfig extends SettingsConfig {
-    constructor({subModule = null, subMenuId = null, groupLabels = CoverCalculatorSettingsConfig.defaultGroupLabels, parentMenu = null} = {}){
-        super();
+export class CoverCalculatorSettingsConfig extends foundry.applications.settings.SettingsConfig {
+    constructor(options = {}){
+        const { subModule = null, subMenuId = null, groupLabels = CoverCalculatorSettingsConfig.defaultGroupLabels, parentMenu = null, ...appOpts } = options;
+        super(appOpts);
+        this.options = this.options || {};
         this.options.subModule = subModule;
         this.options.groupLabels = groupLabels;
         this.options.subMenuId = subMenuId;
         this.options.parentMenu = parentMenu;
     }
 
-    // Presets available for cover levels
     coverPresets = {
-        none: {
-            label: ""
-        },
+        none: { label: "" },
         dnd5e: {
             label: "DnD5e",
             config: {
-                0: {
-                    label: HELPER.localize("SCC.LoS_nocover"),
-                    value: 0,
-                    color: "0xff0000",
-                    icon: "",
-                    partial: [0, 0, 0, 0, 0]
-                },
-                1: {
-                    label: HELPER.localize("SCC.LoS_halfcover"),
-                    value: 2,
-                    color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
-                    partial: [0, 1, 1, 1, 1]
-                },
-                2: {
-                    label: HELPER.localize("SCC.LoS_34cover"),
-                    value: 5,
-                    color: "0xffff00",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
-                    partial: [0, 1, 1, 2, 2]
-                },
-                3: {
-                    label: HELPER.localize("SCC.LoS_fullcover"),
-                    value: 40,
-                    color: "0x008000",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
-                    partial: [0, 1, 1, 2, 3]
-                },
+                0: { label: "No Cover", value: 0, color: "0xff0000", icon: "", partial: [0, 0, 0, 0, 0] },
+                1: { label: "Half Cover", value: 2, color: "0xffa500", icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`, partial: [0, 1, 1, 1, 1] },
+                2: { label: "Three-Quarters Cover", value: 5, color: "0xffff00", icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`, partial: [0, 1, 1, 2, 2] },
+                3: { label: "Full Cover", value: 40, color: "0x008000", icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`, partial: [0, 1, 1, 2, 3] }
             }
         },
         sw5e: {
             label: "SW5e",
             config: {
-                0: {
-                    label: HELPER.localize("SCC.LoS_nocover"),
-                    value: 0,
-                    color: "0xff0000",
-                    icon: "",
-                    partial: [0, 0, 0, 0, 0]
-                },
-                1: {
-                    label: HELPER.localize("SCC.LoS_quartercover"),
-                    value: 2,
-                    color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Q_Cover.svg`,
-                    partial: [0, 1, 1, 1, 1]
-                },
-                2: {
-                    label: HELPER.localize("SCC.LoS_halfcover"),
-                    value: 3,
-                    color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
-                    partial: [0, 1, 1, 2, 2]
-                },
-                3: {
-                    label: HELPER.localize("SCC.LoS_34cover"),
-                    value: 5,
-                    color: "0xffff00",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
-                    partial: [0, 1, 2, 2, 3]
-                },
-                4: {
-                    label: HELPER.localize("SCC.LoS_fullcover"),
-                    value: 40,
-                    color: "0x008000",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
-                    partial: [0, 1, 2, 3, 4]
-                },
+                0: { label: "No Cover", value: 0, color: "0xff0000", icon: "", partial: [0, 0, 0, 0, 0] },
+                1: { label: "Quarter Cover", value: 2, color: "0xffa500", icon: `modules/${MODULE.data.name}/assets/cover-icons/Q_Cover.svg`, partial: [0, 1, 1, 1, 1] },
+                2: { label: "Half Cover", value: 3, color: "0xffa500", icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`, partial: [0, 1, 1, 2, 2] },
+                3: { label: "Three-Quarters Cover", value: 5, color: "0xffff00", icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`, partial: [0, 1, 2, 2, 3] },
+                4: { label: "Full Cover", value: 40, color: "0x008000", icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`, partial: [0, 1, 2, 3, 4] }
             }
         },
         pf2e: {
             label: "PF2e",
             config: {
-                0: {
-                    label: HELPER.localize("SCC.LoS_nocover"),
-                    value: 0,
-                    color: "0xff0000",
-                    icon: "",
-                    partial: [0, 0, 0, 0, 0]
-                },
-                1: {
-                    label: HELPER.localize("SCC.LoS_lessercover"),
-                    value: 1,
-                    color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Q_Cover.svg`,
-                    partial: [0, 1, 1, 1, 1]
-                },
-                2: {
-                    label: HELPER.localize("SCC.LoS_standardcover"),
-                    value: 2,
-                    color: "0xffa500",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`,
-                    partial: [0, 1, 1, 2, 2]
-                },
-                3: {
-                    label: HELPER.localize("SCC.LoS_greatercover"),
-                    value: 4,
-                    color: "0xffff00",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`,
-                    partial: [0, 1, 2, 2, 3]
-                },
-                4: {
-                    label: HELPER.localize("SCC.LoS_fullcover"),
-                    value: 40,
-                    color: "0x008000",
-                    icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
-                    partial: [0, 1, 2, 3, 4]
-                },
+                0: { label: "No Cover", value: 0, color: "0xff0000", icon: "", partial: [0, 0, 0, 0, 0] },
+                1: { label: "Lesser Cover", value: 1, color: "0xffa500", icon: `modules/${MODULE.data.name}/assets/cover-icons/Q_Cover.svg`, partial: [0, 1, 1, 1, 1] },
+                2: { label: "Standard Cover", value: 2, color: "0xffa500", icon: `modules/${MODULE.data.name}/assets/cover-icons/Half_Cover.svg`, partial: [0, 1, 1, 2, 2] },
+                3: { label: "Greater Cover", value: 4, color: "0xffff00", icon: `modules/${MODULE.data.name}/assets/cover-icons/ThreeQ_Cover.svg`, partial: [0, 1, 2, 2, 3] },
+                4: { label: "Full Cover", value: 40, color: "0x008000", icon: `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`, partial: [0, 1, 2, 3, 4] }
             }
-        },
+        }
     }
 
-    /**
-     * Presets available for Cover by Token size, cover config is generated to be scaled to the
-     */
     tokenPresets = {
-        none: {
-            label: ""
-        },
+        none: { label: "" },
         flat: {
-            label: HELPER.localize("scc.coverPreset.flat"),
+            label: "Flat",
             generateConfig: (sizes) => {
                 const config = {};
                 for (const size of sizes) {
-                    config[size] = {
-                        normal: 1,
-                        dead: 1,
-                        prone: 1
-                    };
+                    config[size] = { normal: 1, dead: 1, prone: 1 };
                 }
-
                 return config;
             }
         },
         linear: {
-            label: HELPER.localize("scc.coverPreset.linear"),
+            label: "Linear",
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 1;
                 for (const [index, size] of sizes.entries()) {
                     const coverValue = Math.ceil((index / sizes.length) * maxCover);
-                    config[size] = {
-                        normal: coverValue,
-                        dead: coverValue,
-                        prone: coverValue
-                    };
+                    config[size] = { normal: coverValue, dead: coverValue, prone: coverValue };
                 }
-
                 return config;
             }
         },
@@ -193,99 +80,70 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 for (const [index, size] of sizes.entries()) {
                     const coverValue = Math.ceil((index / sizes.length) * maxCover);
                     const deadCoverValue = Math.floor(coverValue / 2);
-                    config[size] = {
-                        normal: coverValue,
-                        dead: deadCoverValue,
-                        prone: deadCoverValue
-                    };
+                    config[size] = { normal: coverValue, dead: deadCoverValue, prone: deadCoverValue };
                 }
-
                 return config;
             }
         },
         linearAlt: {
-            label: HELPER.localize("scc.coverPreset.linearAlt"),
+            label: "Linear Alt",
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
                 for (const [index, size] of sizes.entries()) {
                     const coverValue = Math.ceil((index / sizes.length) * maxCover) + 1;
-                    config[size] = {
-                        normal: coverValue,
-                        dead: coverValue,
-                        prone: coverValue
-                    };
+                    config[size] = { normal: coverValue, dead: coverValue, prone: coverValue };
                 }
-
                 return config;
             }
         },
         linearDeadAlt: {
-            label: HELPER.localize("scc.coverPreset.linearHalfAlt"),
+            label: "Linear Half Alt",
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
                 for (const [index, size] of sizes.entries()) {
                     const coverValue = Math.ceil((index / sizes.length) * maxCover) + 1;
                     const deadCoverValue = Math.floor(coverValue / 2);
-                    config[size] = {
-                        normal: coverValue,
-                        dead: deadCoverValue,
-                        prone: deadCoverValue
-                    };
+                    config[size] = { normal: coverValue, dead: deadCoverValue, prone: deadCoverValue };
                 }
-
                 return config;
             }
         },
         devPref: {
-            label: HELPER.localize("scc.coverPreset.devPref"),
+            label: "Developer Preference",
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
                 for (const [index, size] of sizes.entries()) {
                     let x = index / sizes.length;
                     x = (2 * x) / (x + 1);
-
                     const coverValue = Math.ceil(x * maxCover) + 1;
-                    config[size] = {
-                        normal: coverValue,
-                        dead: coverValue,
-                        prone: coverValue
-                    };
+                    config[size] = { normal: coverValue, dead: coverValue, prone: coverValue };
                 }
-
                 return config;
             }
         },
         devPrefDead: {
-            label: HELPER.localize("scc.coverPreset.devPrefHalf"),
+            label: "Developer Preference Half",
             generateConfig: (sizes) => {
                 const config = {};
                 const maxCover = this.coverData.length - 2;
                 for (const [index, size] of sizes.entries()) {
                     let x = index / sizes.length;
                     x = (2 * x) / (x + 1);
-
                     const coverValue = Math.ceil(x * maxCover) + 1;
                     const deadCoverValue = Math.floor(coverValue / 2);
-                    config[size] = {
-                        normal: coverValue,
-                        dead: deadCoverValue,
-                        prone: deadCoverValue
-                    };
+                    config[size] = { normal: coverValue, dead: deadCoverValue, prone: deadCoverValue };
                 }
-
                 return config;
             }
         }
     }
 
     static _menus = new Collection();
-
-    static get menus() {
-        return CoverCalculatorSettingsConfig._menus;
-    }
+    static get menus() { return CoverCalculatorSettingsConfig._menus; }
+    get menus() { return CoverCalculatorSettingsConfig.menus; }
 
     static get defaultGroupLabels() {
         return {
@@ -297,23 +155,17 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
+    static DEFAULT_OPTIONS = {
+        id : "cover-calculator-client-settings",
+        window: { title: "Helpers" },
+        position: { width : 830, height : "auto" },
+    };
 
-    get menus() {
-        return CoverCalculatorSettingsConfig.menus;
-    }
-    /**@override */
-    static get defaultOptions(){
-        return foundry.utils.mergeObject(super.defaultOptions, {
-            title : HELPER.localize("Helpers"),
-            id : "cover-calculator-client-settings",
-            template : `${MODULE.data.athenaeum}/templates/ModularSettings.html`,
-            width : 830,
-            height : "auto",
-            tabs : [
-                {navSelector: ".tabs", contentSelector: ".content", initial: "general"}
-            ],
-        });
-    }
+    static PARTS = {
+        main: {
+            template: `/modules/simbuls-athenaeum/templates/ModularSettings.html`
+        }
+    };
 
     _onClickReturn(event, options) {
         event?.preventDefault();
@@ -323,47 +175,29 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return app.render(true, options);
     }
 
-    /**@override */
-    getData(options){
+    async _prepareContext(options) {
         const canConfigure = game.user.can("SETTING_MODIFY") || game.user.can("SETTINGS_MODIFY");
         const settings = Array.from(game.settings.settings);
 
-        options.title = HELPER.format('SCC.ConfigApp.title');
         let data = {
-            tabs: foundry.utils.duplicate(options.groupLabels),
-            hasParent: !!options.subMenuId,
-            parentMenu: options.parentMenu
-        }
+            title: HELPER.format('SCC.ConfigApp.title'),
+            tabs: foundry.utils.duplicate(this.options.groupLabels),
+            hasParent: !!this.options.subMenuId,
+            parentMenu: this.options.parentMenu
+        };
 
         const registerTabSetting = (tabName) => {
-            /* this entry exists already or the setting does NOT have a group,
-            * dont need to create another tab. Core settings do not have this field.
-            */
-            if (data.tabs[tabName].settings) return false;
-
-            /* it doesnt exist, so add a new entry */
-            data.tabs[tabName].settings = [];
+            if (!data.tabs[tabName].settings) data.tabs[tabName].settings = [];
         }
 
         const registerTabMenu = (tabName) => {
-            /* this entry exists already or the setting does NOT have a group,
-            * dont need to create another tab. Core settings do not have this field.
-            */
-            if (data.tabs[tabName].menus) return false;
-
-            /* it doesnt exist, so add a new entry */
-            data.tabs[tabName].menus = [];
+            if (!data.tabs[tabName].menus) data.tabs[tabName].menus = [];
         }
 
         for (let [_, setting] of settings.filter(([_, setting]) => setting.namespace == MODULE.data.name && setting.hidden != true)) {
-
-            /* only add an actual setting if the menu ids match */
             if (!setting.config) {
-
                 if (!canConfigure && setting.scope !== "client") continue;
                 setting.group = data.tabs[setting.group] ? setting.group : 'misc'
-
-                /* ensure there is a tab to hold this setting */
                 registerTabSetting(setting.group);
 
                 let groupTab = data.tabs[setting.group] ?? false;
@@ -398,7 +232,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         }
 
-        /* check if we are the parent of any registered submenus and add those */
         const childMenus = this.menus.filter( menu => menu.parentMenu == this.options.subMenuId )
         childMenus.forEach( menu => {
             registerTabMenu(menu.tab);
@@ -406,38 +239,29 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             if (groupTab) groupTab.menus.push(menu);
         });
 
-        /* clean out tabs that have no entries */
         data.tabs = Object.entries(data.tabs).reduce( (acc, [name, val]) => {
-            /* if we have any settings or any menus, keep the tab */
             if(!!val.settings || !!val.menus) acc[name] = val;
             return acc;
         }, {})
 
-        // Store coverData and token cover data for manipulation
         this.coverData = HELPER.setting(MODULE.data.name, "temporary_coverData") 
             ?? HELPER.setting(MODULE.data.name, "coverData");
         this.coverData = Object.values(this.coverData);
 
-        // Presets
         data.coverPresets = this.coverPresets;
-        data.tokenPresets = this.tokenPresets;  // This needs to occur after cover data is set
+        data.tokenPresets = this.tokenPresets;
 
         logger.debug(game.settings.get(MODULE.data.name, "debug"), "GET DATA | DATA | ", data);
 
-        return {
-            user : game.user, canConfigure, systemTitle : game.system.title, data
-        }
+        return { user : game.user, canConfigure, systemTitle : game.system.title, data }
     }
 
-    /**@override */
     close(options) {
         game.settings.set(MODULE.data.name, "temporary_coverData", null);
-
         super.close(options);
     }
 
-    async _onSubmit(...args) {
-        // We need to save the cover data separately as the FormApplication#_updateObject function will flatten the object and break
+    async _onSubmitForm(config, event) {
         game.settings.set(MODULE.data.name, "coverData",
             this.coverData.reduce((acc, coverLevel, index) => {
                 acc[index] = coverLevel;
@@ -445,49 +269,49 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }, {})
         )
 
-        // Save the changes to token sizes
-        if (document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked)
-        {
+        if (this.element.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked) {
             const defaultTokenSizes = HELPER.setting(MODULE.data.name, "tokenSizesDefault");
-            const tokenCoverSettings = this.form.querySelector("#scc-token-cover-settings-body");
+            const tokenCoverSettings = this.element.querySelector("#scc-token-cover-settings-body");
             for (const tokenCover of tokenCoverSettings.children) {
                 foundry.utils.mergeObject(defaultTokenSizes[tokenCover.dataset.size], this._getTokenSizeValues(tokenCover));
             }
-
             game.settings.set(MODULE.data.name, "tokenSizesDefault", defaultTokenSizes);
         }        
 
-        // save the rest
-        const formData = await super._onSubmit(...args);        
+        const formData = await super._onSubmitForm(config, event);        
 
         if( this.options.subMenuId ){
-            /* submitting from a subMenu, re-render parent */
-            await this._onClickReturn(...args);
+            await this._onClickReturn(event);
         }
 
         return formData;
     }
 
-    /** @override */
-    activateListeners(html) {
-        super.activateListeners(html);
-        html.find('button[name="return"]').click(this._onClickReturn.bind(this));
+    _onRender(context, options) {
+        super._onRender(context, options);
+        
+        const returnBtn = this.element.querySelector('button[name="return"]');
+        if (returnBtn) returnBtn.addEventListener('click', this._onClickReturn.bind(this));
 
-        html.find(`[name="${MODULE.data.name}.losWithTokens"]`).click(this._onTokenCoverChange.bind(this));
-        html.find('[data-tab]').click(this._resizeScreen.bind(this));
-        html.find('[data-tab="token-sizes"]').click(this._onTokenSizeTabClick.bind(this));
+        const losTokens = this.element.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`);
+        if (losTokens) losTokens.addEventListener('click', this._onTokenCoverChange.bind(this));
 
-        html.find(".cover-preset").change(this._handleCoverPresetSelected.bind(this));
-        html.find(".cover-levels-table .cover-control[data-action=\"add\"]").click(this._handleCoverControl.bind(this));
+        this.element.querySelectorAll('[data-tab]').forEach(el => el.addEventListener('click', this._resizeScreen.bind(this)));
+        
+        const tokenSizesTab = this.element.querySelector('[data-tab="token-sizes"]');
+        if (tokenSizesTab) tokenSizesTab.addEventListener('click', this._onTokenSizeTabClick.bind(this));
 
-        html.find(".token-cover-preset").change(this._handleTokenCoverPresetSelected.bind(this));
+        this.element.querySelectorAll(".cover-preset").forEach(el => el.addEventListener('change', this._handleCoverPresetSelected.bind(this)));
+        
+        const addBtn = this.element.querySelector('.cover-levels-table .cover-control[data-action="add"]');
+        if (addBtn) addBtn.addEventListener('click', this._handleCoverControl.bind(this));
 
-        html.find("#scc-token-cover-settings-body select").change(this._updateTokenSizeCoverRowWarnings.bind(this));        
+        this.element.querySelectorAll(".token-cover-preset").forEach(el => el.addEventListener('change', this._handleTokenCoverPresetSelected.bind(this)));
+        this.element.querySelectorAll("#scc-token-cover-settings-body select").forEach(el => el.addEventListener('change', this._updateTokenSizeCoverRowWarnings.bind(this)));
 
-        // unsure if this is the right place
-        this._prepareVisibleForms()
+        this._prepareVisibleForms();
         this._redrawCoverLevels(false);
-        this._updateTokenSizeCoverRowWarnings()
+        this._updateTokenSizeCoverRowWarnings();
     }
 
     _onTokenCoverChange(event) {
@@ -502,36 +326,24 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
     }
 
     _resizeScreen(event) {
-        document.querySelector('#cover-calculator-client-settings').style.height = 'auto';
+        this.element.style.height = 'auto';
     }
 
     _prepareVisibleForms() {
-        const isTokenCoverChecked = document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked;
+        const isTokenCoverChecked = this.element.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked;
         this._toggleTokenSizesTabVisible(isTokenCoverChecked);
     }
 
     _toggleTokenSizesTabVisible(isVisible) {
-        const tab = document.querySelector(".sheet-tabs :nth-child(4)");
+        const tab = this.element.querySelector(".sheet-tabs :nth-child(4)");
         if (tab) {
             tab.style.display = isVisible ? 'block' : 'none';
         }
     }
 
-
-    /* --------------------------------------------- */
-    /* Cover Level Helpers                           */
-    /* --------------------------------------------- */
-
-    /**
-     * Create a dialog for modifying a cover level
-     * @param {Number} index The index of
-     * @param {Boolean} [add] Whether the dialog is for adding a new cover level or modifying an existing one
-     * @private
-     */
     async _createCoverLevelDialog(index, add = true) {
         let data;
         if (add) {
-            // Create a template cover level
             data = {
                 label: HELPER.localize("scc.coverData.newCoverLevelName"), value: null, color : "0x008000",
                 icon : `modules/${MODULE.data.name}/assets/cover-icons/Full_Cover.svg`,
@@ -545,7 +357,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 }
             }
         } else {
-            // Get the existing cover level
             data = {
                 ...this.coverData[index],
                 coverLevels: this.coverData.reduce((acc, value, currentIndex) => {
@@ -569,27 +380,18 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }).render(true);
     }
 
-    /**
-     * An event to handle when the user selects a preset for cover levels
-     * @param event The event that triggered the preset change
-     * @private
-     */
     async _handleCoverPresetSelected(event) {
         try {
             const presetKey = event.currentTarget.value;
             if (presetKey.length === 0) return;
             const preset = this.coverPresets[presetKey];
-            if (preset === undefined) {
-                return;
-            }
+            if (preset === undefined) return;
 
             if (!this.checkedCoverChange) {
                 await Dialog.confirm({
                     title: HELPER.localize("scc.sureCheck.title"),
                     content: HELPER.localize("scc.coverData.sureCheckPreset"),
-                    yes: () => {
-                        this.checkedCoverChange = true;
-                    },
+                    yes: () => { this.checkedCoverChange = true; },
                     defaultYes: false
                 });
                 if (!this.checkedCoverChange) return;
@@ -602,11 +404,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
-    /**
-     * Handle clicking one of the buttons on the cover levels menu
-     * @param {Event} event The click Event
-     * @private
-     */
     async _handleCoverControl(event) {
         const action = event.currentTarget.dataset.action;
         const index = parseInt(event.currentTarget.parentElement.parentElement.dataset.index);
@@ -620,9 +417,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             await Dialog.confirm({
                 title: HELPER.localize("scc.sureCheck.title"),
                 content: HELPER.localize("scc.coverData.sureCheckMove"),
-                yes: () => {
-                    this.checkedCoverChange = true;
-                },
+                yes: () => { this.checkedCoverChange = true; },
                 defaultYes: false
             });
             if (!this.checkedCoverChange) return;
@@ -648,9 +443,7 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 await Dialog.confirm({
                     title: HELPER.localize("scc.sureCheck.title"),
                     content: HELPER.localize("scc.coverData.sureCheckDelete"),
-                    yes: () => {
-                    },
-                    defaultYes: false
+                    yes: () => {}, defaultYes: false
                 });
                 this.coverData.splice(index, 1);
                 break;
@@ -659,30 +452,21 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         this._redrawCoverLevels(true);
     }
 
-    /**
-     * Redraw all the cover levels in the config tab
-     * @private
-     */
     _redrawCoverLevels(flagForRerender) {
-        const coverElement = document.querySelector("#scc-cover-levels-settings-body");
+        const coverElement = this.element.querySelector("#scc-cover-levels-settings-body");
+        if (!coverElement) return;
+        
         coverElement.innerHTML = "";
-
-        // Clone so we don't touch the actual data
         const data = foundry.utils.deepClone(this.coverData);
 
         for (const [index, coverLevel] of Object.entries(data)) {
             const indexNum = parseInt(index);
             coverLevel.warnings = this._getCoverLevelWarnings(coverLevel, indexNum);
-
             coverElement.appendChild(this._buildCoverLevelElement(indexNum, coverLevel));
         }
 
-        // When we redraw we may have done something that has messed up the token cover levels, so check for warnings
         this._updateTokenSizeCoverRowWarnings();
-        if (flagForRerender && document.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked) {
-            // we need to save this for the rerender on token size click, 
-            // so that the selects on that form shows the correct data
-            // we save it as temporary cover data, if we exit out without saving, we don't want to have the data saved
+        if (flagForRerender && this.element.querySelector(`[name="${MODULE.data.name}.losWithTokens"]`)?.checked) {
             game.settings.set(MODULE.data.name, "temporary_coverData",
                 this.coverData.reduce((acc, coverLevel, index) => {
                     acc[index] = coverLevel;
@@ -693,52 +477,27 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }        
     }
 
-    /**
-     * Get a list of warnings of potential errors from the given cover level
-     * @param coverLevel {Object} The cover level to check for warnings
-     * @param index {Number} The index of the cover level being checked
-     * @return {String[]}
-     * @private
-     */
     _getCoverLevelWarnings(coverLevel, index) {
         const warnings = [];
-
-        if (!coverLevel.partial.includes(index)) {
-            warnings.push(HELPER.localize("scc.coverData.warningMissingSelf"))
-        }
-
+        if (!coverLevel.partial.includes(index)) warnings.push(HELPER.localize("scc.coverData.warningMissingSelf"))
         const coverMax = Math.max(...coverLevel.partial);
-        if (coverMax > index) {
-            warnings.push(HELPER.localize("scc.coverData.warningExceedsSelf"))
-        }
-
-        if (coverMax >= this.coverData.length) {
-            warnings.push(HELPER.localize("scc.coverData.warningUnknownLevel"))
-        }
-
+        if (coverMax > index) warnings.push(HELPER.localize("scc.coverData.warningExceedsSelf"))
+        if (coverMax >= this.coverData.length) warnings.push(HELPER.localize("scc.coverData.warningUnknownLevel"))
         return warnings;
     }
 
-    /**
-     * Build an element that represents a cover level row
-     * @param {Number} index The index of the Cover Level
-     * @param {Object} coverLevel The data for the cover level
-     * @return {HTMLLIElement}
-     * @private
-     */
     _buildCoverLevelElement(index, coverLevel) {
         const controls = [
-            {title: HELPER.localize("scc.coverData.controlTitleEdit"), action: "edit", icon: "fas fa-edit"},
-            {title: HELPER.localize("scc.coverData.controlTitleUp"), action: "up", icon: "fas fa-arrow-up", disabled: index === 0},
-            {title: HELPER.localize("scc.coverData.controlTitleDown"), action: "down", icon: "fas fa-arrow-down", disabled: index === this.coverData.length - 1},
-            {title: HELPER.localize("scc.coverData.controlTitleDelete"), action: "delete", icon: "fas fa-trash", disabled: index === 0 || index === this.coverData.length - 1}
+            {title: "Edit", action: "edit", icon: "fas fa-edit"},
+            {title: "Move Up", action: "up", icon: "fas fa-arrow-up", disabled: index === 0},
+            {title: "Move Down", action: "down", icon: "fas fa-arrow-down", disabled: index === this.coverData.length - 1},
+            {title: "Delete", action: "delete", icon: "fas fa-trash", disabled: index === 0 || index === this.coverData.length - 1}
         ]
 
         const containerEl = document.createElement("li");
         containerEl.className = "athenaeum-table-row flexrow";
         containerEl.dataset.index = index;
 
-        // Title
         {
             const titleEl = document.createElement("div");
             titleEl.className = "cover-title";
@@ -758,11 +517,9 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
                 warnEl.appendChild(warningsEl);
                 titleEl.appendChild(warnEl);
             }
-
             containerEl.appendChild(titleEl);
         }
 
-        // AC Bonus
         {
             const acEl = document.createElement("div");
             acEl.className = "cover-ac-bonus";
@@ -770,7 +527,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             containerEl.appendChild(acEl)
         }
 
-        // Controls
         {
             const controlContainerEl = document.createElement("div");
             controlContainerEl.className = "cover-controls flexrow";
@@ -791,30 +547,18 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
 
                 controlContainerEl.appendChild(controlEl);
             }
-
             containerEl.appendChild(controlContainerEl);
         }
 
         return containerEl;
     }
 
-    /* --------------------------------------------- */
-    /* Token Size Cover Helpers                      */
-    /* --------------------------------------------- */
-
-    /**
-     * An event to handle when the user selects a preset for token cover levels
-     * @param event The event that triggered the preset change
-     * @private
-     */
     _handleTokenCoverPresetSelected(event) {
         try {
             const presetKey = event.currentTarget.value;
             if (presetKey.length === 0) return;
             const preset = this.tokenPresets[presetKey];
-            if (preset === undefined) {
-                return;
-            }
+            if (preset === undefined) return;
 
             if (!this.checkedTokenCoverChange) {
                 Dialog.confirm({
@@ -835,33 +579,24 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
-    /**
-     * Apply the given preset config to the settings menu
-     * @param preset {Object} the preset config to use
-     * @private
-     */
     _applyTokenPreset(preset) {
-        const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
-
+        const tokenCoverSettingsEle = this.element.querySelector("#scc-token-cover-settings-body");
         const presetConfig = preset.generateConfig(Object.keys(CONFIG[game.system.id.toUpperCase()].actorSizes));
         for (const [key, value] of Object.entries(presetConfig)) {
             const settingsEle = tokenCoverSettingsEle.querySelector(`[data-size="${key}"]`);
-            settingsEle.querySelector(".token-cover-normal").value = value.normal;
-            settingsEle.querySelector(".token-cover-dead").value = value.dead;
-            settingsEle.querySelector(".token-cover-prone").value = value.prone;
+            if (settingsEle) {
+                settingsEle.querySelector(".token-cover-normal").value = value.normal;
+                settingsEle.querySelector(".token-cover-dead").value = value.dead;
+                settingsEle.querySelector(".token-cover-prone").value = value.prone;
+            }
         }
-
-        // Check for warnings incase they've been removed or something has gone very wrong
         this._updateTokenSizeCoverRowWarnings();
     }
 
-    /**
-     * Update the warnings on each size
-     * @private
-     */
     _updateTokenSizeCoverRowWarnings() {
-        const tokenCoverSettingsEle = this.form.querySelector("#scc-token-cover-settings-body");
-
+        const tokenCoverSettingsEle = this.element.querySelector("#scc-token-cover-settings-body");
+        if (!tokenCoverSettingsEle) return;
+        
         for (const sizeRow of tokenCoverSettingsEle.children) {
             const warnings = this._getTokenSizeCoverRowWarning(sizeRow.dataset.size);
             const warningsEl = sizeRow.querySelector(".athenaeum-warn-parent");
@@ -880,20 +615,14 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         }
     }
 
-    /**
-     * Get the warnings for a size
-     * @param sizeKey {String} The key of the size to check for warnings
-     * @return {String[]}
-     * @private
-     */
     _getTokenSizeCoverRowWarning(sizeKey) {
         const warnings = [];
-
-        const sizeRow = this.form.querySelector(`#scc-token-cover-settings-body [data-size="${sizeKey}"]`)
+        const sizeRow = this.element.querySelector(`#scc-token-cover-settings-body [data-size="${sizeKey}"]`)
+        if (!sizeRow) return warnings;
+        
         const coverLevels = this._getTokenSizeValues(sizeRow);
         const prevSizeRow = sizeRow.previousElementSibling;
 
-        // Check below max
         {
             const maxCoverLevel = this.coverData.length - 1
             if (Object.values(coverLevels).some(coverLevel => coverLevel > maxCoverLevel)) {
@@ -901,7 +630,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
             }
         }
 
-        // Check Above or equal to previous
         if (prevSizeRow) {
             const prevCoverLevels = this._getTokenSizeValues(prevSizeRow);
             if (Object.entries(coverLevels).some(([actorState, coverLevel]) => coverLevel < prevCoverLevels[actorState])) {
@@ -912,12 +640,6 @@ export class CoverCalculatorSettingsConfig extends SettingsConfig {
         return warnings
     }
 
-    /**
-     * Get the normal, dead, and prone values of a specific actor size from the form
-     * @param sizeRowEl {Element} The size row element that contains the fields
-     * @return {{normal: (number), dead: (number), prone: (number)}}
-     * @private
-     */
     _getTokenSizeValues(sizeRowEl) {
         return {
             normal: parseInt(sizeRowEl.querySelector(".token-cover-normal").value) || 0,

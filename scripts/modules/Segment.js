@@ -76,6 +76,16 @@ export class Segment {
             result = false;
         }
 
+        if (result && s.options.tMin !== undefined && s.options.tMax !== undefined) {
+            const intersectZ = s.options.tMin + gam * (s.options.tMax - s.options.tMin);
+            const obstacleBottom = this.options.bottom ?? -Infinity;
+            const obstacleTop = this.options.top ?? Infinity;
+            
+            if (intersectZ < obstacleBottom || intersectZ > obstacleTop) {
+                result = false;
+            }
+        }
+
         if (result && draw) { this.draw(); s.draw(); }
 
         return result ? this.options : result;

@@ -1,6 +1,7 @@
 import { Point } from './Point.js';
 import { Segment } from './Segment.js';
 import { MODULE } from "../module.js";
+import { logger } from '../../../simbuls-athenaeum/scripts/logger.js';
 
 export class Shape {
     segments = [];
@@ -48,8 +49,12 @@ export class Shape {
     }
 
     checkIntersection(s) {
-        let r = foundry.utils.mergeObject({cover: 3, limited: false}, this.options ?? {});
-        return this.segments.reduce((a,v) => a || s.checkIntersection(v), false) ? r : {cover: 0, limited: r.limited};
+        let r = foundry.utils.mergeObject({cover: 3, limited: false, bottom: -Infinity, top: Infinity}, this.options ?? {});
+        return this.segments.reduce((a,v) => { 
+            v.options.bottom = r.bottom; 
+            v.options.top = r.top;
+            return a || s.checkIntersection(v) 
+        }, false) ? r : {cover: 0, limited: r.limited};
     } 
 
     static buildRectangle({x, y, w, h} = {}, p = 0, o) {

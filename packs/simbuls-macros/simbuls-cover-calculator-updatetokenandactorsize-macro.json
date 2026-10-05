@@ -1,0 +1,13 @@
+{
+  "name": "Simbuls:UpdateTokenAndActorSize",
+  "type": "script",
+  "author": "wL7nfavxjGnQAVcI",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const size = await foundry.applications.api.DialogV2.wait({\n    window: { title: \"Change Token Size?\" },\n    content: \"\",\n    buttons: [\n        { action: \"tiny\", label: \"Tiny\", callback: () => 0.25 },\n        { action: \"small\", label: \"Small\", callback: () => 0.5 },\n        { action: \"medium\", label: \"Medium\", callback: () => 1 },\n        { action: \"large\", label: \"Large\", callback: () => 2 },\n        { action: \"huge\", label: \"Huge\", callback: () => 3 },\n        { action: \"gargantuan\", label: \"Gargantuan\", callback: () => 4 },\n        { action: \"unit\", label: \"An Absolute Unit\", callback: () => 8 }\n    ],\n    rejectClose: false\n});\n\nif (!size) return;\n\nawait token.document.update({ height: size, width: size });\n\nswitch(size) {\n    case 0.25: await token.actor.update({\"system.traits.size\": \"tiny\"}); break;\n    case 0.5: await token.actor.update({\"system.traits.size\": \"sm\"}); break;\n    case 1: await token.actor.update({\"system.traits.size\": \"med\"}); break;\n    case 2: await token.actor.update({\"system.traits.size\": \"lg\"}); break;\n    case 3: await token.actor.update({\"system.traits.size\": \"huge\"}); break;\n    case 4: await token.actor.update({\"system.traits.size\": \"grg\"}); break;\n    case 8: await token.actor.update({\"system.traits.size\": \"grg\"}); break;\n}",
+  "folder": null,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -2,6 +2,8 @@
  * Main Module Organizational Tools
  */
 import { MODULE } from './module.js';
+import { logger } from '../../simbuls-athenaeum/scripts/logger.js';
+import { CoverCalculator } from './modules/CoverCalculator.js';
 
 /**
  * Sub Modules
